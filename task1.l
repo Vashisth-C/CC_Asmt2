@@ -44,7 +44,7 @@ SPACE [ ]
 <INITIAL>{
     {SPACE} {}
     \n {line++;}
-    "//" {BEGIN(COMMENT);}
+    "//" {line++,BEGIN(COMMENT);}
     ";" {printf("%d         %s         SEMICOLON\n",line,yytext);}
     {P}{R}{O}{G}{R}{A}{M} {printf("%d         %s         KEYWORD\n",line,yytext);}
     {I}{F} {printf("%d         %s         KEYWORD\n",line,yytext);}

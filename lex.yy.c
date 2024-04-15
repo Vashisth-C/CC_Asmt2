@@ -843,7 +843,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 47 "task1.l"
-{BEGIN(COMMENT);}
+{line++,BEGIN(COMMENT);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
