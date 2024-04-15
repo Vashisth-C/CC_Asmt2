@@ -69,15 +69,15 @@ SPACE [ ]
     {A}{R}{R}{A}{Y} {printf("%d         %s         KEYWORD\n",line,yytext);}
     {D}{O}{W}{N}{T}{O} {printf("%d         %s         KEYWORD\n",line,yytext);}
     {T}{O} {printf("%d         %s         KEYWORD\n",line,yytext);}
-    [A-Za-z][A-Za-z0-9|_]* {printf("%d         %s         VARIABLE\n",line,yytext);}
+    [A-Za-z][A-Za-z0-9|_]* {printf("%d         %s         IDENTIFIER\n",line,yytext);}
     [1-9][0-9]*|"0" {printf("%d         %s         CONSTANT\n",line,yytext);}
     "\"" {yymore(),BEGIN(STRING);}
     "[" {printf("%d         %s         OPEN_BRACKET\n",line,yytext);}
     "]" {printf("%d         %s         CLOSE_BRACKET\n",line,yytext);}
     "(" {printf("%d         %s         OPEN_PARANTHESES\n",line,yytext);}
     ")" {printf("%d         %s         CLOSE_PARANTHESES\n",line,yytext);}
-    ":" {printf("%d         %s         KEYWORD\n",line,yytext);}
-    "," {printf("%d         %s         KEYWORD\n",line,yytext);}
+    ":" {printf("%d         %s         COLON\n",line,yytext);}
+    "," {printf("%d         %s         COMMA\n",line,yytext);}
     "+" {printf("%d         %s         ARITHEMATIC_OP\n",line,yytext);}
     "-" {printf("%d         %s         ARITHEMATIC_OP\n",line,yytext);}
     "*" {printf("%d         %s         ARITHEMATIC_OP\n",line,yytext);}
