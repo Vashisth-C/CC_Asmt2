@@ -3,14 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-extern int yylval;
+#include "y.tab.h"
 
 int line = 1;
 %}
 
 %x COMMENT
-%x STRING
 
 A [aA]
 B [bB]
@@ -48,33 +46,33 @@ SPACE [ ]
     \n {line++;}
     "//" {line++,BEGIN(COMMENT);}
     ";" {return SEMICOLON;}
-    {P}{R}{O}{G}{R}{A}{M} {return KEYWORD;}
-    {I}{F} {return KEYWORD;}
-    {T}{H}{E}{N} {return KEYWORD;}
-    {E}{L}{S}{E} {return KEYWORD;}
-    {W}{H}{I}{L}{E} {return KEYWORD;}
-    {D}{O} {return KEYWORD;}
-    {F}{O}{R} {return KEYWORD;}
-    {O}{F} {return KEYWORD;}
-    {B}{E}{G}{I}{N} {return KEYWORD;}
-    {E}{N}{D} {return KEYWORD;}
-    {R}{E}{A}{D} {return KEYWORD;}
-    {W}{R}{I}{T}{E} {return KEYWORD;}
+    {P}{R}{O}{G}{R}{A}{M} {return PROGRAM;}
+    {I}{F} {return IF;}
+    {T}{H}{E}{N} {return THEN;}
+    {E}{L}{S}{E} {return ELSE;}
+    {W}{H}{I}{L}{E} {return WHILE;}
+    {D}{O} {return DO;}
+    {F}{O}{R} {return FOR;}
+    {O}{F} {return OF;}
+    {B}{E}{G}{I}{N} {return BEGIN_TAG;}
+    {E}{N}{D} {return END;}
+    {R}{E}{A}{D} {return READ;}
+    {W}{R}{I}{T}{E} {return WRITE;}
     {A}{N}{D} {return BOOLEAN_OP;}
     {O}{R} {return BOOLEAN_OP;}
-    {N}{O}{T} {return BOOLEAN_OP;}
-    {I}{N}{T}{E}{G}{E}{R} {return KEYWORD;}
-    {R}{E}{A}{L} {return KEYWORD;}
-    {B}{O}{O}{L}{E}{A}{N} {return KEYWORD;}
-    {C}{H}{A}{R} {return KEYWORD;}
-    {V}{A}{R} {return KEYWORD;}
-    {A}{R}{R}{A}{Y} {return KEYWORD;}
-    {D}{O}{W}{N}{T}{O} {return KEYWORD;}
-    {T}{O} {return KEYWORD;}
+    {N}{O}{T} {return BOOLEAN_OP_NOT;}
+    {I}{N}{T}{E}{G}{E}{R} {return DATATYPE;}
+    {R}{E}{A}{L} {return DATATYPE;}
+    {B}{O}{O}{L}{E}{A}{N} {return DATATYPE;}
+    {C}{H}{A}{R} {return DATATYPE;}
+    {V}{A}{R} {return VAR;}
+    {A}{R}{R}{A}{Y} {return ARRAY;}
+    {D}{O}{W}{N}{T}{O} {return DOWNTO;}
+    {T}{O} {return TO;}
     [A-Za-z][A-Za-z0-9|_]* {return IDENTIFIER;}
     [1-9][0-9]*|"0" {return CONSTANT;}
-    "\"" {yymore(),BEGIN(STRING);}
-    "[" {return OPEN_BRACKET;},
+    "\"".*"\"" {return STRING_CONSTANT;}
+    "[" {return OPEN_BRACKET;}
     "]" {return CLOSE_BRACKET;}
     "(" {return OPEN_PARANTHESIS;}
     ")" {return CLOSE_PARANTHESIS;}
@@ -96,11 +94,6 @@ SPACE [ ]
     ".." {return RANGE_DOTS;}
 }
 
-<STRING>{
-    "\"" {return CONSTANT;BEGIN(INITIAL);}
-    . {yymore();}
-}
-
 <COMMENT>{
     \n {BEGIN(INITIAL);}
     [[A-Za-z]*[0-9]*]* {}
@@ -108,17 +101,6 @@ SPACE [ ]
 }
 
 %%
-
-int main(){
-    printf("Enter the filename: ");
-    char filename[100];
-    scanf("%s", filename);
-    printf("\n\n");
-    yyin=fopen(filename, "r");
-    // printf("LINE_NO      LEXEME      TOKEN\n\n");
-    yylex();
-    return 0;
-}
 
 int yywrap(){
 	return -1;

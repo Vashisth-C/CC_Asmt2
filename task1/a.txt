@@ -1,14 +1,8 @@
-program AddTwoNumbers ;
+program Array_Sum ;
 var
-    num1 , num2 , sum : Integer ;
+    numbers : array [1..10] of Integer ;
+    i , sum : Integer ;
 begin
-    Write ( " Enter the first number : " ) ;
-    read ( num1 ) ;
-    Write ( " Enter the second number : " ) ;
-    read ( num2 ) ;
-    // Perform addition
-    sum := num1 + num2 ;
-    // Display the result
-    Write ( " The sum is " ) ;
-    write ( sum )
-end .
+    write (" The sum is : ");
+    write ( sum );
+end.

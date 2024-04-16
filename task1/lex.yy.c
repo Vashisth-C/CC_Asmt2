@@ -978,7 +978,7 @@ YY_RULE_SETUP
 case 30:
 YY_RULE_SETUP
 #line 74 "task1.l"
-{yymore(),BEGIN(STRING);}
+{printf("%d         %s         DQUOTE\n",line,yytext);BEGIN(STRING);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
@@ -1085,11 +1085,16 @@ YY_RULE_SETUP
 case 51:
 YY_RULE_SETUP
 #line 98 "task1.l"
-{printf("%d         %s         CONSTANT\n",line,yytext);BEGIN(INITIAL);}
+{char* x=yytext ;
+            char c= x[strlen(x)-1];
+            x[strlen(x)-1]='\0'; 
+            printf("%d         %s         STRING_CONSTANT\n",line,x);
+            printf("%d         %c         DQUOTE\n",line,c);BEGIN(STRING);
+            BEGIN(INITIAL);}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 99 "task1.l"
+#line 104 "task1.l"
 {yymore();}
 	YY_BREAK
 
@@ -1097,26 +1102,26 @@ YY_RULE_SETUP
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 103 "task1.l"
+#line 108 "task1.l"
 {BEGIN(INITIAL);}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 104 "task1.l"
+#line 109 "task1.l"
 {}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 105 "task1.l"
+#line 110 "task1.l"
 {}
 	YY_BREAK
 
 case 56:
 YY_RULE_SETUP
-#line 108 "task1.l"
+#line 113 "task1.l"
 ECHO;
 	YY_BREAK
-#line 1120 "lex.yy.c"
+#line 1125 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
@@ -2123,7 +2128,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 108 "task1.l"
+#line 113 "task1.l"
 
 
 int main(){
