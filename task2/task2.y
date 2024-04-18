@@ -39,8 +39,7 @@ possible_writes: possible_write_values| ;
 possible_write_values: left_side_vars|STRING_CONSTANT|STRING_CONSTANT COMMA possible_write_values 
 possible_reads: IDENTIFIER|IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
 
-expression: unit expression_recursion| OPEN_PARANTHESIS expression CLOSE_PARANTHESIS
-expression_recursion: ARITHEMATIC_OP expression expression_recursion|BOOLEAN_OP expression expression_recursion| ;
+expression: unit| OPEN_PARANTHESIS expression CLOSE_PARANTHESIS | expression ARITHEMATIC_OP expression | expression BOOLEAN_OP expression
 unit: IDENTIFIER|CONSTANT| IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET| BOOLEAN_OP_NOT unit 
 
 %%
