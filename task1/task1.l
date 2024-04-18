@@ -92,6 +92,7 @@ SPACE [ ]
     "<>" {printf("%d         %s         RELATIONAL_OP\n",line,yytext);}
     "."  {printf("%d         %s         PERIOD\n",line,yytext);}
     ".." {printf("%d         %s         RANGE_DOTS\n",line,yytext);}
+    . {printf("%d         %s         INVALID\n",line,yytext);}
 }
 
 <STRING>{
@@ -99,8 +100,13 @@ SPACE [ ]
             char c= x[strlen(x)-1];
             x[strlen(x)-1]='\0'; 
             printf("%d         %s         STRING_CONSTANT\n",line,x);
-            printf("%d         %c         DQUOTE\n",line,c);BEGIN(STRING);
+            printf("%d         %c         DQUOTE\n",line,c);
             BEGIN(INITIAL);}
+    "\n" {char* x=yytext ;
+        x[strlen(x)-1]='\0';
+        printf("%d         %s         INVALID\n",line,x);
+        line++;
+        BEGIN(INITIAL);}
     . {yymore();}
 }
 

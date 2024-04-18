@@ -96,7 +96,10 @@ extern FILE *yyin;
 #  endif
 # endif
 
-
+/* Use api.header.include to #include this header
+   instead of duplicating it here.  */
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -205,7 +208,7 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -590,7 +593,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   146
+#define YYLAST   147
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  37
@@ -652,11 +655,11 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    12,    12,    14,    14,    15,    15,    16,    17,    17,
-      18,    18,    20,    22,    22,    24,    25,    26,    27,    28,
-      29,    30,    31,    32,    33,    34,    36,    38,    38,    39,
-      39,    39,    40,    40,    42,    42,    42,    42,    43,    43,
-      43,    43
+       0,    15,    15,    17,    17,    18,    18,    19,    20,    20,
+      21,    21,    23,    25,    25,    27,    28,    29,    30,    31,
+      32,    33,    34,    35,    36,    37,    39,    41,    41,    42,
+      42,    42,    43,    43,    45,    45,    45,    45,    46,    46,
+      46,    46
 };
 #endif
 
@@ -713,11 +716,11 @@ static const yytype_int8 yypact[] =
       97,    19,   103,   -47,   -47,   104,   -47,    12,    86,    12,
       95,    46,   -47,    27,    12,    12,    12,    96,    27,    12,
      102,   -47,    98,   -47,   105,    99,   101,    69,   -47,    48,
-      79,   -47,    21,    87,    87,    87,   100,   107,    16,    19,
-     110,    12,   111,   116,   -47,    27,   -47,    27,    27,   -47,
-      12,    12,   -47,   -47,    77,   -47,   109,    28,   115,   117,
+      79,   -47,    21,   108,    87,   -47,   100,   107,    16,    19,
+     111,    12,   112,   118,   -47,    27,   -47,    27,    27,   -47,
+      12,    12,   -47,   -47,    77,   -47,   110,    28,   116,   117,
       67,    68,   -47,   106,   -47,    27,   -47,   -47,    27,    27,
-      91,   118,   119,   120,   -47,   -47,   -47,   -47
+      93,   119,   120,   121,   -47,   -47,   -47,   -47
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -742,8 +745,8 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -47,   -47,   -47,   121,   -47,   -14,   -47,   -46,   108,   -47,
-       0,   -47,    50,   -47,   -24,   112
+     -47,   -47,   -47,   122,   -47,   -14,   -47,   -46,   109,   -47,
+       0,   -47,    52,   -47,   -24,   113
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -769,10 +772,10 @@ static const yytype_int8 yytable[] =
       54,    55,    54,    71,    40,    56,    25,    56,   108,   109,
      102,    54,    54,    43,    68,    41,    56,    56,    27,    28,
       42,    45,    46,    49,    59,    58,    64,    53,    66,    70,
-      76,    79,    80,    82,    85,    89,    81,    83,    93,    95,
-      96,    88,   103,   106,   114,   107,   115,   116,   117,    92,
-       0,    15,    44,     0,     0,     0,   110,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,    52
+      76,    79,    80,    82,    85,    89,    81,    83,    56,    93,
+      95,    88,    96,   103,   106,   107,   114,   115,   116,   117,
+       0,    92,    15,    44,     0,     0,   110,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,    52
 };
 
 static const yytype_int8 yycheck[] =
@@ -788,10 +791,10 @@ static const yytype_int8 yycheck[] =
        5,     6,     5,    14,     3,    10,    15,    10,    21,    21,
       13,     5,     5,    23,     8,    12,    10,    10,    33,    34,
       12,    11,     8,    11,     7,    21,     3,    35,     4,    14,
-      14,     9,    14,    14,    35,     8,    11,    16,     8,     8,
-       4,    21,    13,     8,    33,     8,     8,     8,     8,    79,
-      -1,    10,    24,    -1,    -1,    -1,    30,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    34
+      14,     9,    14,    14,    35,     8,    11,    16,    10,     8,
+       8,    21,     4,    13,     8,     8,    33,     8,     8,     8,
+      -1,    79,    10,    24,    -1,    -1,    30,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    34
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -1293,13 +1296,13 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD  */
-#line 12 "task2.y"
+#line 15 "task2.y"
                                                                                      {printf("Program is correct\n");}
-#line 1299 "y.tab.c"
+#line 1302 "y.tab.c"
     break;
 
 
-#line 1303 "y.tab.c"
+#line 1306 "y.tab.c"
 
       default: break;
     }
@@ -1492,7 +1495,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 45 "task2.y"
+#line 48 "task2.y"
 
 
 int main(){

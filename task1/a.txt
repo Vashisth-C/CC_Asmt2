@@ -4,5 +4,6 @@ var
     i , sum : Integer ;
 begin
     write (" The sum is : ");
-    write ( sum );
+    \\yo bro
+    write ( numbers[i+10] );
 end.
