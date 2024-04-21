@@ -87,7 +87,8 @@ extern int yydebug;
     DATATYPE = 288,                /* DATATYPE  */
     ARRAY = 289,                   /* ARRAY  */
     THEN = 290,                    /* THEN  */
-    BOOLEAN_OP_NOT = 291           /* BOOLEAN_OP_NOT  */
+    BOOLEAN_OP_NOT = 291,          /* BOOLEAN_OP_NOT  */
+    ARITHEMATIC_OP_MINUS = 292     /* ARITHEMATIC_OP_MINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -130,6 +131,7 @@ extern int yydebug;
 #define ARRAY 289
 #define THEN 290
 #define BOOLEAN_OP_NOT 291
+#define ARITHEMATIC_OP_MINUS 292
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

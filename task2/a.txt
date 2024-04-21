@@ -5,7 +5,7 @@ begin
   i := 10;
   if i+10 > 10 then
   begin
-    i := 10;
+    i := -10;
     i := i - (10+i) *100;
     write(i);
   end

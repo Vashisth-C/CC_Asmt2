@@ -79,7 +79,7 @@ SPACE [ ]
     ":" {return COLON;}
     "," {return COMMA;}
     "+" {return ARITHEMATIC_OP;}
-    "-" {return ARITHEMATIC_OP;}
+    "-" {return ARITHEMATIC_OP_MINUS;}
     "*" {return ARITHEMATIC_OP;}
     "/" {return ARITHEMATIC_OP;}
     "%" {return ARITHEMATIC_OP;}
