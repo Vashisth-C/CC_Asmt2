@@ -6,6 +6,7 @@ int yylex();
 int yyerror();
 %}
 
+
 %left ARITHEMATIC_OP
 %left BOOLEAN_OP
 %left ARITHEMATIC_OP_MINUS
@@ -31,33 +32,37 @@ statements: statementline|statementline statements;
 
 statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLON |
                 READ OPEN_PARANTHESIS possible_reads CLOSE_PARANTHESIS SEMICOLON | 
-                IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON |
-                IF OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS THEN program_declaration ELSE program_declaration SEMICOLON |
-                IF OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS THEN program_declaration SEMICOLON |
-                IF conditionals THEN program_declaration ELSE program_declaration SEMICOLON |
-                IF conditionals THEN program_declaration SEMICOLON |
-                WHILE OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS DO program_declaration SEMICOLON |
+                IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON |    
+                IF condition THEN program_declaration ELSE program_declaration SEMICOLON |
+                IF condition THEN program_declaration SEMICOLON |
                 FOR IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression DO program_declaration SEMICOLON |
                 FOR IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression DO program_declaration SEMICOLON |
-                WHILE conditionals DO program_declaration SEMICOLON  
-                
-conditionals: relational_exp|condtional_unit| 
-                relational_exp BOOLEAN_OP conditionals| relational_exp BOOLEAN_OP unit| 
-                unit BOOLEAN_OP conditionals | unit BOOLEAN_OP unit | BOOLEAN_OP_NOT conditionals|
+                WHILE condition DO program_declaration SEMICOLON 
+
+condition: conditional_head|unit
+
+conditional_head: relational_exp|conditionals
+conditionals:   condtional_unit|
+                relational_exp BOOLEAN_OP conditionals| relational_exp BOOLEAN_OP unit_x| 
+                unit_x BOOLEAN_OP conditionals | unit_x BOOLEAN_OP unit_x | BOOLEAN_OP_NOT conditionals|
+                OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS
                 
 
-condtional_unit:BOOLEAN_OP_NOT unit
+condtional_unit:BOOLEAN_OP_NOT unit_x
 
-relational_exp: arith_expression RELATIONAL_OP arith_expression
+relational_exp: arith_expression RELATIONAL_OP arith_expression|
+                OPEN_PARANTHESIS relational_exp CLOSE_PARANTHESIS
 
 possible_writes: possible_write_values| ;
 possible_write_values: left_side_vars|STRING_CONSTANT|STRING_CONSTANT COMMA possible_write_values| IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET
 possible_reads: IDENTIFIER|IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET
 
-arith_expression: unit| OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS | arith_expression ARITHEMATIC_OP arith_expression| 
+arith_expression: unit_2|unit| OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS | arith_expression ARITHEMATIC_OP arith_expression| 
                     arith_expression ARITHEMATIC_OP_MINUS arith_expression
 
-unit: IDENTIFIER|CONSTANT| IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET| ARITHEMATIC_OP_MINUS arith_expression
+unit_x: unit %prec ARITHEMATIC_OP| OPEN_PARANTHESIS unit CLOSE_PARANTHESIS
+unit: IDENTIFIER| IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET|ARITHEMATIC_OP_MINUS arith_expression
+unit_2: CONSTANT
 
 %%
 

@@ -3,7 +3,7 @@ var
   i: Integer;
 begin
   i := 10;
-  if not a+y>2 and b and c then
+  if ((1<2) and (a) and (b)) then
   begin
     i := -10;
     i := 3;

@@ -39,6 +39,10 @@ Z [zZ]
 
 SPACE [ ]
 
+DIGIT [0-9]
+
+REALNUMBER {DIGIT}+"."{DIGIT}+
+
 %%
 
 <INITIAL>{
