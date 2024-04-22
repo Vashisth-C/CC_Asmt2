@@ -10,7 +10,7 @@ int yyerror();
 %left ARITHEMATIC_OP
 %left BOOLEAN_OP
 %left ARITHEMATIC_OP_MINUS
-%left RELATIONAL_OP
+%right RELATIONAL_OP
 %left BOOLEAN_OP_NOT
 
 %token IDENTIFIER CONSTANT ARITHEMATIC_OP RELATIONAL_OP ASSIGNMENT_OP SEMICOLON COMMA BOOLEAN_OP OPEN_BRACKET OPEN_PARANTHESIS CLOSE_BRACKET CLOSE_PARANTHESIS PERIOD RANGE_DOTS 
@@ -39,7 +39,7 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                 FOR IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression DO program_declaration SEMICOLON |
                 WHILE condition DO program_declaration SEMICOLON 
 
-condition: conditional_head|unit
+condition: conditional_head|unit_x
 
 conditional_head: relational_exp|conditionals
 conditionals:   condtional_unit|
@@ -57,10 +57,12 @@ possible_writes: possible_write_values| ;
 possible_write_values: left_side_vars|STRING_CONSTANT|STRING_CONSTANT COMMA possible_write_values| IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET
 possible_reads: IDENTIFIER|IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET
 
+
 arith_expression: unit_2|unit| OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS | arith_expression ARITHEMATIC_OP arith_expression| 
                     arith_expression ARITHEMATIC_OP_MINUS arith_expression
 
-unit_x: unit %prec ARITHEMATIC_OP| OPEN_PARANTHESIS unit CLOSE_PARANTHESIS
+
+unit_x: unit | OPEN_PARANTHESIS unit CLOSE_PARANTHESIS
 unit: IDENTIFIER| IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET|ARITHEMATIC_OP_MINUS arith_expression
 unit_2: CONSTANT
 

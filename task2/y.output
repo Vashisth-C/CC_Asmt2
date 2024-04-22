@@ -1,4 +1,4 @@
-State 61 conflicts: 1 shift/reduce
+State 62 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -37,7 +37,7 @@ Grammar
    22              | WHILE condition DO program_declaration SEMICOLON
 
    23 condition: conditional_head
-   24          | unit
+   24          | unit_x
 
    25 conditional_head: relational_exp
    26                 | conditionals
@@ -183,10 +183,10 @@ Nonterminals, with rules where they appear
         on right: 17 20 21 35 42 44 47 48 49 53 54
     unit_x (57)
         on left: 50 51
-        on right: 29 30 31 34
+        on right: 24 29 30 31 34
     unit (58)
         on left: 52 53 54
-        on right: 24 46 50 51
+        on right: 46 50 51
     unit_2 (59)
         on left: 55
         on right: 45
@@ -389,7 +389,7 @@ State 18
    18 statementline: IF • condition THEN program_declaration ELSE program_declaration SEMICOLON
    19              | IF • condition THEN program_declaration SEMICOLON
    23 condition: • conditional_head
-   24          | • unit
+   24          | • unit_x
    25 conditional_head: • relational_exp
    26                 | • conditionals
    27 conditionals: • condtional_unit
@@ -435,7 +435,7 @@ State 19
 
    22 statementline: WHILE • condition DO program_declaration SEMICOLON
    23 condition: • conditional_head
-   24          | • unit
+   24          | • unit_x
    25 conditional_head: • relational_exp
    26                 | • conditionals
    27 conditionals: • condtional_unit
@@ -654,8 +654,8 @@ State 34
     condtional_unit   go to state 40
     relational_exp    go to state 59
     arith_expression  go to state 60
-    unit_x            go to state 43
-    unit              go to state 61
+    unit_x            go to state 61
+    unit              go to state 62
     unit_2            go to state 45
 
 
@@ -691,12 +691,12 @@ State 35
     BOOLEAN_OP_NOT        shift, and go to state 35
     ARITHEMATIC_OP_MINUS  shift, and go to state 36
 
-    conditionals      go to state 62
+    conditionals      go to state 63
     condtional_unit   go to state 40
-    relational_exp    go to state 63
+    relational_exp    go to state 64
     arith_expression  go to state 42
-    unit_x            go to state 64
-    unit              go to state 65
+    unit_x            go to state 65
+    unit              go to state 44
     unit_2            go to state 45
 
 
@@ -776,22 +776,24 @@ State 42
 
 State 43
 
+   24 condition: unit_x •  [DO, THEN]
    30 conditionals: unit_x • BOOLEAN_OP conditionals
    31             | unit_x • BOOLEAN_OP unit_x
 
     BOOLEAN_OP  shift, and go to state 72
 
+    $default  reduce using rule 24 (condition)
+
 
 State 44
 
-   24 condition: unit •  [DO, THEN]
    46 arith_expression: unit •  [ARITHEMATIC_OP, RELATIONAL_OP, ARITHEMATIC_OP_MINUS]
-   50 unit_x: unit •  [BOOLEAN_OP]
+   50 unit_x: unit •  [BOOLEAN_OP, CLOSE_PARANTHESIS, DO, THEN]
 
-    BOOLEAN_OP  reduce using rule 50 (unit_x)
-    DO          reduce using rule 24 (condition)
-    THEN        reduce using rule 24 (condition)
-    $default    reduce using rule 46 (arith_expression)
+    ARITHEMATIC_OP        reduce using rule 46 (arith_expression)
+    RELATIONAL_OP         reduce using rule 46 (arith_expression)
+    ARITHEMATIC_OP_MINUS  reduce using rule 46 (arith_expression)
+    $default              reduce using rule 50 (unit_x)
 
 
 State 45
@@ -973,6 +975,14 @@ State 60
 
 State 61
 
+   30 conditionals: unit_x • BOOLEAN_OP conditionals
+   31             | unit_x • BOOLEAN_OP unit_x
+
+    BOOLEAN_OP  shift, and go to state 72
+
+
+State 62
+
    46 arith_expression: unit •  [ARITHEMATIC_OP, RELATIONAL_OP, CLOSE_PARANTHESIS, ARITHEMATIC_OP_MINUS]
    50 unit_x: unit •  [BOOLEAN_OP]
    51       | OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS
@@ -986,17 +996,15 @@ State 61
     shift/reduce conflict on token CLOSE_PARANTHESIS:
        46 arith_expression: unit •
        51 unit_x: OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS
-      First example: PROGRAM IDENTIFIER SEMICOLON variable_declaration BEGIN_TAG IF OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS BOOLEAN_OP conditionals THEN program_declaration ELSE program_declaration SEMICOLON END PERIOD $end
+      First example: PROGRAM IDENTIFIER SEMICOLON variable_declaration BEGIN_TAG IF OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS THEN program_declaration ELSE program_declaration SEMICOLON END PERIOD $end
       Shift derivation
         $accept
-        ↳ 0: start                                                                                                                                                                                                                                            $end
-             ↳ 1: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration                                                                                                                                                                PERIOD
-                                                                    ↳ 11: BEGIN_TAG statementline                                                                                                                                                  END
-                                                                                    ↳ 18: IF condition                                                                                 THEN program_declaration ELSE program_declaration SEMICOLON
-                                                                                             ↳ 23: conditional_head
-                                                                                                   ↳ 26: conditionals
-                                                                                                         ↳ 30: unit_x                                          BOOLEAN_OP conditionals
-                                                                                                               ↳ 51: OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS
+        ↳ 0: start                                                                                                                                                                                                        $end
+             ↳ 1: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration                                                                                                                            PERIOD
+                                                                    ↳ 11: BEGIN_TAG statementline                                                                                                              END
+                                                                                    ↳ 18: IF condition                                             THEN program_declaration ELSE program_declaration SEMICOLON
+                                                                                             ↳ 24: unit_x
+                                                                                                   ↳ 51: OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS
       Second example: PROGRAM IDENTIFIER SEMICOLON variable_declaration BEGIN_TAG IF OPEN_PARANTHESIS unit • CLOSE_PARANTHESIS RELATIONAL_OP arith_expression THEN program_declaration ELSE program_declaration SEMICOLON END PERIOD $end
       Reduce derivation
         $accept
@@ -1013,14 +1021,14 @@ State 61
 
 
 
-State 62
+State 63
 
    32 conditionals: BOOLEAN_OP_NOT conditionals •
 
     $default  reduce using rule 32 (conditionals)
 
 
-State 63
+State 64
 
    28 conditionals: relational_exp • BOOLEAN_OP conditionals
    29             | relational_exp • BOOLEAN_OP unit_x
@@ -1028,7 +1036,7 @@ State 63
     BOOLEAN_OP  shift, and go to state 68
 
 
-State 64
+State 65
 
    30 conditionals: unit_x • BOOLEAN_OP conditionals
    31             | unit_x • BOOLEAN_OP unit_x
@@ -1037,17 +1045,6 @@ State 64
     BOOLEAN_OP  shift, and go to state 72
 
     $default  reduce using rule 34 (condtional_unit)
-
-
-State 65
-
-   46 arith_expression: unit •  [ARITHEMATIC_OP, RELATIONAL_OP, ARITHEMATIC_OP_MINUS]
-   50 unit_x: unit •  [BOOLEAN_OP, CLOSE_PARANTHESIS, DO, THEN]
-
-    ARITHEMATIC_OP        reduce using rule 46 (arith_expression)
-    RELATIONAL_OP         reduce using rule 46 (arith_expression)
-    ARITHEMATIC_OP_MINUS  reduce using rule 46 (arith_expression)
-    $default              reduce using rule 50 (unit_x)
 
 
 State 66
@@ -1108,10 +1105,10 @@ State 68
 
     conditionals      go to state 91
     condtional_unit   go to state 40
-    relational_exp    go to state 63
+    relational_exp    go to state 64
     arith_expression  go to state 42
     unit_x            go to state 92
-    unit              go to state 65
+    unit              go to state 44
     unit_2            go to state 45
 
 
@@ -1218,10 +1215,10 @@ State 72
 
     conditionals      go to state 96
     condtional_unit   go to state 40
-    relational_exp    go to state 63
+    relational_exp    go to state 64
     arith_expression  go to state 42
     unit_x            go to state 97
-    unit              go to state 65
+    unit              go to state 44
     unit_2            go to state 45
 
 

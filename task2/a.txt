@@ -3,9 +3,9 @@ var
   i: Integer;
 begin
   i := 10;
-  if ((1<2) and (a) and (b)) then
+  if (a and b) then
   begin
-    i := -10;
+    i := -10.567;
     i := 3;
     write(i);
   end
