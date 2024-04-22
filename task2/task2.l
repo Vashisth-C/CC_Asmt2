@@ -71,6 +71,7 @@ SPACE [ ]
     {T}{O} {return TO;}
     [A-Za-z][A-Za-z0-9|_]* {return IDENTIFIER;}
     [1-9][0-9]*|"0" {return CONSTANT;}
+    {REALNUMBER} {return CONSTANT;}
     "\"".*"\"" {return STRING_CONSTANT;}
     "[" {return OPEN_BRACKET;}
     "]" {return CLOSE_BRACKET;}

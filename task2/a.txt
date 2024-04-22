@@ -3,15 +3,16 @@ var
   i: Integer;
 begin
   i := 10;
-  if i+10 > 10 then
+  if not a+y>2 and b and c then
   begin
     i := -10;
-    i := i - (10+i) *100;
+    i := 3;
     write(i);
   end
   else
   begin
-    i := 20;
+    i := nums[a[b[c[5%4*(1+20)]]]];
     write(i);
+    write(nums[a[b[c[5%4*(1+20)]]]]);
   end;
 end.

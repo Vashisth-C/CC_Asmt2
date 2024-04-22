@@ -39,6 +39,10 @@ Z [zZ]
 
 SPACE [ ]
 
+DIGIT [0-9]
+
+REALNUMBER {DIGIT}+"."{DIGIT}+
+
 %%
 
 <INITIAL>{
@@ -70,7 +74,8 @@ SPACE [ ]
     {D}{O}{W}{N}{T}{O} {printf("%d         %s         KEYWORD\n",line,yytext);}
     {T}{O} {printf("%d         %s         KEYWORD\n",line,yytext);}
     [A-Za-z][A-Za-z0-9|_]* {printf("%d         %s         IDENTIFIER\n",line,yytext);}
-    [1-9][0-9]*|"0" {printf("%d         %s         CONSTANT\n",line,yytext);}
+    [1-9]{DIGIT}*|"0" {printf("%d         %s         CONSTANT\n",line,yytext);}
+    {REALNUMBER} {printf("%d         %s         CONSTANT\n",line,yytext);}
     "\"" {printf("%d         %s         DQUOTE\n",line,yytext);BEGIN(STRING);}
     "[" {printf("%d         %s         OPEN_BRACKET\n",line,yytext);}
     "]" {printf("%d         %s         CLOSE_BRACKET\n",line,yytext);}
@@ -118,10 +123,9 @@ SPACE [ ]
 
 %%
 
-int main(){
-    printf("Enter the filename: ");
-    char filename[100];
-    scanf("%s", filename);
+int main(int argc, char** argv){
+    char* filename;
+    filename=argv[1];
     printf("\n\n");
     yyin=fopen(filename, "r");
     printf("LINE_NO      LEXEME      TOKEN\n\n");

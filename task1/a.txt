@@ -3,7 +3,8 @@ var
     numbers : array [1..10] of Integer ;
     i , sum : Integer ;
 begin
+    i:=10.5678;
     write (" The sum is : ");
-    \\yo bro
+    //yo bro
     write ( numbers[i+10] );
 end.
