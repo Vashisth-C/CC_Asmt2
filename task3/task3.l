@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "y.tab.h"
 
-int line = 1;
+extern int yylval
 %}
 
 %x COMMENT
@@ -39,6 +39,10 @@ Z [zZ]
 
 SPACE [ ]
 
+DIGIT [0-9]
+
+REALNUMBER {DIGIT}+"."{DIGIT}+
+
 %%
 
 <INITIAL>{
@@ -69,27 +73,28 @@ SPACE [ ]
     {A}{R}{R}{A}{Y} {return ARRAY;}
     {D}{O}{W}{N}{T}{O} {return DOWNTO;}
     {T}{O} {return TO;}
-    [A-Za-z][A-Za-z0-9|_]* {return IDENTIFIER;}
-    [1-9][0-9]*|"0" {return CONSTANT;}
-    "\"".*"\"" {return STRING_CONSTANT;}
+    [A-Za-z][A-Za-z0-9|_]* {yylval.sval=strdup(yytext);return IDENTIFIER;}
+    [1-9][0-9]*|"0" {yylval.ival=atoi(yytext);return INTEGER_CONSTANT;}
+    {REALNUMBER} {yylval.dval=atof(yytext);return FLOAT_CONSTANT;}
+    "\"".*"\"" {yyval.sval=strdup(yytext);return STRING_CONSTANT;}
     "[" {return OPEN_BRACKET;}
     "]" {return CLOSE_BRACKET;}
     "(" {return OPEN_PARANTHESIS;}
     ")" {return CLOSE_PARANTHESIS;}
     ":" {return COLON;}
     "," {return COMMA;}
-    "+" {return ARITHEMATIC_OP;}
-    "-" {return ARITHEMATIC_OP;}
-    "*" {return ARITHEMATIC_OP;}
-    "/" {return ARITHEMATIC_OP;}
-    "%" {return ARITHEMATIC_OP;}
-    ":=" {return ASSIGNMENT_OP;}
-    "=" {return RELATIONAL_OP;}
-    "<" {return RELATIONAL_OP;}
-    ">" {return RELATIONAL_OP;}
-    "<=" {return RELATIONAL_OP;}
-    ">=" {return RELATIONAL_OP;}
-    "<>" {return RELATIONAL_OP;}
+    "+" {yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+    "-" {yylval.sval=strdup(yytext);return ARITHEMATIC_OP_MINUS;}
+    "*" {yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+    "/" {yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+    "%" {yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+    ":=" {yylval.sval=strdup(yytext);return ASSIGNMENT_OP;}
+    "=" {yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+    "<" {yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+    ">" {yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+    "<=" {yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+    ">=" {yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+    "<>" {yylval.sval=strdup(yytext);return RELATIONAL_OP;}
     "."  {return PERIOD;}
     ".." {return RANGE_DOTS;}
 }
