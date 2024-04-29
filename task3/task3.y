@@ -2,6 +2,7 @@
 # include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 extern FILE *yyin;
 int yylex();
 int yyerror();
@@ -10,7 +11,15 @@ typedef struct node{
     char lexeme[100];
     int NumChild;
     struct node **child;
-    } node;
+} node;
+
+typedef struct symbol {
+    char name[100];
+    char type[100];
+    struct symbol* next;
+} symbol;
+
+symbol* symbol_table = NULL;
 
 struct node* make_binary_node(char*, node*, node*);
 struct node* make_leaf(char* );
@@ -19,6 +28,10 @@ struct node* make_unary_node(char* , node* );
 void AST_print(struct node* );
 void writeToFile(struct node* );
 void preOrderTraversal(struct node* , char* );
+void add_symbol(const char*, const char*);
+symbol* find_symbol(const char*);
+char * tolowercase(char *);
+void printTable();
 
 
 %}
@@ -45,7 +58,7 @@ void preOrderTraversal(struct node* , char* );
 
 
 %type <node> start variable_declaration program_declaration variable_list variable_line left_side_vars rigth_side_type datatype unit_2 statements statementline
-%type <node> possible_writes possible_write_values possible_reads arith_expression unit condition conditional_head relational_exp conditionals condtional_unit
+%type <node> possible_writes possible_write_values possible_reads arith_expression unit condition conditional_head relational_exp conditionals condtional_unit left_side_vars_write
 
 %%
 
@@ -61,7 +74,7 @@ start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PER
                                                                                     t->NumChild++;
                                                                                     printf("Valid Input\n\n");
                                                                                     writeToFile($$);
-                                                                                    AST_print($$);
+                                                                                    printTable();
                                                                                     printf("\n");  };
 
 variable_declaration: VAR variable_list {$$=make_unary_node("VAR",$2);}
@@ -80,8 +93,28 @@ variable_list: variable_line { $$=$1;}
 
 variable_line: left_side_vars COLON rigth_side_type SEMICOLON { struct node * temp1=make_leaf(";");
                                                                 $$=make_binary_node(":",$1,$3);}
-left_side_vars: IDENTIFIER { $$=make_leaf($1);}
-                |IDENTIFIER COMMA left_side_vars { struct node * temp1=make_leaf($1);
+left_side_vars: IDENTIFIER { char * temp; temp=(char*)malloc(100*sizeof(char));
+                            strcpy(temp,$1);
+                            temp=tolowercase(temp);
+                            if(find_symbol(temp)==NULL){
+                                add_symbol(temp,"undefined");
+                                }
+                            else{
+                                printf("Multiple Declarations of the variable: %s\n\n",$1);
+                                exit(0);
+                                }
+                            $$=make_leaf($1);}
+                |IDENTIFIER COMMA left_side_vars { char * temp; temp=(char*)malloc(100*sizeof(char));
+                                                strcpy(temp,$1);
+                                                temp=tolowercase(temp);
+                                                if(find_symbol(temp)==NULL){
+                                                    add_symbol(temp,"undefined");
+                                                    }
+                                                    else{
+                                                    printf("Multiple Declarations of the variable: %s\n\n",$1);
+                                                    exit(0);
+                                                    };
+                                                    struct node * temp1=make_leaf($1);
                                                     $$=make_binary_node(",",temp1,$3);}
 
 rigth_side_type: datatype { $$=$1;}
@@ -97,11 +130,44 @@ rigth_side_type: datatype { $$=$1;}
                                                                                                             node* temp2=make_unary_node(temp3,$6);
                                                                                                             $$=make_binary_node("..",temp1,temp2);}
 
+
 datatype: INTEGER {struct node* temp= make_leaf(";");
-                    $$=make_unary_node("INTEGER",temp);}
-        |REAL {struct node* temp= make_leaf(";");$$=make_unary_node("REAL",temp);}
-        |BOOLEAN {struct node* temp= make_leaf(";");$$=make_unary_node("BOOLEAN",temp);}
-        |CHAR {struct node* temp= make_leaf(";");$$=make_unary_node("CHAR",temp);}
+                    $$=make_unary_node("INTEGER",temp);
+                    symbol* current = symbol_table;
+                    while (current != NULL) {
+                        if (strcmp(current->type, "undefined") == 0) {
+                            strcpy(current->type, "INTEGER");
+                        }
+                        current = current->next;
+                    }}
+        |REAL {struct node* temp= make_leaf(";");
+                $$=make_unary_node("REAL",temp);
+                symbol* current = symbol_table;
+                while (current != NULL) {
+                    if (strcmp(current->type, "undefined") == 0) {
+                        strcpy(current->type, "REAL");
+                    }
+                    current = current->next;
+                }}
+        |BOOLEAN {struct node* temp= make_leaf(";");
+                $$=make_unary_node("BOOLEAN",temp);
+                symbol* current = symbol_table;
+                while (current != NULL) {
+                    if (strcmp(current->type, "undefined") == 0) {
+                        strcpy(current->type, "BOOLEAN");
+                    }
+                    current = current->next;
+                }}
+        |CHAR {struct node* temp= make_leaf(";");
+                $$=make_unary_node("CHAR",temp);
+                symbol* current = symbol_table;
+                while (current != NULL) {
+                    if (strcmp(current->type, "undefined") == 0) {
+                        strcpy(current->type, "CHAR");
+                    }
+                    current = current->next;
+                }}
+
 
 program_declaration: BEGIN_TAG statements END { struct node* temp=make_leaf("END");
                                                 $$=make_binary_node("BEGIN",$2,temp);
@@ -129,7 +195,14 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                                                                                     $5=make_leaf(";");
                                                                                     $4=make_unary_node(")",$5);
                                                                                     $$=make_ternary_node("READ",$2,$3,$4);}
-                |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON { node* temp=make_leaf(";");
+                |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON { char * x; x=(char*)malloc(100*sizeof(char));
+                                                                        strcpy(x,$1);
+                                                                        x=tolowercase(x);
+                                                                        if(find_symbol(x)==NULL){
+                                                                            printf("Undeclared variable: %s\n\n",$1);
+                                                                            exit(0);
+                                                                        }
+                                                                        node* temp=make_leaf(";");
                                                                         node* temp1=make_leaf($1);
                                                                         $$=make_ternary_node($2,temp1,$3,temp);}
                 |IF condition THEN program_declaration ELSE program_declaration SEMICOLON { node* then= make_unary_node("THEN",$4);
@@ -153,6 +226,13 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                                                                     t->NumChild++;
                                                                     }
                 |FOR IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression DO program_declaration SEMICOLON {
+                    char * x; x=(char*)malloc(100*sizeof(char));
+                    strcpy(x,$2);
+                    x=tolowercase(x);
+                    if(find_symbol(x)==NULL){
+                        printf("Undeclared variable: %s\n\n",$2);
+                        exit(0);
+                    }
                     node* dotemp=make_unary_node("DO",$8);
                     node* id=make_leaf($2);
                     node* temp=make_binary_node("TO",$4,$6);
@@ -167,6 +247,13 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                     t->NumChild++;
                 }
                 |FOR IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression DO program_declaration SEMICOLON {
+                    char * x; x=(char*)malloc(100*sizeof(char));
+                    strcpy(x,$2);
+                    x=tolowercase(x);
+                    if(find_symbol(x)==NULL){
+                        printf("Undeclared variable: %s\n\n",$2);
+                        exit(0);
+                    }
                     node* dotemp=make_unary_node("DO",$8);
                     node* id=make_leaf($2);
                     node* temp=make_binary_node("DOWNTO",$4,$6);
@@ -212,19 +299,58 @@ relational_exp: arith_expression RELATIONAL_OP arith_expression { $$=make_binary
                 |OPEN_PARANTHESIS relational_exp CLOSE_PARANTHESIS {node * temp=make_leaf(")");
                                                                     $$=make_binary_node("(",$2,temp);}
 
+left_side_vars_write: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
+                                    strcpy(temp,$1);
+                                    temp=tolowercase(temp);
+                                    if(find_symbol(temp)==NULL){
+                                        printf("Undeclared variable: %s\n\n",$1);
+                                        exit(0);
+                                    }
+                                $$=make_leaf($1);}
+                |IDENTIFIER COMMA left_side_vars_write { char * temp; temp=(char*)malloc(100*sizeof(char));
+                                                strcpy(temp,$1);
+                                                temp=tolowercase(temp);
+                                                if(find_symbol(temp)==NULL){
+                                                    printf("Undeclared variable: %s\n\n",$1);
+                                                    exit(0);
+                                                }
+                                                struct node * temp1=make_leaf($1);
+                                                $$=make_binary_node(",",temp1,$3);}
+
 possible_writes: possible_write_values { $$=$1;}
     | {$$=NULL;};
 
-possible_write_values: left_side_vars {$$=$1;}
+possible_write_values: left_side_vars_write {$$=$1;}
                         |STRING_CONSTANT { $$=make_leaf($1);}
                         |STRING_CONSTANT COMMA possible_write_values {node* temp=make_leaf($1);
                                                                         $$=make_binary_node(",",temp,$3);}
-                        | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {node* temp=make_leaf($1);
+                        | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
+                                                                                strcpy(x,$1);
+                                                                                x=tolowercase(x);
+                                                                                if(find_symbol(x)==NULL){
+                                                                                    printf("Undeclared variable: %s\n\n",$1);
+                                                                                    exit(0);
+                                                                                }
+                                                                                node* temp=make_leaf($1);
                                                                                 $4=make_leaf("r_brace");
                                                                                 $$=make_ternary_node("l_brace",temp,$2,$3);}
 
-possible_reads: IDENTIFIER {$$=make_leaf($1);}
-                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {node* temp=make_leaf($1);
+possible_reads: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
+                            strcpy(temp,$1);
+                            temp=tolowercase(temp);
+                            if(find_symbol(temp)==NULL){
+                                printf("Undeclared variable: %s\n\n",$1);
+                                exit(0);
+                            }
+                            $$=make_leaf($1);}
+                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
+                                                                        strcpy(x,$1);
+                                                                        x=tolowercase(x);
+                                                                        if(find_symbol(x)==NULL){
+                                                                            printf("Undeclared variable: %s\n\n",$1);
+                                                                            exit(0);
+                                                                        }
+                                                                        node* temp=make_leaf($1);
                                                                         $4=make_leaf("r_brace");
                                                                         $$=make_ternary_node("l_brace",temp,$2,$3);}
 
@@ -237,8 +363,22 @@ arith_expression: unit_2 {$$=$1;}
                 | arith_expression ARITHEMATIC_OP_MINUS arith_expression { $$=make_binary_node("-",$1,$3);}
 
 
-unit: IDENTIFIER {$$=make_leaf($1);}
-    | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {node* temp=make_leaf($1);
+unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
+                strcpy(temp,$1);
+                temp=tolowercase(temp);
+                if(find_symbol(temp)==NULL){
+                    printf("Undeclared variable: %s\n\n",$1);
+                    exit(0);
+                }
+                $$=make_leaf($1);}
+    | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
+                                                            strcpy(x,$1);
+                                                            x=tolowercase(x);
+                                                            if(find_symbol(x)==NULL){
+                                                                printf("Undeclared variable: %s\n\n",$1);
+                                                                exit(0);
+                                                            }
+                                                            node* temp=make_leaf($1);
                                                             $4=make_leaf("r_brace");
                                                             $$=make_ternary_node("l_brace",temp,$2,$3);}
     |ARITHEMATIC_OP_MINUS arith_expression {$$=make_unary_node("-",$2);}
@@ -330,6 +470,42 @@ void writeToFile(struct node* n){
     preOrderTraversal(n,text);
     // Write the string to the file
     fprintf(file, "%s", text);
+}
+
+void add_symbol(const char* name, const char* type) {
+    symbol* new_symbol = (symbol*)malloc(sizeof(symbol));
+    strcpy(new_symbol->name, name);
+    strcpy(new_symbol->type, type);
+    new_symbol->next = symbol_table;
+    symbol_table = new_symbol;
+}
+
+symbol* find_symbol(const char* name) {
+    symbol* current = symbol_table;
+    while (current != NULL) {
+        if (strcmp(current->name, name) == 0) {
+            return current;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+void printTable() {
+    symbol* current = symbol_table;
+    printf("\n\nSymbol Table\n");
+    printf("Name\tType\n");
+    while (current != NULL) {
+        printf("%s\t%s\n", current->name, current->type);
+        current = current->next;
+    }
+}
+
+char * tolowercase(char *s){
+    for(int i=0;i<strlen(s);i++){
+        s[i]=tolower(s[i]);
+    }
+    return s;
 }
 
 

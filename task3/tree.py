@@ -1,4 +1,5 @@
 from nltk.tree import *
+from nltk.featstruct import FeatStruct
 
 # assign your output (generalied list of the syntax tree) to varaible text
 f = open('syntaxtree.txt', 'r')
@@ -15,8 +16,6 @@ text = text.replace("[", "(")
 text = text.replace("]", ")")
 
 
-tree = Tree.fromstring(text)
-tree.pretty_print(unicodelines=True, nodedist=1)   
 
-with open('tree_output.txt', 'w') as f:
-    f.write(tree.pformat())  # Write pretty-formatted tree to file
+tree = Tree.fromstring(text, read_leaf=lambda x: FeatStruct(x))
+tree.pretty_print(unicodelines=False, nodedist=1)   
