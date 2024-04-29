@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include "y.tab.h"
 
-extern int yylval
+extern YYSTYPE yylval;
+int line=1;
 %}
 
 %x COMMENT
@@ -62,13 +63,13 @@ REALNUMBER {DIGIT}+"."{DIGIT}+
     {E}{N}{D} {return END;}
     {R}{E}{A}{D} {return READ;}
     {W}{R}{I}{T}{E} {return WRITE;}
-    {A}{N}{D} {return BOOLEAN_OP;}
-    {O}{R} {return BOOLEAN_OP;}
-    {N}{O}{T} {return BOOLEAN_OP_NOT;}
-    {I}{N}{T}{E}{G}{E}{R} {return DATATYPE;}
-    {R}{E}{A}{L} {return DATATYPE;}
-    {B}{O}{O}{L}{E}{A}{N} {return DATATYPE;}
-    {C}{H}{A}{R} {return DATATYPE;}
+    {A}{N}{D} {yylval.sval=strdup(yytext);return BOOLEAN_OP;}
+    {O}{R} {yylval.sval=strdup(yytext);return BOOLEAN_OP;}
+    {N}{O}{T} {yylval.sval=strdup(yytext);return BOOLEAN_OP_NOT;}
+    {I}{N}{T}{E}{G}{E}{R} {yylval.sval=strdup(yytext);return INTEGER;}
+    {R}{E}{A}{L} {yylval.sval=strdup(yytext);return REAL;}
+    {B}{O}{O}{L}{E}{A}{N} {yylval.sval=strdup(yytext);return BOOLEAN;}
+    {C}{H}{A}{R} {yylval.sval=strdup(yytext);return CHAR;}
     {V}{A}{R} {return VAR;}
     {A}{R}{R}{A}{Y} {return ARRAY;}
     {D}{O}{W}{N}{T}{O} {return DOWNTO;}
@@ -76,7 +77,7 @@ REALNUMBER {DIGIT}+"."{DIGIT}+
     [A-Za-z][A-Za-z0-9|_]* {yylval.sval=strdup(yytext);return IDENTIFIER;}
     [1-9][0-9]*|"0" {yylval.ival=atoi(yytext);return INTEGER_CONSTANT;}
     {REALNUMBER} {yylval.dval=atof(yytext);return FLOAT_CONSTANT;}
-    "\"".*"\"" {yyval.sval=strdup(yytext);return STRING_CONSTANT;}
+    "\"".*"\"" {yylval.sval=strdup(yytext);return STRING_CONSTANT;}
     "[" {return OPEN_BRACKET;}
     "]" {return CLOSE_BRACKET;}
     "(" {return OPEN_PARANTHESIS;}
