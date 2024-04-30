@@ -852,7 +852,7 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 55 "task3.l"
-{return IF;}
+{yylval.sval.line=line;return IF;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
@@ -867,7 +867,7 @@ YY_RULE_SETUP
 case 9:
 YY_RULE_SETUP
 #line 58 "task3.l"
-{return WHILE;}
+{yylval.sval.line=line;return WHILE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
@@ -907,37 +907,37 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 66 "task3.l"
-{yylval.sval=strdup(yytext);return BOOLEAN_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return BOOLEAN_OP;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 67 "task3.l"
-{yylval.sval=strdup(yytext);return BOOLEAN_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return BOOLEAN_OP;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 68 "task3.l"
-{yylval.sval=strdup(yytext);return BOOLEAN_OP_NOT;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return BOOLEAN_OP_NOT;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 69 "task3.l"
-{yylval.sval=strdup(yytext);return INTEGER;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return INTEGER;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 70 "task3.l"
-{yylval.sval=strdup(yytext);return REAL;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return REAL;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 71 "task3.l"
-{yylval.sval=strdup(yytext);return BOOLEAN;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return BOOLEAN;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 72 "task3.l"
-{yylval.sval=strdup(yytext);return CHAR;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return CHAR;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
@@ -962,22 +962,22 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 77 "task3.l"
-{yylval.sval=strdup(yytext);return IDENTIFIER;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return IDENTIFIER;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 78 "task3.l"
-{yylval.ival=atoi(yytext);return INTEGER_CONSTANT;}
+{yylval.ival.val=atoi(yytext);yylval.ival.line=line;return INTEGER_CONSTANT;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 79 "task3.l"
-{yylval.dval=atof(yytext);return FLOAT_CONSTANT;}
+{yylval.dval.val=atof(yytext);yylval.dval.line=line;return FLOAT_CONSTANT;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 80 "task3.l"
-{yylval.sval=strdup(yytext);return STRING_CONSTANT;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return STRING_CONSTANT;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
@@ -1012,62 +1012,62 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 87 "task3.l"
-{yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 88 "task3.l"
-{yylval.sval=strdup(yytext);return ARITHEMATIC_OP_MINUS;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_MINUS;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 89 "task3.l"
-{yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 90 "task3.l"
-{yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 91 "task3.l"
-{yylval.sval=strdup(yytext);return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 92 "task3.l"
-{yylval.sval=strdup(yytext);return ASSIGNMENT_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ASSIGNMENT_OP;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 93 "task3.l"
-{yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 94 "task3.l"
-{yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 95 "task3.l"
-{yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 96 "task3.l"
-{yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
 #line 97 "task3.l"
-{yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
 #line 98 "task3.l"
-{yylval.sval=strdup(yytext);return RELATIONAL_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP

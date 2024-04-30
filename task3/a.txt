@@ -1,21 +1,22 @@
 program MaxValueArray;
 var
-  numbers,maxValue,i: array[1..10] of Integer;
-  j: Integer;
+  numbers,maxValue: array[1..10] of Integer;
+  j,i: Integer;
   x: array[6..8] of Boolean;
 begin
   write("Enter 10 integer values:");
   for i := 1 to 10 do
   begin
-    read(numbers[i]);
+    read(numbers[1]);
   end;
-  j := 1+numbers[i]; 
-  maxValue := numbers[1];
+  i :=j;
+  j := 1+numbers[1]; 
+  maxValue := numbers;
   for i := j+2 to j+5 do
   begin
-    if numbers[i] <> maxValue then
+    if numbers<>maxValue then
     begin
-      maxValue := numbers[i];
+      maxValue := 1;
     end;
   end;
   write("The value is ");  

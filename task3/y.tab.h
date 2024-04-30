@@ -66,12 +66,12 @@ extern int yydebug;
     RELATIONAL_OP = 267,           /* RELATIONAL_OP  */
     ARITHEMATIC_OP = 268,          /* ARITHEMATIC_OP  */
     ARITHEMATIC_OP_MINUS = 269,    /* ARITHEMATIC_OP_MINUS  */
-    INTEGER_CONSTANT = 270,        /* INTEGER_CONSTANT  */
-    FLOAT_CONSTANT = 271,          /* FLOAT_CONSTANT  */
-    PROGRAM = 272,                 /* PROGRAM  */
-    SEMICOLON = 273,               /* SEMICOLON  */
-    IF = 274,                      /* IF  */
-    WHILE = 275,                   /* WHILE  */
+    IF = 270,                      /* IF  */
+    WHILE = 271,                   /* WHILE  */
+    INTEGER_CONSTANT = 272,        /* INTEGER_CONSTANT  */
+    FLOAT_CONSTANT = 273,          /* FLOAT_CONSTANT  */
+    PROGRAM = 274,                 /* PROGRAM  */
+    SEMICOLON = 275,               /* SEMICOLON  */
     ELSE = 276,                    /* ELSE  */
     FOR = 277,                     /* FOR  */
     DO = 278,                      /* DO  */
@@ -113,12 +113,12 @@ extern int yydebug;
 #define RELATIONAL_OP 267
 #define ARITHEMATIC_OP 268
 #define ARITHEMATIC_OP_MINUS 269
-#define INTEGER_CONSTANT 270
-#define FLOAT_CONSTANT 271
-#define PROGRAM 272
-#define SEMICOLON 273
-#define IF 274
-#define WHILE 275
+#define IF 270
+#define WHILE 271
+#define INTEGER_CONSTANT 272
+#define FLOAT_CONSTANT 273
+#define PROGRAM 274
+#define SEMICOLON 275
 #define ELSE 276
 #define FOR 277
 #define DO 278
@@ -145,14 +145,23 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 49 "task3.y"
+#line 50 "task3.y"
 
-    int ival;
-    char *sval;
-    double dval;
+    struct sval{
+        char *val;
+        int line;
+    }sval;
+    struct ival{
+        int val;
+        int line;
+    }ival;
+    struct dval{
+        double val;
+        int line;
+    }dval;
     struct node* node;
 
-#line 156 "y.tab.h"
+#line 165 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

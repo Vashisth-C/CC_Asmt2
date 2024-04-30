@@ -17,6 +17,7 @@ typedef struct node{
 typedef struct symbol {
     char name[100];
     char type[100];
+    int value;
     struct symbol* next;
 } symbol;
 
@@ -47,9 +48,18 @@ void printErrors();
 %}
 
 %union{
-    int ival;
-    char *sval;
-    double dval;
+    struct sval{
+        char *val;
+        int line;
+    }sval;
+    struct ival{
+        int val;
+        int line;
+    }ival;
+    struct dval{
+        double val;
+        int line;
+    }dval;
     struct node* node;
 }
 
@@ -60,10 +70,10 @@ void printErrors();
 %right RELATIONAL_OP
 %left BOOLEAN_OP_NOT
 
-%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP ARITHEMATIC_OP ARITHEMATIC_OP_MINUS
+%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP ARITHEMATIC_OP ARITHEMATIC_OP_MINUS IF WHILE
 %token <ival> INTEGER_CONSTANT
 %token <dval> FLOAT_CONSTANT
-%token <node> PROGRAM SEMICOLON IF WHILE ELSE FOR DO BEGIN_TAG END WRITE READ DOWNTO TO OF COLON VAR ARRAY THEN
+%token <node> PROGRAM SEMICOLON ELSE FOR DO BEGIN_TAG END WRITE READ DOWNTO TO OF COLON VAR ARRAY THEN
 %token <node> COMMA OPEN_BRACKET OPEN_PARANTHESIS CLOSE_BRACKET CLOSE_PARANTHESIS PERIOD RANGE_DOTS 
 
 
@@ -74,8 +84,10 @@ void printErrors();
 
 start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {$1=make_leaf("PROGRAM");
                                                                                     $6=make_binary_node(";",$4,$5);
-                                                                                    $$=make_binary_node($2,$1,$6);
+                                                                                    $$=make_binary_node($2.val,$1,$6);
                                                                                     node* t=$$;
+                                                                                    add_symbol($2.val,"PROGRAM");
+                                                                                    symbol_table->value=1;
                                                                                     while(t->child!=NULL){
                                                                                         t=t->child[t->NumChild-1];
                                                                                     }
@@ -87,10 +99,11 @@ start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PER
                                                                                     }
                                                                                     else{
                                                                                         printf("Valid Input\n\n");
-                                                                                        writeToFile($$);
+                                                                                        
                                                                                         printTable();
                                                                                         printf("\n");
                                                                                     }
+                                                                                    writeToFile($$);
                                                                                       };
 
 variable_declaration: VAR variable_list {$$=make_unary_node("VAR",$2);}
@@ -110,29 +123,31 @@ variable_list: variable_line { $$=$1;}
 variable_line: left_side_vars COLON rigth_side_type SEMICOLON { struct node * temp1=make_leaf(";");
                                                                 $$=make_binary_node(":",$1,$3);}
 left_side_vars: IDENTIFIER { char * temp; temp=(char*)malloc(100*sizeof(char));
-                            strcpy(temp,$1);
+                            strcpy(temp,$1.val);
                             temp=tolowercase(temp);
                             if(find_symbol(temp)==NULL){
                                 add_symbol(temp,"undefined");
+                                symbol_table->value=0;
                                 }
                             else{
                                 char *errormsg=(char*)malloc(100*sizeof(char));
-                                sprintf(errormsg,"Multiple Declarations of the variable: %s",$1);
+                                sprintf(errormsg,"Multiple Declarations of the variable: %s at line number: %d",$1.val,$1.line);
                                 addError(errormsg);
                                 }
-                            $$=make_leaf($1);}
+                            $$=make_leaf($1.val);}
                 |IDENTIFIER COMMA left_side_vars { char * temp; temp=(char*)malloc(100*sizeof(char));
-                                                strcpy(temp,$1);
+                                                strcpy(temp,$1.val);
                                                 temp=tolowercase(temp);
                                                 if(find_symbol(temp)==NULL){
                                                     add_symbol(temp,"undefined");
+                                                    symbol_table->value=0;
                                                     }
                                                     else{
                                                         char *errormsg=(char*)malloc(100*sizeof(char));
-                                                        sprintf(errormsg,"Multiple Declarations of the variable: %s",$1);
+                                                        sprintf(errormsg,"Multiple Declarations of the variable: %s at line number: %d",$1.val,$1.line);
                                                         addError(errormsg);
                                                     };
-                                                    struct node * temp1=make_leaf($1);
+                                                    struct node * temp1=make_leaf($1.val);
                                                     $$=make_binary_node(",",temp1,$3);}
 
 rigth_side_type: datatype { $$=$1;}
@@ -147,14 +162,14 @@ rigth_side_type: datatype { $$=$1;}
                         $1= make_leaf("ARRAY");
                         $2=make_unary_node("l_brace",$1);
                         char * temp; temp=(char*)malloc(100*sizeof(char)); 
-                        sprintf(temp,"%d",$3);
+                        sprintf(temp,"%d",$3.val);
                         node* temp1=make_unary_node(temp,$2);
                         node * sc=make_leaf(";");
                         node* dt=make_unary_node("INTEGER",sc);
                         $7=make_unary_node("OF",dt);
                         $6=make_unary_node("r_brace",$7);
                         char* temp3; temp3=(char*)malloc(100*sizeof(char));
-                        sprintf(temp3,"%d",$5);
+                        sprintf(temp3,"%d",$5.val);
                         node* temp2=make_unary_node(temp3,$6);
                         $$=make_binary_node("..",temp1,temp2);}
                 |ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF REAL {
@@ -168,14 +183,14 @@ rigth_side_type: datatype { $$=$1;}
                         $1= make_leaf("ARRAY");
                         $2=make_unary_node("l_brace",$1);
                         char * temp; temp=(char*)malloc(100*sizeof(char)); 
-                        sprintf(temp,"%d",$3);
+                        sprintf(temp,"%d",$3.val);
                         node* temp1=make_unary_node(temp,$2);
                         node * sc=make_leaf(";");
                         node* dt=make_unary_node("REAL",sc);
                         $7=make_unary_node("OF",dt);
                         $6=make_unary_node("r_brace",$7);
                         char* temp3; temp3=(char*)malloc(100*sizeof(char));
-                        sprintf(temp3,"%d",$5);
+                        sprintf(temp3,"%d",$5.val);
                         node* temp2=make_unary_node(temp3,$6);
                         $$=make_binary_node("..",temp1,temp2);}
                 |ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF BOOLEAN {
@@ -189,14 +204,14 @@ rigth_side_type: datatype { $$=$1;}
                         $1= make_leaf("ARRAY");
                         $2=make_unary_node("l_brace",$1);
                         char * temp; temp=(char*)malloc(100*sizeof(char)); 
-                        sprintf(temp,"%d",$3);
+                        sprintf(temp,"%d",$3.val);
                         node* temp1=make_unary_node(temp,$2);
                         node * sc=make_leaf(";");
                         node* dt=make_unary_node("BOOLEAN",sc);
                         $7=make_unary_node("OF",dt);
                         $6=make_unary_node("r_brace",$7);
                         char* temp3; temp3=(char*)malloc(100*sizeof(char));
-                        sprintf(temp3,"%d",$5);
+                        sprintf(temp3,"%d",$5.val);
                         node* temp2=make_unary_node(temp3,$6);
                         $$=make_binary_node("..",temp1,temp2);}
                 |ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF CHAR {
@@ -210,14 +225,14 @@ rigth_side_type: datatype { $$=$1;}
                         $1= make_leaf("ARRAY");
                         $2=make_unary_node("l_brace",$1);
                         char * temp; temp=(char*)malloc(100*sizeof(char)); 
-                        sprintf(temp,"%d",$3);
+                        sprintf(temp,"%d",$3.val);
                         node* temp1=make_unary_node(temp,$2);
                         node * sc=make_leaf(";");
                         node* dt=make_unary_node("CHAR",sc);
                         $7=make_unary_node("OF",dt);
                         $6=make_unary_node("r_brace",$7);
                         char* temp3; temp3=(char*)malloc(100*sizeof(char));
-                        sprintf(temp3,"%d",$5);
+                        sprintf(temp3,"%d",$5.val);
                         node* temp2=make_unary_node(temp3,$6);
                         $$=make_binary_node("..",temp1,temp2);}
 
@@ -226,8 +241,7 @@ datatype: INTEGER {struct node* temp= make_leaf(";");
                     $$=make_unary_node("INTEGER",temp);
                     symbol* current = symbol_table;
                     while (current != NULL) {
-                        if (strcmp(current->type, "undefined") == 0 
-                        || strcmp(current->type, "ARRAY") == 0) {
+                        if (strcmp(current->type, "undefined") == 0 ) {
                             strcpy(current->type, "INTEGER");
                         }
                         current = current->next;
@@ -236,7 +250,7 @@ datatype: INTEGER {struct node* temp= make_leaf(";");
                 $$=make_unary_node("REAL",temp);
                 symbol* current = symbol_table;
                 while (current != NULL) {
-                    if (strcmp(current->type, "undefined") == 0 || strcmp(current->type, "ARRAY") == 0){
+                    if (strcmp(current->type, "undefined") == 0){
                         strcpy(current->type, "REAL");
                     }
                     current = current->next;
@@ -245,7 +259,7 @@ datatype: INTEGER {struct node* temp= make_leaf(";");
                 $$=make_unary_node("BOOLEAN",temp);
                 symbol* current = symbol_table;
                 while (current != NULL) {
-                    if (strcmp(current->type, "undefined") == 0 || strcmp(current->type, "ARRAY") == 0) {
+                    if (strcmp(current->type, "undefined") == 0) {
                         strcpy(current->type, "BOOLEAN");
                     }
                     current = current->next;
@@ -254,7 +268,7 @@ datatype: INTEGER {struct node* temp= make_leaf(";");
                 $$=make_unary_node("CHAR",temp);
                 symbol* current = symbol_table;
                 while (current != NULL) {
-                    if (strcmp(current->type, "undefined") == 0 || strcmp(current->type, "ARRAY") == 0) {
+                    if (strcmp(current->type, "undefined") == 0) {
                         strcpy(current->type, "CHAR");
                     }
                     current = current->next;
@@ -288,16 +302,54 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                                                                                     $4=make_unary_node(")",$5);
                                                                                     $$=make_ternary_node("READ",$2,$3,$4);}
                 |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON { char * x; x=(char*)malloc(100*sizeof(char));
-                                                                        strcpy(x,$1);
+                                                                        strcpy(x,$1.val);
                                                                         x=tolowercase(x);
-                                                                        if(find_symbol(x)==NULL){
+                                                                        if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                            sprintf(errormsg,"Undeclared variable: %s",$1);
+                                                                            sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
                                                                             addError(errormsg);
+                                                                            add_symbol(x,"undefined");
                                                                         }
                                                                         node* temp=make_leaf(";");
-                                                                        node* temp1=make_leaf($1);
-                                                                        $$=make_ternary_node($2,temp1,$3,temp);}
+                                                                        node* temp1=make_leaf($1.val);
+                                                                        $$=make_ternary_node($2.val,temp1,$3,temp);
+                                                                        if(strcmp(find_symbol(x)->type,$3->type)!=0){
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Assignment of mismatched types at line number: %d",$1.line);
+                                                                            addError(errormsg);
+                                                                        }
+                                                                        find_symbol(x)->value=1;}
+                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET ASSIGNMENT_OP arith_expression SEMICOLON {
+                    char * x; x=(char*)malloc(100*sizeof(char));
+                    strcpy(x,$1.val);
+                    x=tolowercase(x);
+                    if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
+                        char *errormsg=(char*)malloc(100*sizeof(char) );
+                        sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                        addError(errormsg);
+                        add_symbol(x,"undefined");
+                    }
+                    if(strcmp($3->type,"INTEGER")!=0){
+                        char *errormsg=(char*)malloc(100*sizeof(char));
+                        sprintf(errormsg,"Array Indices should be Integer at line number: %d",$1.line);
+                        addError(errormsg);
+                    }
+                    char *typ=(char*)malloc(100*sizeof(char));
+                    strcpy(typ,find_symbol(x)->type);
+                    char *subStr = NULL;
+                    char *underscorePos = strchr(typ, '_');
+                    subStr = underscorePos + 1;
+                    if(strcmp(subStr,$6->type)!=0){
+                        char *errormsg=(char*)malloc(100*sizeof(char));
+                        sprintf(errormsg,"Assignment of mismatched types at line number: %d",$1.line);
+                        addError(errormsg);
+                    }
+                    node* temp=make_leaf(";");
+                    node* temp1=make_leaf($1.val);
+                    node* temp2=make_leaf("r_brace");
+                    $2=make_ternary_node("l_brace",temp1,$3,temp2);
+                    $$=make_ternary_node($5.val,$2,$6,temp);
+                    find_symbol(x)->value=1;}
                 |IF condition THEN program_declaration ELSE program_declaration SEMICOLON { node* then= make_unary_node("THEN",$4);
                                                                                         node* elset= make_unary_node("ELSE",$6);
                                                                                         $$=make_ternary_node("IF",$2,then,elset);
@@ -307,7 +359,12 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                                                                                         }
                                                                                         t->child=(struct node**)malloc(sizeof(struct node*));
                                                                                         t->child[0]=make_leaf(";");
-                                                                                        t->NumChild++;}
+                                                                                        t->NumChild++;
+                                                                                        if(strcmp($2->type,"BOOLEAN")!=0){
+                                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                                            sprintf(errormsg,"If-condition should be boolean at line number: %d",$1.line);
+                                                                                            addError(errormsg);
+                                                                                        }}
                 |IF condition THEN program_declaration SEMICOLON { node* then= make_unary_node("THEN",$4);
                                                                     $$=make_binary_node("IF",$2,then);
                                                                     node* t=$$;
@@ -317,20 +374,31 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                                                                     t->child=(struct node**)malloc(sizeof(struct node*));
                                                                     t->child[0]=make_leaf(";");
                                                                     t->NumChild++;
-                                                                    }
+                                                                    if(strcmp($2->type,"BOOLEAN")!=0){
+                                                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                        sprintf(errormsg,"If-condition should be boolean at line number: %d",$1.line);
+                                                                        addError(errormsg);
+                                                                    }}
                 |FOR IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression DO program_declaration SEMICOLON {
                     char * x; x=(char*)malloc(100*sizeof(char));
-                    strcpy(x,$2);
+                    strcpy(x,$2.val);
                     x=tolowercase(x);
-                    if(find_symbol(x)==NULL){
+                    if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
                         char *errormsg=(char*)malloc(100*sizeof(char));
-                        sprintf(errormsg,"Undeclared variable: %s",$2);
+                        sprintf(errormsg,"Undeclared variable: %s at line number: %d",$2.val,$2.line);
+                        addError(errormsg);
+                        add_symbol(x,"undefined");
+                    }
+                    if(!(strcmp(find_symbol(x)->type,"INTEGER")==0 && strcmp($4->type,"INTEGER")==0 && strcmp($6->type,"INTEGER")==0)){
+                        char *errormsg=(char*)malloc(100*sizeof(char));
+                        sprintf(errormsg,"For loop variables should be integer at line number: %d",$2.line);
                         addError(errormsg);
                     }
+                    find_symbol(x)->value=1;
                     node* dotemp=make_unary_node("DO",$8);
-                    node* id=make_leaf($2);
+                    node* id=make_leaf($2.val);
                     node* temp=make_binary_node("TO",$4,$6);
-                    node* temp1=make_binary_node($3,id,temp);
+                    node* temp1=make_binary_node($3.val,id,temp);
                     $$=make_binary_node("FOR",temp1,dotemp);
                     node* t=$$;
                     while(t->child!=NULL){
@@ -342,17 +410,25 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                 }
                 |FOR IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression DO program_declaration SEMICOLON {
                     char * x; x=(char*)malloc(100*sizeof(char));
-                    strcpy(x,$2);
+                    strcpy(x,$2.val);
                     x=tolowercase(x);
-                    if(find_symbol(x)==NULL){
+                    if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
                         char *errormsg=(char*)malloc(100*sizeof(char));
-                        sprintf(errormsg,"Undeclared variable: %s",$2);
+                        sprintf(errormsg,"Undeclared variable: %s at line number: %d",$2.val,$2.line);
+                        addError(errormsg);
+                        add_symbol(x,"undefined");
+                        symbol_table->value=0;
+                    }
+                    if(!(strcmp(find_symbol(x)->type,"INTEGER")==0 && strcmp($4->type,"INTEGER")==0 && strcmp($6->type,"INTEGER")==0)){
+                        char *errormsg=(char*)malloc(100*sizeof(char));
+                        sprintf(errormsg,"For loop variables should be integer at line number: %d",$2.line);
                         addError(errormsg);
                     }
+                    find_symbol(x)->value=1;
                     node* dotemp=make_unary_node("DO",$8);
-                    node* id=make_leaf($2);
+                    node* id=make_leaf($2.val);
                     node* temp=make_binary_node("DOWNTO",$4,$6);
-                    node* temp1=make_binary_node($3,id,temp);
+                    node* temp1=make_binary_node($3.val,id,temp);
                     $$=make_binary_node("FOR",temp1,dotemp);
                     node* t=$$;
                      while(t->child!=NULL){
@@ -370,87 +446,238 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                                                                     }
                                                                     t->child=(struct node**)malloc(sizeof(struct node*));
                                                                     t->child[0]=make_leaf(";");
-                                                                    t->NumChild++;}
+                                                                    t->NumChild++;
+                                                                    if(strcmp($2->type,"BOOLEAN")!=0){
+                                                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                        sprintf(errormsg,"While-condition should be boolean at line number: %d",$1.line);
+                                                                        addError(errormsg);
+                                                                    }
+                                                                    }
 
-condition: conditional_head {$$=$1;}
-            |unit {$$=$1;}
+condition: conditional_head {$$=$1;
+                            strcpy($$->type,$1->type);}
+            |unit {$$=$1;
+                   strcpy($$->type,$1->type);}
 
-conditional_head: relational_exp { $$=$1;}
-                    |conditionals { $$=$1;}
+conditional_head: relational_exp { $$=$1;
+                                    strcpy($$->type,$1->type);}
+                    |conditionals { $$=$1;
+                                    strcpy($$->type,$1->type);}
 
-conditionals:   condtional_unit {$$=$1;}
-                |relational_exp BOOLEAN_OP conditionals { $$=make_binary_node($2,$1,$3);}
-                | relational_exp BOOLEAN_OP unit { $$=make_binary_node($2,$1,$3);}
-                |unit BOOLEAN_OP conditionals  { $$=make_binary_node($2,$1,$3);}
-                | unit BOOLEAN_OP unit  { $$=make_binary_node($2,$1,$3);}
-                | BOOLEAN_OP_NOT conditionals { $$=make_unary_node($1,$2);}
+conditionals:   condtional_unit {$$=$1;
+                                strcpy($$->type,$1->type);}
+                |relational_exp BOOLEAN_OP conditionals { $$=make_binary_node($2.val,$1,$3);
+                                                            if(strcmp($1->type,"BOOLEAN")==0 && strcmp($3->type,"BOOLEAN")==0){
+                                                                strcpy($$->type,"BOOLEAN");
+                                                            }
+                                                            else{
+                                                                char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                                addError(errormsg);
+                                                                strcpy($$->type,"BOOLEAN");
+                                                            }}
+                | relational_exp BOOLEAN_OP unit { $$=make_binary_node($2.val,$1,$3);
+                                                    if(strcmp($1->type,"BOOLEAN")==0 && strcmp($3->type,"BOOLEAN")==0){
+                                                        strcpy($$->type,"BOOLEAN");
+                                                    }
+                                                    else{
+                                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                                        sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                        addError(errormsg);
+                                                        strcpy($$->type,"BOOLEAN");
+                                                    }}
+                |unit BOOLEAN_OP conditionals  { $$=make_binary_node($2.val,$1,$3);
+                                                if(strcmp($1->type,"BOOLEAN")==0 && strcmp($3->type,"BOOLEAN")==0){
+                                                    strcpy($$->type,"BOOLEAN");
+                                                }
+                                                else{
+                                                    char *errormsg=(char*)malloc(100*sizeof(char));
+                                                    sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                    addError(errormsg);
+                                                    strcpy($$->type,"BOOLEAN");
+                                                }}
+                | unit BOOLEAN_OP unit  { $$=make_binary_node($2.val,$1,$3);
+                                        if(strcmp($1->type,"BOOLEAN")==0 && strcmp($3->type,"BOOLEAN")==0){
+                                            strcpy($$->type,"BOOLEAN");
+                                        }
+                                        else{
+                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                            addError(errormsg);
+                                            strcpy($$->type,"BOOLEAN");
+                                        }}
+                | BOOLEAN_OP_NOT conditionals { $$=make_unary_node($1.val,$2);
+                                                if(strcmp($2->type,"BOOLEAN")==0){
+                                                    strcpy($$->type,"BOOLEAN");
+                                                }
+                                                else{
+                                                    char *errormsg=(char*)malloc(100*sizeof(char));
+                                                    sprintf(errormsg,"Type Mismatch at line number: %d",$1.line);
+                                                    addError(errormsg);
+                                                    strcpy($$->type,"BOOLEAN");
+                                                }}
                 |OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS {node * temp=make_leaf(")");
-                                                                $$=make_binary_node("(",$2,temp);}
+                                                                $$=make_binary_node("(",$2,temp);
+                                                                strcpy($$->type,$2->type);}
                 
 
-condtional_unit:BOOLEAN_OP_NOT unit {$$=make_unary_node($1,$2);}
+condtional_unit:BOOLEAN_OP_NOT unit {$$=make_unary_node($1.val,$2);
+                                    if(strcmp($2->type,"BOOLEAN")==0){
+                                        strcpy($$->type,"BOOLEAN");
+                                    }
+                                    else{
+                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                        sprintf(errormsg,"Type Mismatch at line number: %d",$1.line);
+                                        addError(errormsg);
+                                        strcpy($$->type,"BOOLEAN");
+                                    }}
 
-relational_exp: arith_expression RELATIONAL_OP arith_expression { $$=make_binary_node($2,$1,$3);}
+relational_exp: arith_expression RELATIONAL_OP arith_expression { $$=make_binary_node($2.val,$1,$3);
+
+                                                                    if(strcmp($2.val,"<>")==0 || strcmp($2.val,"=")==0){
+                                                                        if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }else if(strcmp($1->type,"CHAR")==0 && strcmp($3->type,"CHAR")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }else if(strcmp($1->type,"BOOLEAN")==0 && strcmp($3->type,"BOOLEAN")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }else if(strcmp($1->type,"ARRAY_INTEGER")==0 && strcmp($3->type,"ARRAY_INTEGER")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }else if(strcmp($1->type,"ARRAY_REAL")==0 && strcmp($3->type,"ARRAY_REAL")==0){
+                                                                            strcpy($$->type,"BOOLEAN");}
+                                                                        else if(strcmp($1->type,"ARRAY_BOOLEAN")==0 && strcmp($3->type,"ARRAY_BOOLEAN")==0){
+                                                                            strcpy($$->type,"BOOLEAN");}
+                                                                        else if(strcmp($1->type,"ARRAY_CHAR")==0 && strcmp($3->type,"ARRAY_CHAR")==0){
+                                                                            strcpy($$->type,"BOOLEAN");}
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                                            addError(errormsg);
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                    }else{
+                                                                        if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                                            addError(errormsg);
+                                                                            strcpy($$->type,"BOOLEAN");
+                                                                        }
+                                                                    }}
                 |OPEN_PARANTHESIS relational_exp CLOSE_PARANTHESIS {node * temp=make_leaf(")");
-                                                                    $$=make_binary_node("(",$2,temp);}
+                                                                    $$=make_binary_node("(",$2,temp);
+                                                                    strcpy($$->type,$2->type);}
 
 left_side_vars_write: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
-                                    strcpy(temp,$1);
+                                    strcpy(temp,$1.val);
                                     temp=tolowercase(temp);
-                                    if(find_symbol(temp)==NULL){
+                                    if(find_symbol(temp)==NULL || strcmp(find_symbol(temp)->type,"undefined")==0){
                                         char *errormsg=(char*)malloc(100*sizeof(char));
-                                        sprintf(errormsg,"Undeclared variable: %s",$1);
+                                        sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                                        addError(errormsg);
+                                        add_symbol(temp,"undefined");
+                                        symbol_table->value=0;
+                                    }
+                                    if(find_symbol(temp)->value==0){
+                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                        sprintf(errormsg,"Variable not initialized: %s at line number: %d",$1.val,$1.line);
                                         addError(errormsg);
                                     }
-                                $$=make_leaf($1);}
+                                $$=make_leaf($1.val);}
                 |IDENTIFIER COMMA left_side_vars_write { char * temp; temp=(char*)malloc(100*sizeof(char));
-                                                strcpy(temp,$1);
+                                                strcpy(temp,$1.val);
                                                 temp=tolowercase(temp);
-                                                if(find_symbol(temp)==NULL){
+                                                if(find_symbol(temp)==NULL || strcmp(find_symbol(temp)->type,"undefined")==0){
                                                     char *errormsg=(char*)malloc(100*sizeof(char));
-                                                    sprintf(errormsg,"Undeclared variable: %s",$1);
+                                                    sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                                                    addError(errormsg);
+                                                    add_symbol(temp,"undefined");
+                                                    symbol_table->value=0;
+                                                }
+                                                if(find_symbol(temp)->value==0){
+                                                    char *errormsg=(char*)malloc(100*sizeof(char));
+                                                    sprintf(errormsg,"Variable not initialized: %s at line number: %d",$1.val,$1.line);
                                                     addError(errormsg);
                                                 }
-                                                struct node * temp1=make_leaf($1);
+                                                struct node * temp1=make_leaf($1.val);
                                                 $$=make_binary_node(",",temp1,$3);}
 
 possible_writes: possible_write_values { $$=$1;}
     | {$$=NULL;};
 
 possible_write_values: left_side_vars_write {$$=$1;}
-                        |STRING_CONSTANT { $$=make_leaf($1);}
-                        |STRING_CONSTANT COMMA possible_write_values {node* temp=make_leaf($1);
+                        |STRING_CONSTANT { $$=make_leaf($1.val);}
+                        |STRING_CONSTANT COMMA possible_write_values {node* temp=make_leaf($1.val);
                                                                         $$=make_binary_node(",",temp,$3);}
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
-                                                                                strcpy(x,$1);
+                                                                                strcpy(x,$1.val);
                                                                                 x=tolowercase(x);
-                                                                                if(find_symbol(x)==NULL){
+                                                                                if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
                                                                                     char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                                    sprintf(errormsg,"Undeclared variable: %s",$1);
+                                                                                    sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                                                                                    addError(errormsg);
+                                                                                    add_symbol(x,"undefined");
+                                                                                    symbol_table->value=0;
+                                                                                }
+                                                                                if(find_symbol(x)->value==0){
+                                                                                    char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                                    sprintf(errormsg,"Variable not initialized: %s at line number: %d",$1.val,$1.line);
                                                                                     addError(errormsg);
                                                                                 }
-                                                                                node* temp=make_leaf($1);
+                                                                                if(strcmp($3->type,"INTEGER")!=0){
+                                                                                    char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                                    sprintf(errormsg,"Array Indices should be Integer at line number: %d",$1.line);
+                                                                                    addError(errormsg);
+                                                                                }
+                                                                                node* temp=make_leaf($1.val);
                                                                                 $4=make_leaf("r_brace");
                                                                                 $$=make_ternary_node("l_brace",temp,$2,$3);}
 
 possible_reads: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
-                            strcpy(temp,$1);
+                            strcpy(temp,$1.val);
                             temp=tolowercase(temp);
                             if(find_symbol(temp)==NULL){
-                                char *errormsg=(char*)malloc(100*sizeof(char));
-                                sprintf(errormsg,"Undeclared variable: %s",$1);
+                                char *errormsg=(char*)malloc(100*sizeof(char) || strcmp(find_symbol(temp)->type,"undefined")==0);
+                                sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
                                 addError(errormsg);
+                                add_symbol(temp,"undefined");
+                                symbol_table->value=0;
                             }
-                            $$=make_leaf($1);}
+                            find_symbol(temp)->value=1;
+                            printf("Value of %s: \n",temp);
+                            $$=make_leaf($1.val);}
                 |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
-                                                                        strcpy(x,$1);
+                                                                        strcpy(x,$1.val);
                                                                         x=tolowercase(x);
-                                                                        if(find_symbol(x)==NULL){
+                                                                        if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                            sprintf(errormsg,"Undeclared variable: %s",$1);
-                                                                            addError(errormsg);     
+                                                                            sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                                                                            addError(errormsg);
+                                                                            add_symbol(x,"undefined");
+                                                                            symbol_table->value=0;     
                                                                         }
-                                                                        node* temp=make_leaf($1);
+                                                                        find_symbol(x)->value=1;
+                                                                        node* temp=make_leaf($1.val);
                                                                         $4=make_leaf("r_brace");
                                                                         $$=make_ternary_node("l_brace",temp,$2,$3);}
 
@@ -458,17 +685,24 @@ possible_reads: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
 arith_expression: unit_2 {$$=$1;}
                 |unit {$$=$1;}
                 | OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS {node * temp=make_leaf(")");
-                                                                        $$=make_binary_node("(",$2,temp);}
-                | arith_expression ARITHEMATIC_OP arith_expression { $$=make_binary_node($2,$1,$3);
+                                                                        $$=make_binary_node("(",$2,temp);
+                                                                        strcpy($$->type,$2->type);}
+                | arith_expression ARITHEMATIC_OP arith_expression { $$=make_binary_node($2.val,$1,$3);
                                                                     if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
                                                                         strcpy($$->type,"INTEGER");
                                                                     }
                                                                     else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
                                                                         strcpy($$->type,"REAL");
                                                                     }
+                                                                    else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"REAL")==0){
+                                                                        strcpy($$->type,"REAL");
+                                                                    }
+                                                                    else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                        strcpy($$->type,"REAL");
+                                                                    }
                                                                     else{
                                                                         char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                        sprintf(errormsg,"Type Mismatch");
+                                                                        sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
                                                                         addError(errormsg);
                                                                     }}
                 | arith_expression ARITHEMATIC_OP_MINUS arith_expression { $$=make_binary_node("-",$1,$3);
@@ -478,34 +712,59 @@ arith_expression: unit_2 {$$=$1;}
                                                                         else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
                                                                             strcpy($$->type,"REAL");
                                                                         }
+                                                                        else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
                                                                         else{
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                            sprintf(errormsg,"Type Mismatch");
+                                                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
                                                                             addError(errormsg);
                                                                         }}
 
 
 unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
-                strcpy(temp,$1);
+                strcpy(temp,$1.val);
                 temp=tolowercase(temp);
-                if(find_symbol(temp)==NULL){
+                if(find_symbol(temp)==NULL || strcmp(find_symbol(temp)->type,"undefined")==0){
                     char *errormsg=(char*)malloc(100*sizeof(char));
-                    sprintf(errormsg,"Undeclared variable: %s",$1);
+                    sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                    addError(errormsg);
+                    add_symbol(temp,"undefined");
+                    symbol_table->value=0;
+                }
+                if(find_symbol(temp)->value==0){
+                    char *errormsg=(char*)malloc(100*sizeof(char));
+                    sprintf(errormsg,"Variable not initialized: %s at line number: %d",$1.val,$1.line);
                     addError(errormsg);
                 }
-                $$=make_leaf($1);
+                $$=make_leaf($1.val);
                 char *typ=(char*)malloc(100*sizeof(char));
                 strcpy(typ,find_symbol(temp)->type);
                 strcpy($$->type,typ);}
     | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
-                                                            strcpy(x,$1);
+                                                            strcpy(x,$1.val);
                                                             x=tolowercase(x);
-                                                            if(find_symbol(x)==NULL){
+                                                            if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
+                                                                char *errormsg=(char*)malloc(100*sizeof(char) );
+                                                                sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+                                                                addError(errormsg);
+                                                                add_symbol(x,"undefined");
+                                                                symbol_table->value=0;
+                                                            }
+                                                            if(find_symbol(x)->value==0){
                                                                 char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                sprintf(errormsg,"Undeclared variable: %s",$1);
+                                                                sprintf(errormsg,"Variable not initialized: %s at line number: %d",$1.val,$1.line);
                                                                 addError(errormsg);
                                                             }
-                                                            node* temp=make_leaf($1);
+                                                            if(strcmp($3->type,"INTEGER")!=0){
+                                                                char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                sprintf(errormsg,"Array Indices should be Integer at line number: %d",$1.line);
+                                                                addError(errormsg);
+                                                            }
+                                                            node* temp=make_leaf($1.val);
                                                             $4=make_leaf("r_brace");
                                                             $$=make_ternary_node("l_brace",temp,$2,$3);
                                                             char *typ=(char*)malloc(100*sizeof(char));
@@ -514,14 +773,25 @@ unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
                                                             char *underscorePos = strchr(typ, '_');
                                                             subStr = underscorePos + 1;
                                                             strcpy($$->type,subStr);}
-    |ARITHEMATIC_OP_MINUS arith_expression {$$=make_unary_node("-",$2);}
+    |ARITHEMATIC_OP_MINUS arith_expression {$$=make_unary_node("-",$2);
+                                            if(strcmp($2->type,"INTEGER")==0){
+                                                strcpy($$->type,"INTEGER");
+                                            }
+                                            else if(strcmp($2->type,"REAL")==0){
+                                                strcpy($$->type,"REAL");
+                                            }
+                                            else{
+                                                char *errormsg=(char*)malloc(100*sizeof(char));
+                                                sprintf(errormsg,"Type Mismatch at line number: %d",$1.line);
+                                                addError(errormsg);
+                                            }}
 
 unit_2: INTEGER_CONSTANT { char * temp; temp=(char*)malloc(100*sizeof(char)); 
-                            sprintf(temp,"%d",$1);
+                            sprintf(temp,"%d",$1.val);
                             $$=make_leaf(temp);
                             sprintf($$->type,"INTEGER");}
     | FLOAT_CONSTANT { char * temp; temp=(char*)malloc(100*sizeof(char)); 
-                        sprintf(temp,"%f",$1);
+                        sprintf(temp,"%f",$1.val);
                         $$=make_leaf(temp);
                         sprintf($$->type,"REAL");}
 

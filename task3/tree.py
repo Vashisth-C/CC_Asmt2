@@ -15,7 +15,7 @@ text = text.replace(")", "cb")    #in the syntax tree, 'cb' will display in plac
 text = text.replace("[", "(")
 text = text.replace("]", ")")
 
-
+text= text.replace(" ","")
 
 tree = Tree.fromstring(text)
 tree.pretty_print(unicodelines=False, nodedist=1)   
