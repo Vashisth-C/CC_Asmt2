@@ -17,5 +17,5 @@ text = text.replace("]", ")")
 
 
 
-tree = Tree.fromstring(text, read_leaf=lambda x: FeatStruct(x))
+tree = Tree.fromstring(text)
 tree.pretty_print(unicodelines=False, nodedist=1)   

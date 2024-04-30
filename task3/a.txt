@@ -2,6 +2,7 @@ program MaxValueArray;
 var
   numbers,maxValue,i: array[1..10] of Integer;
   j: Integer;
+  x: array[6..8] of Boolean;
 begin
   write("Enter 10 integer values:");
   for i := 1 to 10 do
