@@ -736,8 +736,8 @@ static const yytype_int16 yyrline[] =
      267,   270,   271,   282,   286,   290,   301,   311,   321,   343,
      365,   375,   376,   378,   379,   381,   382,   383,   384,   385,
      386,   387,   391,   393,   394,   397,   406,   417,   418,   420,
-     421,   422,   424,   436,   445,   458,   459,   460,   462,   463,
-     466,   478,   489,   491,   495
+     421,   422,   424,   436,   445,   458,   459,   460,   462,   474,
+     488,   500,   517,   519,   523
 };
 #endif
 
@@ -2043,18 +2043,40 @@ yyreduce:
 
   case 58: /* arith_expression: arith_expression ARITHEMATIC_OP arith_expression  */
 #line 462 "task3.y"
-                                                                   { (yyval.node)=make_binary_node((yyvsp[-1].sval),(yyvsp[-2].node),(yyvsp[0].node));}
-#line 2048 "y.tab.c"
+                                                                   { (yyval.node)=make_binary_node((yyvsp[-1].sval),(yyvsp[-2].node),(yyvsp[0].node));
+                                                                    if(strcmp((yyvsp[-2].node)->type,"INTEGER")==0 && strcmp((yyvsp[0].node)->type,"INTEGER")==0){
+                                                                        strcpy((yyval.node)->type,"INTEGER");
+                                                                    }
+                                                                    else if(strcmp((yyvsp[-2].node)->type,"REAL")==0 && strcmp((yyvsp[0].node)->type,"REAL")==0){
+                                                                        strcpy((yyval.node)->type,"REAL");
+                                                                    }
+                                                                    else{
+                                                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                        sprintf(errormsg,"Type Mismatch");
+                                                                        addError(errormsg);
+                                                                    }}
+#line 2059 "y.tab.c"
     break;
 
   case 59: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
-#line 463 "task3.y"
-                                                                         { (yyval.node)=make_binary_node("-",(yyvsp[-2].node),(yyvsp[0].node));}
-#line 2054 "y.tab.c"
+#line 474 "task3.y"
+                                                                         { (yyval.node)=make_binary_node("-",(yyvsp[-2].node),(yyvsp[0].node));
+                                                                            if(strcmp((yyvsp[-2].node)->type,"INTEGER")==0 && strcmp((yyvsp[0].node)->type,"INTEGER")==0){
+                                                                            strcpy((yyval.node)->type,"INTEGER");
+                                                                        }
+                                                                        else if(strcmp((yyvsp[-2].node)->type,"REAL")==0 && strcmp((yyvsp[0].node)->type,"REAL")==0){
+                                                                            strcpy((yyval.node)->type,"REAL");
+                                                                        }
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch");
+                                                                            addError(errormsg);
+                                                                        }}
+#line 2076 "y.tab.c"
     break;
 
   case 60: /* unit: IDENTIFIER  */
-#line 466 "task3.y"
+#line 488 "task3.y"
                  {char * temp; temp=(char*)malloc(100*sizeof(char));
                 strcpy(temp,(yyvsp[0].sval));
                 temp=tolowercase(temp);
@@ -2067,11 +2089,11 @@ yyreduce:
                 char *typ=(char*)malloc(100*sizeof(char));
                 strcpy(typ,find_symbol(temp)->type);
                 strcpy((yyval.node)->type,typ);}
-#line 2071 "y.tab.c"
+#line 2093 "y.tab.c"
     break;
 
   case 61: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 478 "task3.y"
+#line 500 "task3.y"
                                                              {char * x; x=(char*)malloc(100*sizeof(char));
                                                             strcpy(x,(yyvsp[-3].sval));
                                                             x=tolowercase(x);
@@ -2082,36 +2104,42 @@ yyreduce:
                                                             }
                                                             node* temp=make_leaf((yyvsp[-3].sval));
                                                             (yyvsp[0].node)=make_leaf("r_brace");
-                                                            (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));}
-#line 2087 "y.tab.c"
+                                                            (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));
+                                                            char *typ=(char*)malloc(100*sizeof(char));
+                                                            strcpy(typ,find_symbol(x)->type);
+                                                            char *subStr = NULL;
+                                                            char *underscorePos = strchr(typ, '_');
+                                                            subStr = underscorePos + 1;
+                                                            strcpy((yyval.node)->type,subStr);}
+#line 2115 "y.tab.c"
     break;
 
   case 62: /* unit: ARITHEMATIC_OP_MINUS arith_expression  */
-#line 489 "task3.y"
+#line 517 "task3.y"
                                            {(yyval.node)=make_unary_node("-",(yyvsp[0].node));}
-#line 2093 "y.tab.c"
+#line 2121 "y.tab.c"
     break;
 
   case 63: /* unit_2: INTEGER_CONSTANT  */
-#line 491 "task3.y"
+#line 519 "task3.y"
                          { char * temp; temp=(char*)malloc(100*sizeof(char)); 
                             sprintf(temp,"%d",(yyvsp[0].ival));
                             (yyval.node)=make_leaf(temp);
                             sprintf((yyval.node)->type,"INTEGER");}
-#line 2102 "y.tab.c"
+#line 2130 "y.tab.c"
     break;
 
   case 64: /* unit_2: FLOAT_CONSTANT  */
-#line 495 "task3.y"
+#line 523 "task3.y"
                      { char * temp; temp=(char*)malloc(100*sizeof(char)); 
                         sprintf(temp,"%f",(yyvsp[0].dval));
                         (yyval.node)=make_leaf(temp);
                         sprintf((yyval.node)->type,"REAL");}
-#line 2111 "y.tab.c"
+#line 2139 "y.tab.c"
     break;
 
 
-#line 2115 "y.tab.c"
+#line 2143 "y.tab.c"
 
       default: break;
     }
@@ -2304,7 +2332,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 500 "task3.y"
+#line 528 "task3.y"
 
 
 struct node* make_binary_node(char* root, node* left, node* right){

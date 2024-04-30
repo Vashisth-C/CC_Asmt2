@@ -9,7 +9,7 @@ begin
   begin
     read(numbers[i]);
   end;
-  j := 1; 
+  j := 1+numbers[i]; 
   maxValue := numbers[1];
   for i := j+2 to j+5 do
   begin

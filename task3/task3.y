@@ -459,8 +459,30 @@ arith_expression: unit_2 {$$=$1;}
                 |unit {$$=$1;}
                 | OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS {node * temp=make_leaf(")");
                                                                         $$=make_binary_node("(",$2,temp);}
-                | arith_expression ARITHEMATIC_OP arith_expression { $$=make_binary_node($2,$1,$3);}
-                | arith_expression ARITHEMATIC_OP_MINUS arith_expression { $$=make_binary_node("-",$1,$3);}
+                | arith_expression ARITHEMATIC_OP arith_expression { $$=make_binary_node($2,$1,$3);
+                                                                    if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                        strcpy($$->type,"INTEGER");
+                                                                    }
+                                                                    else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
+                                                                        strcpy($$->type,"REAL");
+                                                                    }
+                                                                    else{
+                                                                        char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                        sprintf(errormsg,"Type Mismatch");
+                                                                        addError(errormsg);
+                                                                    }}
+                | arith_expression ARITHEMATIC_OP_MINUS arith_expression { $$=make_binary_node("-",$1,$3);
+                                                                            if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"INTEGER");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch");
+                                                                            addError(errormsg);
+                                                                        }}
 
 
 unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
@@ -488,7 +510,10 @@ unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
                                                             $$=make_ternary_node("l_brace",temp,$2,$3);
                                                             char *typ=(char*)malloc(100*sizeof(char));
                                                             strcpy(typ,find_symbol(x)->type);
-                                                            strcpy($$->type,typ);}
+                                                            char *subStr = NULL;
+                                                            char *underscorePos = strchr(typ, '_');
+                                                            subStr = underscorePos + 1;
+                                                            strcpy($$->type,subStr);}
     |ARITHEMATIC_OP_MINUS arith_expression {$$=make_unary_node("-",$2);}
 
 unit_2: INTEGER_CONSTANT { char * temp; temp=(char*)malloc(100*sizeof(char)); 
