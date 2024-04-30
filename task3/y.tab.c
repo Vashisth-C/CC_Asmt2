@@ -745,11 +745,11 @@ static const yytype_int16 yyrline[] =
 {
        0,    85,    85,   109,   110,   111,   112,   123,   125,   138,
      153,   154,   175,   196,   217,   240,   249,   258,   267,   278,
-     281,   284,   285,   296,   300,   304,   321,   351,   366,   380,
-     391,   402,   418,   438,   458,   460,   463,   465,   468,   470,
-     480,   490,   500,   510,   520,   525,   536,   588,   592,   606,
-     622,   623,   625,   626,   627,   629,   651,   663,   679,   680,
-     681,   684,   712,   742,   766,   801,   814,   818
+     281,   284,   285,   296,   300,   304,   325,   355,   370,   384,
+     395,   406,   422,   442,   462,   464,   467,   469,   472,   474,
+     484,   494,   504,   514,   524,   529,   540,   592,   596,   610,
+     626,   627,   629,   630,   631,   633,   655,   667,   683,   684,
+     685,   688,   716,   746,   770,   805,   818,   822
 };
 #endif
 
@@ -1740,25 +1740,28 @@ yyreduce:
                                                                      { char * x; x=(char*)malloc(100*sizeof(char));
                                                                         strcpy(x,(yyvsp[-3].sval).val);
                                                                         x=tolowercase(x);
+                                                                        node* temp=make_leaf(";");
+                                                                        node* temp1=make_leaf((yyvsp[-3].sval).val);
+                                                                        (yyval.node)=make_ternary_node((yyvsp[-2].sval).val,temp1,(yyvsp[-1].node),temp);
                                                                         if(find_symbol(x)==NULL ){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
                                                                             sprintf(errormsg,"Undeclared variable: %s at line number: %d",(yyvsp[-3].sval).val,(yyvsp[-3].sval).line);
                                                                             addError(errormsg);
-                                                                        }
-                                                                        node* temp=make_leaf(";");
-                                                                        node* temp1=make_leaf((yyvsp[-3].sval).val);
-                                                                        (yyval.node)=make_ternary_node((yyvsp[-2].sval).val,temp1,(yyvsp[-1].node),temp);
-                                                                        if(strcmp(find_symbol(x)->type,(yyvsp[-1].node)->type)!=0){
-                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                            sprintf(errormsg,"Assignment of mismatched types at line number: %d",(yyvsp[-3].sval).line);
-                                                                            addError(errormsg);
-                                                                        }
-                                                                        find_symbol(x)->value=1;}
-#line 1758 "y.tab.c"
+                                                                            
+                                                                        }else{
+                                                                            if(strcmp((yyvsp[-1].node)->type,"undefined")==0){
+                                                                                
+                                                                            }
+                                                                            else if(strcmp(find_symbol(x)->type,(yyvsp[-1].node)->type)!=0){
+                                                                                char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                                sprintf(errormsg,"Assignment of mismatched types at line number: %d",(yyvsp[-3].sval).line);
+                                                                                addError(errormsg);}
+                                                                            find_symbol(x)->value=1;}}
+#line 1761 "y.tab.c"
     break;
 
   case 26: /* statementline: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 321 "task3.y"
+#line 325 "task3.y"
                                                                                                                  {
                     char * x; x=(char*)malloc(100*sizeof(char));
                     strcpy(x,(yyvsp[-6].sval).val);
@@ -1789,11 +1792,11 @@ yyreduce:
                     (yyvsp[-5].node)=make_ternary_node("l_brace",temp1,(yyvsp[-4].node),temp2);
                     (yyval.node)=make_ternary_node((yyvsp[-2].sval).val,(yyvsp[-5].node),(yyvsp[-1].node),temp);
                     find_symbol(x)->value=1;}
-#line 1793 "y.tab.c"
+#line 1796 "y.tab.c"
     break;
 
   case 27: /* statementline: IF condition THEN program_declaration ELSE program_declaration SEMICOLON  */
-#line 351 "task3.y"
+#line 355 "task3.y"
                                                                                           { node* then= make_unary_node("THEN",(yyvsp[-3].node));
                                                                                         node* elset= make_unary_node("ELSE",(yyvsp[-1].node));
                                                                                         (yyval.node)=make_ternary_node("IF",(yyvsp[-5].node),then,elset);
@@ -1809,11 +1812,11 @@ yyreduce:
                                                                                             sprintf(errormsg,"If-condition should be boolean at line number: %d",(yyvsp[-6].sval).line);
                                                                                             addError(errormsg);
                                                                                         }}
-#line 1813 "y.tab.c"
+#line 1816 "y.tab.c"
     break;
 
   case 28: /* statementline: IF condition THEN program_declaration SEMICOLON  */
-#line 366 "task3.y"
+#line 370 "task3.y"
                                                                  { node* then= make_unary_node("THEN",(yyvsp[-1].node));
                                                                     (yyval.node)=make_binary_node("IF",(yyvsp[-3].node),then);
                                                                     node* t=(yyval.node);
@@ -1828,11 +1831,11 @@ yyreduce:
                                                                         sprintf(errormsg,"If-condition should be boolean at line number: %d",(yyvsp[-4].sval).line);
                                                                         addError(errormsg);
                                                                     }}
-#line 1832 "y.tab.c"
+#line 1835 "y.tab.c"
     break;
 
   case 29: /* statementline: FOR for_conditionals1 DO program_declaration SEMICOLON  */
-#line 380 "task3.y"
+#line 384 "task3.y"
                                                                         {
                     node* dotemp=make_unary_node("DO",(yyvsp[-1].node));
                     (yyval.node)=make_binary_node("FOR",(yyvsp[-3].node),dotemp);
@@ -1844,11 +1847,11 @@ yyreduce:
                     t->child[0]=make_leaf(";");
                     t->NumChild++;
                 }
-#line 1848 "y.tab.c"
+#line 1851 "y.tab.c"
     break;
 
   case 30: /* statementline: FOR for_conditionals2 DO program_declaration SEMICOLON  */
-#line 391 "task3.y"
+#line 395 "task3.y"
                                                                         {
                     node* dotemp=make_unary_node("DO",(yyvsp[-1].node));
                     (yyval.node)=make_binary_node("FOR",(yyvsp[-3].node),dotemp);
@@ -1860,11 +1863,11 @@ yyreduce:
                     t->child[0]=make_leaf(";");
                     t->NumChild++;
                 }
-#line 1864 "y.tab.c"
+#line 1867 "y.tab.c"
     break;
 
   case 31: /* statementline: WHILE condition DO program_declaration SEMICOLON  */
-#line 402 "task3.y"
+#line 406 "task3.y"
                                                                   { node* temp=make_unary_node("DO",(yyvsp[-1].node));
                                                                     (yyval.node)=make_binary_node("WHILE",(yyvsp[-3].node),temp);
                                                                     node* t=(yyval.node);
@@ -1880,11 +1883,11 @@ yyreduce:
                                                                         addError(errormsg);
                                                                     }
                                                                     }
-#line 1884 "y.tab.c"
+#line 1887 "y.tab.c"
     break;
 
   case 32: /* for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 418 "task3.y"
+#line 422 "task3.y"
                                                                                 {
     char * x; x=(char*)malloc(100*sizeof(char));
     strcpy(x,(yyvsp[-4].sval).val);
@@ -1904,11 +1907,11 @@ yyreduce:
     node * temp1=make_binary_node("TO",(yyvsp[-2].node),(yyvsp[0].node));
     (yyval.node)=make_binary_node(":=",temp,temp1);
 }
-#line 1908 "y.tab.c"
+#line 1911 "y.tab.c"
     break;
 
   case 33: /* for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 438 "task3.y"
+#line 442 "task3.y"
                                                                                     {
     char * x; x=(char*)malloc(100*sizeof(char));
     strcpy(x,(yyvsp[-4].sval).val);
@@ -1928,46 +1931,46 @@ yyreduce:
     node * temp1=make_binary_node("DOWNTO",(yyvsp[-2].node),(yyvsp[0].node));
     (yyval.node)=make_binary_node(":=",temp,temp1);
 }
-#line 1932 "y.tab.c"
+#line 1935 "y.tab.c"
     break;
 
   case 34: /* condition: conditional_head  */
-#line 458 "task3.y"
+#line 462 "task3.y"
                             {(yyval.node)=(yyvsp[0].node);
                             strcpy((yyval.node)->type,(yyvsp[0].node)->type);}
-#line 1939 "y.tab.c"
+#line 1942 "y.tab.c"
     break;
 
   case 35: /* condition: unit  */
-#line 460 "task3.y"
+#line 464 "task3.y"
                   {(yyval.node)=(yyvsp[0].node);
                    strcpy((yyval.node)->type,(yyvsp[0].node)->type);}
-#line 1946 "y.tab.c"
+#line 1949 "y.tab.c"
     break;
 
   case 36: /* conditional_head: relational_exp  */
-#line 463 "task3.y"
+#line 467 "task3.y"
                                  { (yyval.node)=(yyvsp[0].node);
                                     strcpy((yyval.node)->type,(yyvsp[0].node)->type);}
-#line 1953 "y.tab.c"
+#line 1956 "y.tab.c"
     break;
 
   case 37: /* conditional_head: conditionals  */
-#line 465 "task3.y"
+#line 469 "task3.y"
                                   { (yyval.node)=(yyvsp[0].node);
                                     strcpy((yyval.node)->type,(yyvsp[0].node)->type);}
-#line 1960 "y.tab.c"
+#line 1963 "y.tab.c"
     break;
 
   case 38: /* conditionals: condtional_unit  */
-#line 468 "task3.y"
+#line 472 "task3.y"
                                 {(yyval.node)=(yyvsp[0].node);
                                 strcpy((yyval.node)->type,(yyvsp[0].node)->type);}
-#line 1967 "y.tab.c"
+#line 1970 "y.tab.c"
     break;
 
   case 39: /* conditionals: relational_exp BOOLEAN_OP conditionals  */
-#line 470 "task3.y"
+#line 474 "task3.y"
                                                         { (yyval.node)=make_binary_node((yyvsp[-1].sval).val,(yyvsp[-2].node),(yyvsp[0].node));
                                                             if(strcmp((yyvsp[-2].node)->type,"BOOLEAN")==0 && strcmp((yyvsp[0].node)->type,"BOOLEAN")==0){
                                                                 strcpy((yyval.node)->type,"BOOLEAN");
@@ -1978,11 +1981,11 @@ yyreduce:
                                                                 addError(errormsg);
                                                                 strcpy((yyval.node)->type,"BOOLEAN");
                                                             }}
-#line 1982 "y.tab.c"
+#line 1985 "y.tab.c"
     break;
 
   case 40: /* conditionals: relational_exp BOOLEAN_OP unit  */
-#line 480 "task3.y"
+#line 484 "task3.y"
                                                  { (yyval.node)=make_binary_node((yyvsp[-1].sval).val,(yyvsp[-2].node),(yyvsp[0].node));
                                                     if(strcmp((yyvsp[-2].node)->type,"BOOLEAN")==0 && strcmp((yyvsp[0].node)->type,"BOOLEAN")==0){
                                                         strcpy((yyval.node)->type,"BOOLEAN");
@@ -1993,11 +1996,11 @@ yyreduce:
                                                         addError(errormsg);
                                                         strcpy((yyval.node)->type,"BOOLEAN");
                                                     }}
-#line 1997 "y.tab.c"
+#line 2000 "y.tab.c"
     break;
 
   case 41: /* conditionals: unit BOOLEAN_OP conditionals  */
-#line 490 "task3.y"
+#line 494 "task3.y"
                                                { (yyval.node)=make_binary_node((yyvsp[-1].sval).val,(yyvsp[-2].node),(yyvsp[0].node));
                                                 if(strcmp((yyvsp[-2].node)->type,"BOOLEAN")==0 && strcmp((yyvsp[0].node)->type,"BOOLEAN")==0){
                                                     strcpy((yyval.node)->type,"BOOLEAN");
@@ -2008,11 +2011,11 @@ yyreduce:
                                                     addError(errormsg);
                                                     strcpy((yyval.node)->type,"BOOLEAN");
                                                 }}
-#line 2012 "y.tab.c"
+#line 2015 "y.tab.c"
     break;
 
   case 42: /* conditionals: unit BOOLEAN_OP unit  */
-#line 500 "task3.y"
+#line 504 "task3.y"
                                         { (yyval.node)=make_binary_node((yyvsp[-1].sval).val,(yyvsp[-2].node),(yyvsp[0].node));
                                         if(strcmp((yyvsp[-2].node)->type,"BOOLEAN")==0 && strcmp((yyvsp[0].node)->type,"BOOLEAN")==0){
                                             strcpy((yyval.node)->type,"BOOLEAN");
@@ -2023,11 +2026,11 @@ yyreduce:
                                             addError(errormsg);
                                             strcpy((yyval.node)->type,"BOOLEAN");
                                         }}
-#line 2027 "y.tab.c"
+#line 2030 "y.tab.c"
     break;
 
   case 43: /* conditionals: BOOLEAN_OP_NOT conditionals  */
-#line 510 "task3.y"
+#line 514 "task3.y"
                                               { (yyval.node)=make_unary_node((yyvsp[-1].sval).val,(yyvsp[0].node));
                                                 if(strcmp((yyvsp[0].node)->type,"BOOLEAN")==0){
                                                     strcpy((yyval.node)->type,"BOOLEAN");
@@ -2038,19 +2041,19 @@ yyreduce:
                                                     addError(errormsg);
                                                     strcpy((yyval.node)->type,"BOOLEAN");
                                                 }}
-#line 2042 "y.tab.c"
+#line 2045 "y.tab.c"
     break;
 
   case 44: /* conditionals: OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS  */
-#line 520 "task3.y"
+#line 524 "task3.y"
                                                                  {node * temp=make_leaf(")");
                                                                 (yyval.node)=make_binary_node("(",(yyvsp[-1].node),temp);
                                                                 strcpy((yyval.node)->type,(yyvsp[-1].node)->type);}
-#line 2050 "y.tab.c"
+#line 2053 "y.tab.c"
     break;
 
   case 45: /* condtional_unit: BOOLEAN_OP_NOT unit  */
-#line 525 "task3.y"
+#line 529 "task3.y"
                                     {(yyval.node)=make_unary_node((yyvsp[-1].sval).val,(yyvsp[0].node));
                                     if(strcmp((yyvsp[0].node)->type,"BOOLEAN")==0){
                                         strcpy((yyval.node)->type,"BOOLEAN");
@@ -2061,11 +2064,11 @@ yyreduce:
                                         addError(errormsg);
                                         strcpy((yyval.node)->type,"BOOLEAN");
                                     }}
-#line 2065 "y.tab.c"
+#line 2068 "y.tab.c"
     break;
 
   case 46: /* relational_exp: arith_expression RELATIONAL_OP arith_expression  */
-#line 536 "task3.y"
+#line 540 "task3.y"
                                                                 { (yyval.node)=make_binary_node((yyvsp[-1].sval).val,(yyvsp[-2].node),(yyvsp[0].node));
 
                                                                     if(strcmp((yyvsp[-1].sval).val,"<>")==0 || strcmp((yyvsp[-1].sval).val,"=")==0){
@@ -2118,19 +2121,19 @@ yyreduce:
                                                                             strcpy((yyval.node)->type,"BOOLEAN");
                                                                         }
                                                                     }}
-#line 2122 "y.tab.c"
+#line 2125 "y.tab.c"
     break;
 
   case 47: /* relational_exp: OPEN_PARANTHESIS relational_exp CLOSE_PARANTHESIS  */
-#line 588 "task3.y"
+#line 592 "task3.y"
                                                                    {node * temp=make_leaf(")");
                                                                     (yyval.node)=make_binary_node("(",(yyvsp[-1].node),temp);
                                                                     strcpy((yyval.node)->type,(yyvsp[-1].node)->type);}
-#line 2130 "y.tab.c"
+#line 2133 "y.tab.c"
     break;
 
   case 48: /* left_side_vars_write: IDENTIFIER  */
-#line 592 "task3.y"
+#line 596 "task3.y"
                                  {char * temp; temp=(char*)malloc(100*sizeof(char));
                                     strcpy(temp,(yyvsp[0].sval).val);
                                     temp=tolowercase(temp);
@@ -2145,11 +2148,11 @@ yyreduce:
                                         addError(errormsg);
                                     }
                                 (yyval.node)=make_leaf((yyvsp[0].sval).val);}
-#line 2149 "y.tab.c"
+#line 2152 "y.tab.c"
     break;
 
   case 49: /* left_side_vars_write: IDENTIFIER COMMA left_side_vars_write  */
-#line 606 "task3.y"
+#line 610 "task3.y"
                                                        { char * temp; temp=(char*)malloc(100*sizeof(char));
                                                 strcpy(temp,(yyvsp[-2].sval).val);
                                                 temp=tolowercase(temp);
@@ -2165,42 +2168,42 @@ yyreduce:
                                                 }
                                                 struct node * temp1=make_leaf((yyvsp[-2].sval).val);
                                                 (yyval.node)=make_binary_node(",",temp1,(yyvsp[0].node));}
-#line 2169 "y.tab.c"
+#line 2172 "y.tab.c"
     break;
 
   case 50: /* possible_writes: possible_write_values  */
-#line 622 "task3.y"
+#line 626 "task3.y"
                                        { (yyval.node)=(yyvsp[0].node);}
-#line 2175 "y.tab.c"
+#line 2178 "y.tab.c"
     break;
 
   case 51: /* possible_writes: %empty  */
-#line 623 "task3.y"
+#line 627 "task3.y"
       {(yyval.node)=NULL;}
-#line 2181 "y.tab.c"
+#line 2184 "y.tab.c"
     break;
 
   case 52: /* possible_write_values: left_side_vars_write  */
-#line 625 "task3.y"
+#line 629 "task3.y"
                                             {(yyval.node)=(yyvsp[0].node);}
-#line 2187 "y.tab.c"
+#line 2190 "y.tab.c"
     break;
 
   case 53: /* possible_write_values: STRING_CONSTANT  */
-#line 626 "task3.y"
+#line 630 "task3.y"
                                          { (yyval.node)=make_leaf((yyvsp[0].sval).val);}
-#line 2193 "y.tab.c"
+#line 2196 "y.tab.c"
     break;
 
   case 54: /* possible_write_values: STRING_CONSTANT COMMA possible_write_values  */
-#line 627 "task3.y"
+#line 631 "task3.y"
                                                                      {node* temp=make_leaf((yyvsp[-2].sval).val);
                                                                         (yyval.node)=make_binary_node(",",temp,(yyvsp[0].node));}
-#line 2200 "y.tab.c"
+#line 2203 "y.tab.c"
     break;
 
   case 55: /* possible_write_values: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 629 "task3.y"
+#line 633 "task3.y"
                                                                                  {char * x; x=(char*)malloc(100*sizeof(char));
                                                                                 strcpy(x,(yyvsp[-3].sval).val);
                                                                                 x=tolowercase(x);
@@ -2222,11 +2225,11 @@ yyreduce:
                                                                                 node* temp=make_leaf((yyvsp[-3].sval).val);
                                                                                 (yyvsp[0].node)=make_leaf("r_brace");
                                                                                 (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));}
-#line 2226 "y.tab.c"
+#line 2229 "y.tab.c"
     break;
 
   case 56: /* possible_reads: IDENTIFIER  */
-#line 651 "task3.y"
+#line 655 "task3.y"
                            {char * temp; temp=(char*)malloc(100*sizeof(char));
                             strcpy(temp,(yyvsp[0].sval).val);
                             temp=tolowercase(temp);
@@ -2239,11 +2242,11 @@ yyreduce:
                             }
                             printf("Value of %s: \n",temp);
                             (yyval.node)=make_leaf((yyvsp[0].sval).val);}
-#line 2243 "y.tab.c"
+#line 2246 "y.tab.c"
     break;
 
   case 57: /* possible_reads: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 663 "task3.y"
+#line 667 "task3.y"
                                                                         {char * x; x=(char*)malloc(100*sizeof(char));
                                                                         strcpy(x,(yyvsp[-3].sval).val);
                                                                         x=tolowercase(x);
@@ -2258,31 +2261,31 @@ yyreduce:
                                                                         node* temp=make_leaf((yyvsp[-3].sval).val);
                                                                         (yyvsp[0].node)=make_leaf("r_brace");
                                                                         (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));}
-#line 2262 "y.tab.c"
+#line 2265 "y.tab.c"
     break;
 
   case 58: /* arith_expression: unit_2  */
-#line 679 "task3.y"
+#line 683 "task3.y"
                          {(yyval.node)=(yyvsp[0].node);}
-#line 2268 "y.tab.c"
+#line 2271 "y.tab.c"
     break;
 
   case 59: /* arith_expression: unit  */
-#line 680 "task3.y"
+#line 684 "task3.y"
                       {(yyval.node)=(yyvsp[0].node);}
-#line 2274 "y.tab.c"
+#line 2277 "y.tab.c"
     break;
 
   case 60: /* arith_expression: OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS  */
-#line 681 "task3.y"
+#line 685 "task3.y"
                                                                       {node * temp=make_leaf(")");
                                                                         (yyval.node)=make_binary_node("(",(yyvsp[-1].node),temp);
                                                                         strcpy((yyval.node)->type,(yyvsp[-1].node)->type);}
-#line 2282 "y.tab.c"
+#line 2285 "y.tab.c"
     break;
 
   case 61: /* arith_expression: arith_expression ARITHEMATIC_OP arith_expression  */
-#line 684 "task3.y"
+#line 688 "task3.y"
                                                                    { (yyval.node)=make_binary_node((yyvsp[-1].sval).val,(yyvsp[-2].node),(yyvsp[0].node));
                                                                     if(strcmp((yyvsp[-2].node)->type,"INTEGER")==0 && strcmp((yyvsp[0].node)->type,"INTEGER")==0){
                                                                         strcpy((yyval.node)->type,"INTEGER");
@@ -2311,11 +2314,11 @@ yyreduce:
                                                                         sprintf(errormsg,"Type Mismatch at line number: %d",(yyvsp[-1].sval).line);
                                                                         addError(errormsg);
                                                                     }}
-#line 2315 "y.tab.c"
+#line 2318 "y.tab.c"
     break;
 
   case 62: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
-#line 712 "task3.y"
+#line 716 "task3.y"
                                                                          { (yyval.node)=make_binary_node("-",(yyvsp[-2].node),(yyvsp[0].node));
                                                                             if(strcmp((yyvsp[-2].node)->type,"INTEGER")==0 && strcmp((yyvsp[0].node)->type,"INTEGER")==0){
                                                                             strcpy((yyval.node)->type,"INTEGER");
@@ -2344,11 +2347,11 @@ yyreduce:
                                                                             sprintf(errormsg,"Type Mismatch at line number: %d",(yyvsp[-1].sval).line);
                                                                             addError(errormsg);
                                                                         }}
-#line 2348 "y.tab.c"
+#line 2351 "y.tab.c"
     break;
 
   case 63: /* unit: IDENTIFIER  */
-#line 742 "task3.y"
+#line 746 "task3.y"
                  {char * temp; temp=(char*)malloc(100*sizeof(char));
                 strcpy(temp,(yyvsp[0].sval).val);
                 temp=tolowercase(temp);
@@ -2371,11 +2374,11 @@ yyreduce:
                     strcpy(typ,find_symbol(temp)->type);
                     strcpy((yyval.node)->type,typ);}
                 }
-#line 2375 "y.tab.c"
+#line 2378 "y.tab.c"
     break;
 
   case 64: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 766 "task3.y"
+#line 770 "task3.y"
                                                              {char * x; x=(char*)malloc(100*sizeof(char));
                                                             strcpy(x,(yyvsp[-3].sval).val);
                                                             x=tolowercase(x);
@@ -2411,11 +2414,11 @@ yyreduce:
                                                                 sprintf(errormsg,"Array Indices should be Integer at line number: %d",(yyvsp[-3].sval).line);
                                                                 addError(errormsg);
                                                             }}
-#line 2415 "y.tab.c"
+#line 2418 "y.tab.c"
     break;
 
   case 65: /* unit: ARITHEMATIC_OP_MINUS arith_expression  */
-#line 801 "task3.y"
+#line 805 "task3.y"
                                            {(yyval.node)=make_unary_node("-",(yyvsp[0].node));
                                             if(strcmp((yyvsp[0].node)->type,"INTEGER")==0){
                                                 strcpy((yyval.node)->type,"INTEGER");
@@ -2428,29 +2431,29 @@ yyreduce:
                                                 sprintf(errormsg,"Type Mismatch at line number: %d",(yyvsp[-1].sval).line);
                                                 addError(errormsg);
                                             }}
-#line 2432 "y.tab.c"
+#line 2435 "y.tab.c"
     break;
 
   case 66: /* unit_2: INTEGER_CONSTANT  */
-#line 814 "task3.y"
+#line 818 "task3.y"
                          { char * temp; temp=(char*)malloc(100*sizeof(char)); 
                             sprintf(temp,"%d",(yyvsp[0].ival).val);
                             (yyval.node)=make_leaf(temp);
                             sprintf((yyval.node)->type,"INTEGER");}
-#line 2441 "y.tab.c"
+#line 2444 "y.tab.c"
     break;
 
   case 67: /* unit_2: FLOAT_CONSTANT  */
-#line 818 "task3.y"
+#line 822 "task3.y"
                      { char * temp; temp=(char*)malloc(100*sizeof(char)); 
                         sprintf(temp,"%f",(yyvsp[0].dval).val);
                         (yyval.node)=make_leaf(temp);
                         sprintf((yyval.node)->type,"REAL");}
-#line 2450 "y.tab.c"
+#line 2453 "y.tab.c"
     break;
 
 
-#line 2454 "y.tab.c"
+#line 2457 "y.tab.c"
 
       default: break;
     }
@@ -2643,7 +2646,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 823 "task3.y"
+#line 827 "task3.y"
 
 
 struct node* make_binary_node(char* root, node* left, node* right){

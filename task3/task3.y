@@ -304,20 +304,24 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                 |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON { char * x; x=(char*)malloc(100*sizeof(char));
                                                                         strcpy(x,$1.val);
                                                                         x=tolowercase(x);
+                                                                        node* temp=make_leaf(";");
+                                                                        node* temp1=make_leaf($1.val);
+                                                                        $$=make_ternary_node($2.val,temp1,$3,temp);
                                                                         if(find_symbol(x)==NULL ){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
                                                                             sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
                                                                             addError(errormsg);
-                                                                        }
-                                                                        node* temp=make_leaf(";");
-                                                                        node* temp1=make_leaf($1.val);
-                                                                        $$=make_ternary_node($2.val,temp1,$3,temp);
-                                                                        if(strcmp(find_symbol(x)->type,$3->type)!=0){
-                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
-                                                                            sprintf(errormsg,"Assignment of mismatched types at line number: %d",$1.line);
-                                                                            addError(errormsg);
-                                                                        }
-                                                                        find_symbol(x)->value=1;}
+                                                                            
+                                                                        }else{
+                                                                            if(strcmp($3->type,"undefined")==0){
+                                                                                
+                                                                            }
+                                                                            else if(strcmp(find_symbol(x)->type,$3->type)!=0){
+                                                                                char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                                sprintf(errormsg,"Assignment of mismatched types at line number: %d",$1.line);
+                                                                                addError(errormsg);}
+                                                                            find_symbol(x)->value=1;}}
+                                                                        
                 |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET ASSIGNMENT_OP arith_expression SEMICOLON {
                     char * x; x=(char*)malloc(100*sizeof(char));
                     strcpy(x,$1.val);
