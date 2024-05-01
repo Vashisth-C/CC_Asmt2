@@ -78,6 +78,7 @@ REALNUMBER {DIGIT}+"."{DIGIT}+
     [1-9][0-9]*|"0" {yylval.ival.val=atoi(yytext);yylval.ival.line=line;return INTEGER_CONSTANT;}
     {REALNUMBER} {yylval.dval.val=atof(yytext);yylval.dval.line=line;return FLOAT_CONSTANT;}
     "\"".*"\"" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return STRING_CONSTANT;}
+    "'".*"'" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return CHAR_CONSTANT;}
     "[" {return OPEN_BRACKET;}
     "]" {return CLOSE_BRACKET;}
     "(" {return OPEN_PARANTHESIS;}

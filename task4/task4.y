@@ -71,6 +71,7 @@ void addTAC(const char*, const char*, const char*, const char*);
 void printTAC();
 void push(char*);
 char* pop();
+void printFormatted();
 
 
 %}
@@ -98,7 +99,7 @@ char* pop();
 %left RELATIONAL_OP
 %left ASSIGNMENT_OP
 
-%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP 
+%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP CHAR_CONSTANT
 %token <sval> ARITHEMATIC_OP_PLUS ARITHEMATIC_OP_DIV ARITHEMATIC_OP_MUL ARITHEMATIC_OP_MINUS IF WHILE ARITHEMATIC_OP_MOD
 %token <ival> INTEGER_CONSTANT
 %token <dval> FLOAT_CONSTANT
@@ -111,7 +112,9 @@ char* pop();
 
 start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("Valid Input\n");
                                                                                     reverseTAC();
-                                                                                    printTAC();}
+                                                                                    printTAC();
+                                                                                    printFormatted();
+                                                                                    }
 
 variable_declaration: VAR variable_list 
                     | ;
@@ -215,7 +218,6 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                 |READ OPEN_PARANTHESIS possible_reads CLOSE_PARANTHESIS SEMICOLON 
                 |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON{
                     addTAC($2.val,pop(), "", $1.val);
-
                 }                                                     
                 |left_array_assignment ASSIGNMENT_OP arith_expression SEMICOLON {
                     char *id=(char*)malloc(100*sizeof(char));
@@ -223,7 +225,6 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                     char *id2=(char*)malloc(100*sizeof(char));
                     strcpy(id2,pop());
                     addTAC($2.val,id,"",id2);
-                    
                 }
                 |left_if middle_if right_if SEMICOLON 
                 |left_if middle_if SEMICOLON 
@@ -241,7 +242,52 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-                |WHILE condition DO program_declaration SEMICOLON 
+                |FOR for_conditionals3 DO program_declaration SEMICOLON {
+                    char *id=(char*)malloc(100*sizeof(char));
+                    strcpy(id,pop());
+                    addTAC("+",id,"1",id);
+                    addTAC("GOTO",pop(),"","");
+                    addTAC("LABEL",pop(),"","");
+                }
+                |FOR for_conditionals4 DO program_declaration SEMICOLON {
+                    char *id=(char*)malloc(100*sizeof(char));
+                    strcpy(id,pop());
+                    addTAC("-",id,"1",id);
+                    addTAC("GOTO",pop(),"","");
+                    addTAC("LABEL",pop(),"","");
+                }
+                |while_left DO program_declaration SEMICOLON {
+                    addTAC("GOTO",pop(),"","");
+                    addTAC("LABEL",pop(),"","");
+                }
+
+while_left :WHILE condition {
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    addTAC("LABEL",str,"","");
+    char * str1= (char *)malloc(100*sizeof(char));
+    strcpy(str1,"L");
+    char temp2[10];
+    sprintf(temp2,"%d",lindex);
+    strcat(str1,temp2);
+    lindex++;
+    char * str2=(char *)malloc(100*sizeof(char));
+    strcpy(str2,"L");
+    char temp3[10];
+    sprintf(temp3, "%d", lindex);
+    strcat(str2,temp3);
+    lindex++;
+    addTAC("IF",pop(),"GOTO",str1);
+    push(str2);
+    push(str);
+    addTAC("GOTO",str2,"","");
+    addTAC("LABEL",str1,"","");
+    
+}
 
 left_if: IF condition{
     char * str=(char *)malloc(100*sizeof(char));
@@ -282,7 +328,13 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     char temp2[10];
     sprintf(temp2, "%d", qindex);
     strcat(dt,temp2);
-    addTAC("sizeof",find_symbol($1.val)->type,"",dt);
+    char*typ=(char *)malloc(100*sizeof(char));
+    $1.val=tolowercase($1.val);
+    strcpy(typ,find_symbol($1.val)->type);
+    char *subStr = NULL;
+    char *underscorePos = strchr(typ, '_');
+    subStr = underscorePos + 1;
+    addTAC("sizeof",subStr,"",dt);
     qindex++;
     char *id2=(char*)malloc(100*sizeof(char));
     strcpy(id2,"t");
@@ -298,6 +350,7 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     strcat(id3,temp4);
     addTAC("+",id,id2,id3);
     qindex++;
+    push(id3);
 }
 
 for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression{
@@ -364,13 +417,76 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
     lindex++;
 }
 
-condition: conditional_head 
+for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression{
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    char * str2=(char *)malloc(100*sizeof(char));
+    strcpy(str2,pop());
+    char * str1=(char *)malloc(100*sizeof(char));
+    strcpy(str1,pop());
+    addTAC($2.val,str1,"",str1);
+    char* cond=(char *)malloc(100*sizeof(char));
+    strcpy(cond,"t");
+    char temp[10];
+    sprintf(temp, "%d", qindex);
+    strcat(cond,temp);
+    addTAC("LABEL",str,"","");
+    addTAC(">=",str1,str2,cond);
+    qindex++;
+    char* str3=(char *)malloc(100*sizeof(char));
+    strcpy(str3,"L");
+    char temp2[10];
+    sprintf(temp2, "%d", lindex);
+    strcat(str3,temp2);
+    addTAC("IF",cond,"GOTO",str3);
+    push(str3);
+    push(str);
+    push(str1);
+    lindex++;
+}
+
+for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO arith_expression{
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    char * str2=(char *)malloc(100*sizeof(char));
+    strcpy(str2,pop());
+    char * str1=(char *)malloc(100*sizeof(char));
+    strcpy(str1,pop());
+    addTAC($2.val,str1,"",str1);
+    char* cond=(char *)malloc(100*sizeof(char));
+    strcpy(cond,"t");
+    char temp[10];
+    sprintf(temp, "%d", qindex);
+    strcat(cond,temp);
+    addTAC("LABEL",str,"","");
+    addTAC("<=",str1,str2,cond);
+    qindex++;
+    char* str3=(char *)malloc(100*sizeof(char));
+    strcpy(str3,"L");
+    char temp2[10];
+    sprintf(temp2, "%d", lindex);
+    strcat(str3,temp2);
+    addTAC("IF",cond,"GOTO",str3);
+    push(str3);
+    push(str);
+    push(str1);
+    lindex++;
+}
+
+condition: conditionals
             |unit
 
-conditional_head: relational_exp 
-                    |conditionals
 
 conditionals:   condtional_unit 
+                | relational_exp 
                 |relational_exp BOOLEAN_OP conditionals {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -412,7 +528,6 @@ conditionals:   condtional_unit
                     push(str);
                 }
                 | BOOLEAN_OP_NOT conditionals 
-                |OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS 
                 
 
 condtional_unit:BOOLEAN_OP_NOT unit 
@@ -427,7 +542,6 @@ relational_exp: arith_expression RELATIONAL_OP arith_expression {
     qindex++;
     push(str);
     }
-                |OPEN_PARANTHESIS relational_exp CLOSE_PARANTHESIS 
 
 left_side_vars_write: IDENTIFIER 
                 |IDENTIFIER COMMA left_side_vars_write 
@@ -499,13 +613,11 @@ arith_expression: unit_2
 
 
 unit: IDENTIFIER {
-    printf("here3\n");
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",$1.val);
             push(str);
     }
     | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
-        printf("here\n");
             char *id=(char*)malloc(100*sizeof(char));
             strcpy(id,"t");
             char temp[10];
@@ -518,7 +630,13 @@ unit: IDENTIFIER {
             char temp2[10];
             sprintf(temp2, "%d", qindex);
             strcat(dt,temp2);
-            addTAC("sizeof",find_symbol($1.val)->type,"",dt);
+            char*typ=(char *)malloc(100*sizeof(char));
+            $1.val=tolowercase($1.val);
+            strcpy(typ,find_symbol($1.val)->type);
+            char *subStr = NULL;
+            char *underscorePos = strchr(typ, '_');
+            subStr = underscorePos + 1;
+            addTAC("sizeof",subStr,"",dt);
             qindex++;
             char *id2=(char*)malloc(100*sizeof(char));
             strcpy(id2,"t");
@@ -540,7 +658,6 @@ unit: IDENTIFIER {
     |ARITHEMATIC_OP_MINUS arith_expression
 
 unit_2: INTEGER_CONSTANT {
-    printf("here2\n");
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%d",$1.val);
             push(str);
@@ -548,6 +665,11 @@ unit_2: INTEGER_CONSTANT {
     | FLOAT_CONSTANT {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%f",$1.val);
+            push(str);
+    }
+    | CHAR_CONSTANT {
+            char * str=malloc(100*sizeof(char));
+            sprintf(str,"%s",$1.val);
             push(str);
     }
 
@@ -674,6 +796,29 @@ void reverseTAC() {
         current = next;
     }
     TAC_table = prev;
+}
+
+void printFormatted(){
+    TAC* current=TAC_table;
+    printf("\n\nIntermediate Code:\n\n");
+    while(current!=NULL){
+        if(strcmp(current->op,"LABEL")==0){
+            printf("%s:\n",current->arg1);
+        }else if(strcmp(current->op,"GOTO")==0){
+            printf("GOTO %s\n",current->arg1);
+        }else if(strcmp(current->op,"IF")==0){
+            printf("%s %s %s %s\n",current->op,current->arg1,current->arg2,current->result);
+        }else if(strcmp(current->op,":=")==0){
+            printf("%s = %s\n",current->result,current->arg1);
+        }else if(strcmp(current->op,"sizeof")==0){
+            printf("%s = sizeof(%s)\n",current->result,current->arg1);
+        }else if(strcmp(current->op,"&")==0){
+            printf("%s = &%s\n",current->result,current->arg1);
+        }else{
+            printf("%s = %s %s %s\n",current->result,current->arg1,current->op,current->arg2);
+        }
+        current=current->next;
+    }
 }
 
 void push(char* data){

@@ -141,10 +141,11 @@ void addTAC(const char*, const char*, const char*, const char*);
 void printTAC();
 void push(char*);
 char* pop();
+void printFormatted();
 
 
 
-#line 148 "y.tab.c"
+#line 149 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -198,38 +199,39 @@ extern int yydebug;
     BOOLEAN_OP_NOT = 265,          /* BOOLEAN_OP_NOT  */
     ASSIGNMENT_OP = 266,           /* ASSIGNMENT_OP  */
     RELATIONAL_OP = 267,           /* RELATIONAL_OP  */
-    ARITHEMATIC_OP_PLUS = 268,     /* ARITHEMATIC_OP_PLUS  */
-    ARITHEMATIC_OP_DIV = 269,      /* ARITHEMATIC_OP_DIV  */
-    ARITHEMATIC_OP_MUL = 270,      /* ARITHEMATIC_OP_MUL  */
-    ARITHEMATIC_OP_MINUS = 271,    /* ARITHEMATIC_OP_MINUS  */
-    IF = 272,                      /* IF  */
-    WHILE = 273,                   /* WHILE  */
-    ARITHEMATIC_OP_MOD = 274,      /* ARITHEMATIC_OP_MOD  */
-    INTEGER_CONSTANT = 275,        /* INTEGER_CONSTANT  */
-    FLOAT_CONSTANT = 276,          /* FLOAT_CONSTANT  */
-    PROGRAM = 277,                 /* PROGRAM  */
-    SEMICOLON = 278,               /* SEMICOLON  */
-    ELSE = 279,                    /* ELSE  */
-    FOR = 280,                     /* FOR  */
-    DO = 281,                      /* DO  */
-    BEGIN_TAG = 282,               /* BEGIN_TAG  */
-    END = 283,                     /* END  */
-    WRITE = 284,                   /* WRITE  */
-    READ = 285,                    /* READ  */
-    DOWNTO = 286,                  /* DOWNTO  */
-    TO = 287,                      /* TO  */
-    OF = 288,                      /* OF  */
-    COLON = 289,                   /* COLON  */
-    VAR = 290,                     /* VAR  */
-    ARRAY = 291,                   /* ARRAY  */
-    THEN = 292,                    /* THEN  */
-    COMMA = 293,                   /* COMMA  */
-    OPEN_BRACKET = 294,            /* OPEN_BRACKET  */
-    OPEN_PARANTHESIS = 295,        /* OPEN_PARANTHESIS  */
-    CLOSE_BRACKET = 296,           /* CLOSE_BRACKET  */
-    CLOSE_PARANTHESIS = 297,       /* CLOSE_PARANTHESIS  */
-    PERIOD = 298,                  /* PERIOD  */
-    RANGE_DOTS = 299               /* RANGE_DOTS  */
+    CHAR_CONSTANT = 268,           /* CHAR_CONSTANT  */
+    ARITHEMATIC_OP_PLUS = 269,     /* ARITHEMATIC_OP_PLUS  */
+    ARITHEMATIC_OP_DIV = 270,      /* ARITHEMATIC_OP_DIV  */
+    ARITHEMATIC_OP_MUL = 271,      /* ARITHEMATIC_OP_MUL  */
+    ARITHEMATIC_OP_MINUS = 272,    /* ARITHEMATIC_OP_MINUS  */
+    IF = 273,                      /* IF  */
+    WHILE = 274,                   /* WHILE  */
+    ARITHEMATIC_OP_MOD = 275,      /* ARITHEMATIC_OP_MOD  */
+    INTEGER_CONSTANT = 276,        /* INTEGER_CONSTANT  */
+    FLOAT_CONSTANT = 277,          /* FLOAT_CONSTANT  */
+    PROGRAM = 278,                 /* PROGRAM  */
+    SEMICOLON = 279,               /* SEMICOLON  */
+    ELSE = 280,                    /* ELSE  */
+    FOR = 281,                     /* FOR  */
+    DO = 282,                      /* DO  */
+    BEGIN_TAG = 283,               /* BEGIN_TAG  */
+    END = 284,                     /* END  */
+    WRITE = 285,                   /* WRITE  */
+    READ = 286,                    /* READ  */
+    DOWNTO = 287,                  /* DOWNTO  */
+    TO = 288,                      /* TO  */
+    OF = 289,                      /* OF  */
+    COLON = 290,                   /* COLON  */
+    VAR = 291,                     /* VAR  */
+    ARRAY = 292,                   /* ARRAY  */
+    THEN = 293,                    /* THEN  */
+    COMMA = 294,                   /* COMMA  */
+    OPEN_BRACKET = 295,            /* OPEN_BRACKET  */
+    OPEN_PARANTHESIS = 296,        /* OPEN_PARANTHESIS  */
+    CLOSE_BRACKET = 297,           /* CLOSE_BRACKET  */
+    CLOSE_PARANTHESIS = 298,       /* CLOSE_PARANTHESIS  */
+    PERIOD = 299,                  /* PERIOD  */
+    RANGE_DOTS = 300               /* RANGE_DOTS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -248,44 +250,45 @@ extern int yydebug;
 #define BOOLEAN_OP_NOT 265
 #define ASSIGNMENT_OP 266
 #define RELATIONAL_OP 267
-#define ARITHEMATIC_OP_PLUS 268
-#define ARITHEMATIC_OP_DIV 269
-#define ARITHEMATIC_OP_MUL 270
-#define ARITHEMATIC_OP_MINUS 271
-#define IF 272
-#define WHILE 273
-#define ARITHEMATIC_OP_MOD 274
-#define INTEGER_CONSTANT 275
-#define FLOAT_CONSTANT 276
-#define PROGRAM 277
-#define SEMICOLON 278
-#define ELSE 279
-#define FOR 280
-#define DO 281
-#define BEGIN_TAG 282
-#define END 283
-#define WRITE 284
-#define READ 285
-#define DOWNTO 286
-#define TO 287
-#define OF 288
-#define COLON 289
-#define VAR 290
-#define ARRAY 291
-#define THEN 292
-#define COMMA 293
-#define OPEN_BRACKET 294
-#define OPEN_PARANTHESIS 295
-#define CLOSE_BRACKET 296
-#define CLOSE_PARANTHESIS 297
-#define PERIOD 298
-#define RANGE_DOTS 299
+#define CHAR_CONSTANT 268
+#define ARITHEMATIC_OP_PLUS 269
+#define ARITHEMATIC_OP_DIV 270
+#define ARITHEMATIC_OP_MUL 271
+#define ARITHEMATIC_OP_MINUS 272
+#define IF 273
+#define WHILE 274
+#define ARITHEMATIC_OP_MOD 275
+#define INTEGER_CONSTANT 276
+#define FLOAT_CONSTANT 277
+#define PROGRAM 278
+#define SEMICOLON 279
+#define ELSE 280
+#define FOR 281
+#define DO 282
+#define BEGIN_TAG 283
+#define END 284
+#define WRITE 285
+#define READ 286
+#define DOWNTO 287
+#define TO 288
+#define OF 289
+#define COLON 290
+#define VAR 291
+#define ARRAY 292
+#define THEN 293
+#define COMMA 294
+#define OPEN_BRACKET 295
+#define OPEN_PARANTHESIS 296
+#define CLOSE_BRACKET 297
+#define CLOSE_PARANTHESIS 298
+#define PERIOD 299
+#define RANGE_DOTS 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 78 "task4.y"
+#line 79 "task4.y"
 
     struct sval{
         char *val;
@@ -300,7 +303,7 @@ union YYSTYPE
         int line;
     }dval;
 
-#line 304 "y.tab.c"
+#line 307 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -333,67 +336,70 @@ enum yysymbol_kind_t
   YYSYMBOL_BOOLEAN_OP_NOT = 10,            /* BOOLEAN_OP_NOT  */
   YYSYMBOL_ASSIGNMENT_OP = 11,             /* ASSIGNMENT_OP  */
   YYSYMBOL_RELATIONAL_OP = 12,             /* RELATIONAL_OP  */
-  YYSYMBOL_ARITHEMATIC_OP_PLUS = 13,       /* ARITHEMATIC_OP_PLUS  */
-  YYSYMBOL_ARITHEMATIC_OP_DIV = 14,        /* ARITHEMATIC_OP_DIV  */
-  YYSYMBOL_ARITHEMATIC_OP_MUL = 15,        /* ARITHEMATIC_OP_MUL  */
-  YYSYMBOL_ARITHEMATIC_OP_MINUS = 16,      /* ARITHEMATIC_OP_MINUS  */
-  YYSYMBOL_IF = 17,                        /* IF  */
-  YYSYMBOL_WHILE = 18,                     /* WHILE  */
-  YYSYMBOL_ARITHEMATIC_OP_MOD = 19,        /* ARITHEMATIC_OP_MOD  */
-  YYSYMBOL_INTEGER_CONSTANT = 20,          /* INTEGER_CONSTANT  */
-  YYSYMBOL_FLOAT_CONSTANT = 21,            /* FLOAT_CONSTANT  */
-  YYSYMBOL_PROGRAM = 22,                   /* PROGRAM  */
-  YYSYMBOL_SEMICOLON = 23,                 /* SEMICOLON  */
-  YYSYMBOL_ELSE = 24,                      /* ELSE  */
-  YYSYMBOL_FOR = 25,                       /* FOR  */
-  YYSYMBOL_DO = 26,                        /* DO  */
-  YYSYMBOL_BEGIN_TAG = 27,                 /* BEGIN_TAG  */
-  YYSYMBOL_END = 28,                       /* END  */
-  YYSYMBOL_WRITE = 29,                     /* WRITE  */
-  YYSYMBOL_READ = 30,                      /* READ  */
-  YYSYMBOL_DOWNTO = 31,                    /* DOWNTO  */
-  YYSYMBOL_TO = 32,                        /* TO  */
-  YYSYMBOL_OF = 33,                        /* OF  */
-  YYSYMBOL_COLON = 34,                     /* COLON  */
-  YYSYMBOL_VAR = 35,                       /* VAR  */
-  YYSYMBOL_ARRAY = 36,                     /* ARRAY  */
-  YYSYMBOL_THEN = 37,                      /* THEN  */
-  YYSYMBOL_COMMA = 38,                     /* COMMA  */
-  YYSYMBOL_OPEN_BRACKET = 39,              /* OPEN_BRACKET  */
-  YYSYMBOL_OPEN_PARANTHESIS = 40,          /* OPEN_PARANTHESIS  */
-  YYSYMBOL_CLOSE_BRACKET = 41,             /* CLOSE_BRACKET  */
-  YYSYMBOL_CLOSE_PARANTHESIS = 42,         /* CLOSE_PARANTHESIS  */
-  YYSYMBOL_PERIOD = 43,                    /* PERIOD  */
-  YYSYMBOL_RANGE_DOTS = 44,                /* RANGE_DOTS  */
-  YYSYMBOL_YYACCEPT = 45,                  /* $accept  */
-  YYSYMBOL_start = 46,                     /* start  */
-  YYSYMBOL_variable_declaration = 47,      /* variable_declaration  */
-  YYSYMBOL_variable_list = 48,             /* variable_list  */
-  YYSYMBOL_variable_line = 49,             /* variable_line  */
-  YYSYMBOL_left_side_vars = 50,            /* left_side_vars  */
-  YYSYMBOL_rigth_side_type = 51,           /* rigth_side_type  */
-  YYSYMBOL_datatype = 52,                  /* datatype  */
-  YYSYMBOL_program_declaration = 53,       /* program_declaration  */
-  YYSYMBOL_statements = 54,                /* statements  */
-  YYSYMBOL_statementline = 55,             /* statementline  */
-  YYSYMBOL_left_if = 56,                   /* left_if  */
-  YYSYMBOL_middle_if = 57,                 /* middle_if  */
-  YYSYMBOL_right_if = 58,                  /* right_if  */
-  YYSYMBOL_left_array_assignment = 59,     /* left_array_assignment  */
-  YYSYMBOL_for_conditionals1 = 60,         /* for_conditionals1  */
-  YYSYMBOL_for_conditionals2 = 61,         /* for_conditionals2  */
-  YYSYMBOL_condition = 62,                 /* condition  */
-  YYSYMBOL_conditional_head = 63,          /* conditional_head  */
-  YYSYMBOL_conditionals = 64,              /* conditionals  */
-  YYSYMBOL_condtional_unit = 65,           /* condtional_unit  */
-  YYSYMBOL_relational_exp = 66,            /* relational_exp  */
-  YYSYMBOL_left_side_vars_write = 67,      /* left_side_vars_write  */
-  YYSYMBOL_possible_writes = 68,           /* possible_writes  */
-  YYSYMBOL_possible_write_values = 69,     /* possible_write_values  */
-  YYSYMBOL_possible_reads = 70,            /* possible_reads  */
-  YYSYMBOL_arith_expression = 71,          /* arith_expression  */
-  YYSYMBOL_unit = 72,                      /* unit  */
-  YYSYMBOL_unit_2 = 73                     /* unit_2  */
+  YYSYMBOL_CHAR_CONSTANT = 13,             /* CHAR_CONSTANT  */
+  YYSYMBOL_ARITHEMATIC_OP_PLUS = 14,       /* ARITHEMATIC_OP_PLUS  */
+  YYSYMBOL_ARITHEMATIC_OP_DIV = 15,        /* ARITHEMATIC_OP_DIV  */
+  YYSYMBOL_ARITHEMATIC_OP_MUL = 16,        /* ARITHEMATIC_OP_MUL  */
+  YYSYMBOL_ARITHEMATIC_OP_MINUS = 17,      /* ARITHEMATIC_OP_MINUS  */
+  YYSYMBOL_IF = 18,                        /* IF  */
+  YYSYMBOL_WHILE = 19,                     /* WHILE  */
+  YYSYMBOL_ARITHEMATIC_OP_MOD = 20,        /* ARITHEMATIC_OP_MOD  */
+  YYSYMBOL_INTEGER_CONSTANT = 21,          /* INTEGER_CONSTANT  */
+  YYSYMBOL_FLOAT_CONSTANT = 22,            /* FLOAT_CONSTANT  */
+  YYSYMBOL_PROGRAM = 23,                   /* PROGRAM  */
+  YYSYMBOL_SEMICOLON = 24,                 /* SEMICOLON  */
+  YYSYMBOL_ELSE = 25,                      /* ELSE  */
+  YYSYMBOL_FOR = 26,                       /* FOR  */
+  YYSYMBOL_DO = 27,                        /* DO  */
+  YYSYMBOL_BEGIN_TAG = 28,                 /* BEGIN_TAG  */
+  YYSYMBOL_END = 29,                       /* END  */
+  YYSYMBOL_WRITE = 30,                     /* WRITE  */
+  YYSYMBOL_READ = 31,                      /* READ  */
+  YYSYMBOL_DOWNTO = 32,                    /* DOWNTO  */
+  YYSYMBOL_TO = 33,                        /* TO  */
+  YYSYMBOL_OF = 34,                        /* OF  */
+  YYSYMBOL_COLON = 35,                     /* COLON  */
+  YYSYMBOL_VAR = 36,                       /* VAR  */
+  YYSYMBOL_ARRAY = 37,                     /* ARRAY  */
+  YYSYMBOL_THEN = 38,                      /* THEN  */
+  YYSYMBOL_COMMA = 39,                     /* COMMA  */
+  YYSYMBOL_OPEN_BRACKET = 40,              /* OPEN_BRACKET  */
+  YYSYMBOL_OPEN_PARANTHESIS = 41,          /* OPEN_PARANTHESIS  */
+  YYSYMBOL_CLOSE_BRACKET = 42,             /* CLOSE_BRACKET  */
+  YYSYMBOL_CLOSE_PARANTHESIS = 43,         /* CLOSE_PARANTHESIS  */
+  YYSYMBOL_PERIOD = 44,                    /* PERIOD  */
+  YYSYMBOL_RANGE_DOTS = 45,                /* RANGE_DOTS  */
+  YYSYMBOL_YYACCEPT = 46,                  /* $accept  */
+  YYSYMBOL_start = 47,                     /* start  */
+  YYSYMBOL_variable_declaration = 48,      /* variable_declaration  */
+  YYSYMBOL_variable_list = 49,             /* variable_list  */
+  YYSYMBOL_variable_line = 50,             /* variable_line  */
+  YYSYMBOL_left_side_vars = 51,            /* left_side_vars  */
+  YYSYMBOL_rigth_side_type = 52,           /* rigth_side_type  */
+  YYSYMBOL_datatype = 53,                  /* datatype  */
+  YYSYMBOL_program_declaration = 54,       /* program_declaration  */
+  YYSYMBOL_statements = 55,                /* statements  */
+  YYSYMBOL_statementline = 56,             /* statementline  */
+  YYSYMBOL_while_left = 57,                /* while_left  */
+  YYSYMBOL_left_if = 58,                   /* left_if  */
+  YYSYMBOL_middle_if = 59,                 /* middle_if  */
+  YYSYMBOL_right_if = 60,                  /* right_if  */
+  YYSYMBOL_left_array_assignment = 61,     /* left_array_assignment  */
+  YYSYMBOL_for_conditionals1 = 62,         /* for_conditionals1  */
+  YYSYMBOL_for_conditionals2 = 63,         /* for_conditionals2  */
+  YYSYMBOL_for_conditionals3 = 64,         /* for_conditionals3  */
+  YYSYMBOL_for_conditionals4 = 65,         /* for_conditionals4  */
+  YYSYMBOL_condition = 66,                 /* condition  */
+  YYSYMBOL_conditionals = 67,              /* conditionals  */
+  YYSYMBOL_condtional_unit = 68,           /* condtional_unit  */
+  YYSYMBOL_relational_exp = 69,            /* relational_exp  */
+  YYSYMBOL_left_side_vars_write = 70,      /* left_side_vars_write  */
+  YYSYMBOL_possible_writes = 71,           /* possible_writes  */
+  YYSYMBOL_possible_write_values = 72,     /* possible_write_values  */
+  YYSYMBOL_possible_reads = 73,            /* possible_reads  */
+  YYSYMBOL_arith_expression = 74,          /* arith_expression  */
+  YYSYMBOL_unit = 75,                      /* unit  */
+  YYSYMBOL_unit_2 = 76                     /* unit_2  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -721,19 +727,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   213
+#define YYLAST   216
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  45
+#define YYNTOKENS  46
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  29
+#define YYNNTS  31
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  74
+#define YYNRULES  77
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  159
+#define YYNSTATES  167
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   299
+#define YYMAXUTOK   300
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -776,21 +782,22 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    42,    43,    44
+      35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
+      45
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   112,   112,   116,   117,   118,   119,   121,   122,   128,
-     135,   136,   145,   154,   163,   174,   182,   190,   198,   208,
-     209,   211,   212,   214,   215,   216,   220,   228,   229,   230,
-     237,   244,   246,   266,   270,   272,   303,   335,   367,   368,
-     370,   371,   373,   374,   384,   394,   404,   414,   415,   418,
-     420,   430,   432,   433,   435,   436,   438,   439,   440,   441,
-     443,   444,   447,   448,   449,   450,   459,   469,   479,   489,
-     501,   507,   540,   542,   548
+       0,   113,   113,   119,   120,   121,   122,   124,   125,   131,
+     138,   139,   148,   157,   166,   177,   185,   193,   201,   211,
+     212,   214,   215,   217,   218,   219,   222,   229,   230,   231,
+     238,   245,   252,   259,   264,   292,   312,   316,   318,   356,
+     388,   420,   452,   484,   485,   488,   489,   490,   500,   510,
+     520,   530,   533,   535,   546,   547,   549,   550,   552,   553,
+     554,   555,   557,   558,   561,   562,   563,   564,   573,   583,
+     593,   603,   615,   620,   658,   660,   665,   670
 };
 #endif
 
@@ -808,7 +815,7 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "IDENTIFIER",
   "STRING_CONSTANT", "INTEGER", "REAL", "BOOLEAN", "CHAR", "BOOLEAN_OP",
-  "BOOLEAN_OP_NOT", "ASSIGNMENT_OP", "RELATIONAL_OP",
+  "BOOLEAN_OP_NOT", "ASSIGNMENT_OP", "RELATIONAL_OP", "CHAR_CONSTANT",
   "ARITHEMATIC_OP_PLUS", "ARITHEMATIC_OP_DIV", "ARITHEMATIC_OP_MUL",
   "ARITHEMATIC_OP_MINUS", "IF", "WHILE", "ARITHEMATIC_OP_MOD",
   "INTEGER_CONSTANT", "FLOAT_CONSTANT", "PROGRAM", "SEMICOLON", "ELSE",
@@ -818,11 +825,12 @@ static const char *const yytname[] =
   "RANGE_DOTS", "$accept", "start", "variable_declaration",
   "variable_list", "variable_line", "left_side_vars", "rigth_side_type",
   "datatype", "program_declaration", "statements", "statementline",
-  "left_if", "middle_if", "right_if", "left_array_assignment",
-  "for_conditionals1", "for_conditionals2", "condition",
-  "conditional_head", "conditionals", "condtional_unit", "relational_exp",
-  "left_side_vars_write", "possible_writes", "possible_write_values",
-  "possible_reads", "arith_expression", "unit", "unit_2", YY_NULLPTR
+  "while_left", "left_if", "middle_if", "right_if",
+  "left_array_assignment", "for_conditionals1", "for_conditionals2",
+  "for_conditionals3", "for_conditionals4", "condition", "conditionals",
+  "condtional_unit", "relational_exp", "left_side_vars_write",
+  "possible_writes", "possible_write_values", "possible_reads",
+  "arith_expression", "unit", "unit_2", YY_NULLPTR
 };
 
 static const char *
@@ -832,12 +840,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-51)
+#define YYPACT_NINF (-52)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-50)
+#define YYTABLE_NINF (-53)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -846,22 +854,23 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -13,     3,    13,    -4,   -51,   -14,    24,    37,    27,   -51,
-      24,    33,   112,    25,    24,   -51,    52,    87,     2,     2,
-      74,   -51,    38,    46,    63,   129,    71,    86,   -51,   -51,
-     -51,   -51,   -51,   -51,    77,   104,   -51,    14,    14,    96,
-       2,    14,   -51,   -51,     2,   -51,   -51,   -51,   -51,   127,
-     179,    81,   -51,   117,   133,   122,   123,    12,   148,   -51,
-     -51,    37,     8,    14,   132,   -51,    14,   154,   -51,    80,
-      14,   -51,   127,    -1,   119,   111,    11,    60,   146,     2,
-      14,    14,    14,    14,    14,    14,     2,    37,    14,    37,
-      37,    23,   118,   -51,   115,   -51,   125,   130,   -51,   -51,
-      37,   142,   167,   131,    68,   -51,   -51,    90,   -51,   -51,
-     -51,   -51,    29,   186,   119,   -51,   -51,   119,   -51,   -51,
-      43,   151,   147,   153,   161,   168,    14,    12,   162,    14,
-     164,   -51,   -51,   -51,   169,   -51,   -51,    14,    14,   -51,
-     -51,   150,   -51,    98,   -51,   -51,   109,   -51,   155,   186,
-     186,   -51,   -51,   170,   201,   -51,   -51,   -51,   -51
+     -14,    16,     7,     2,   -52,   -15,    31,    25,    22,   -52,
+      31,    32,    80,    27,    31,   -52,    52,    26,    10,    10,
+      66,   -52,    34,    40,    55,    94,    59,    57,    85,   -52,
+     -52,   -52,   -52,   -52,   -52,    60,    83,   -52,    51,    51,
+      68,    10,   -52,    51,   -52,   -52,    51,   -52,   -52,   -52,
+     105,   185,    -5,   -52,   -52,    54,   108,    95,    96,   103,
+     104,    14,   134,   -52,   -52,    25,    25,     4,    51,   117,
+     -52,   163,   -52,   101,    51,   -52,    -3,    -4,    62,    10,
+      51,    51,    51,    51,    51,    51,    10,    51,    51,    25,
+      25,    25,    25,    48,   102,   -52,    97,   -52,   109,    99,
+     124,   -52,   -52,    25,   127,   174,   107,   -52,   -52,   112,
+     -52,   -52,    47,   192,    -4,   -52,   -52,    -4,   -52,   -52,
+      53,   142,   149,   129,   131,   136,   143,   165,    51,    14,
+     146,    51,   147,   -52,   -52,   -52,   -52,   152,   -52,    51,
+      51,    51,    51,   -52,   -52,   -52,   -52,   137,   -52,   119,
+     -52,   -52,   130,   -52,   144,   192,   192,   192,   192,   -52,
+     -52,   150,   208,   -52,   -52,   -52,   -52
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -871,36 +880,39 @@ static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     1,     4,     0,     0,     8,     3,
        5,     0,     0,     0,     0,     6,     0,     0,     0,     0,
-       0,    20,     0,     0,     0,    21,     0,     0,     2,     9,
-      15,    16,    17,    18,     0,     0,    10,     0,     0,    70,
-       0,     0,    73,    74,     0,    32,    38,    41,    42,    40,
-       0,    63,    62,     0,     0,     0,     0,    55,     0,    19,
-      22,     0,     0,     0,     0,     7,     0,     0,    63,     0,
-       0,    47,     0,    63,    72,     0,     0,     0,    63,     0,
+       0,    20,     0,     0,     0,    21,     0,     0,     0,     2,
+       9,    15,    16,    17,    18,     0,     0,    10,     0,     0,
+      72,     0,    77,     0,    75,    76,     0,    35,    43,    45,
+      46,     0,    65,    64,    34,     0,     0,     0,     0,     0,
+       0,    57,     0,    19,    22,     0,     0,     0,     0,     0,
+       7,     0,    65,     0,     0,    51,    65,    74,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    52,    57,    56,     0,    54,    60,     0,    33,    28,
-       0,     0,     0,     0,     0,    25,    35,     0,    48,    51,
-      64,    43,    63,    50,    65,    68,    67,    66,    69,    45,
-      63,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    34,    27,    26,     0,    71,    31,     0,     0,    29,
-      30,    52,    53,     0,    58,    23,     0,    24,     0,    37,
-      36,    59,    61,     0,     0,    11,    12,    13,    14
+       0,     0,     0,    54,    59,    58,     0,    56,    62,     0,
+       0,    36,    28,     0,     0,     0,     0,    25,    38,     0,
+      66,    47,    65,    53,    67,    70,    69,    68,    71,    49,
+      65,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    33,    37,    27,    26,     0,    73,     0,
+       0,     0,     0,    29,    30,    31,    32,    54,    55,     0,
+      60,    23,     0,    24,     0,    40,    39,    42,    41,    61,
+      63,     0,     0,    11,    12,    13,    14
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -51,   -51,   -51,   187,   -51,   190,   -51,   -51,   -50,   185,
-     -51,   -51,   -51,   -51,   -51,   -51,   -51,   192,   -51,   -30,
-     -51,   101,    88,   -51,    85,   -51,   -37,   -16,   -51
+     -52,   -52,   -52,   175,   -52,   178,   -52,   -52,   -51,   168,
+     -52,   -52,   -52,   -52,   -52,   176,   -52,   -52,   -52,   -52,
+     184,   -31,   -52,   -52,    77,   -52,    81,   -52,   -38,   -16,
+     -52
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     7,     9,    10,    11,    35,    36,    13,    24,
-      25,    26,    62,   101,    27,    55,    56,    45,    46,    47,
-      48,    72,    93,    94,    95,    97,    50,    68,    52
+       0,     2,     7,     9,    10,    11,    36,    37,    13,    24,
+      25,    26,    27,    67,   104,    28,    57,    58,    59,    60,
+      47,    48,    49,    50,    95,    96,    97,    99,    51,    72,
+      53
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -908,89 +920,90 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
-      67,    69,    51,    51,    74,    39,     3,    77,    86,     1,
-      71,    98,    40,     4,    75,    91,    92,    39,    41,     5,
-      79,     6,    42,    43,    73,   -49,   102,     8,    78,   104,
-      41,    99,   100,   107,    42,    43,   -49,   121,    86,   123,
-     124,   -49,    44,   113,   114,   115,   116,   117,   118,   111,
-     131,   122,    86,   109,    66,   -44,   119,    30,    31,    32,
-      33,   125,   126,   112,    12,    14,   -44,    16,    28,   -46,
-     120,   -44,    80,    81,    82,    83,    84,    54,    57,    85,
-     -46,    81,    82,    83,    84,   -46,    58,    85,    34,   143,
-      86,    59,   146,    81,    82,    83,    84,    63,    37,    85,
-     149,   150,   110,    81,    82,    83,    84,   -39,    61,    85,
-     110,    81,    82,    83,    84,    17,    64,    85,   -39,    49,
-      49,   106,    81,    82,    83,    84,    38,    65,    85,    18,
-      19,   135,    17,    82,    83,    70,    79,    20,    85,   151,
-      21,    22,    23,    87,    88,    76,    18,    19,    89,    90,
-     152,    96,   103,   108,    20,    86,   127,   128,    22,    23,
-      81,    82,    83,    84,   129,   132,    85,    81,    82,    83,
-      84,   141,   130,    85,   136,   134,   139,   105,   137,   138,
-      81,    82,    83,    84,   140,   145,    85,   147,   125,   148,
-     133,    80,    81,    82,    83,    84,   153,    15,    85,    81,
-      82,    83,    84,   154,    29,    85,   155,   156,   157,   158,
-      60,    53,   144,   142
+      71,    73,    52,    52,    86,    77,    86,     4,    78,     1,
+      75,    82,    83,    40,   100,   101,    85,    93,    94,     3,
+      41,     6,   -44,    42,   -52,    76,     5,    43,   102,   103,
+     105,    44,    45,   -44,     8,   -52,   109,    38,   123,   124,
+     125,   126,   113,   114,   115,   116,   117,   118,   111,   121,
+     122,    46,   134,    12,    40,   119,    86,    31,    32,    33,
+      34,    14,    86,   112,    42,    87,    39,    16,    43,    55,
+     120,    29,    44,    45,   -48,    61,    81,    82,    83,    84,
+     -50,    62,    85,    17,    63,   -48,    65,   127,   128,    35,
+     149,   -50,    46,   152,    39,    66,    68,    17,    18,    19,
+      69,   155,   156,   157,   158,   110,    20,    70,    74,    21,
+      22,    23,    18,    19,    79,    81,    82,    83,    84,    88,
+      20,    85,    89,    90,    22,    23,    81,    82,    83,    84,
+      91,    92,    85,    81,    82,    83,    84,    98,   106,    85,
+     130,   129,   132,   108,    81,    82,    83,    84,   133,   131,
+      85,   135,   137,   143,   138,   144,    81,    82,    83,    84,
+     145,   159,    85,    81,    82,    83,    84,   146,   147,    85,
+     151,   153,   160,   154,   139,   140,   127,    81,    82,    83,
+      84,   141,   142,    85,   162,    15,   161,   107,    81,    82,
+      83,    84,    30,    64,    85,     0,    56,    80,   136,    81,
+      82,    83,    84,    54,   148,    85,    81,    82,    83,    84,
+     150,     0,    85,   163,   164,   165,   166
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int16 yycheck[] =
 {
-      37,    38,    18,    19,    41,     3,     3,    44,     9,    22,
-      40,    61,    10,     0,    44,     3,     4,     3,    16,    23,
-       9,    35,    20,    21,    40,    26,    63,     3,    44,    66,
-      16,    23,    24,    70,    20,    21,    37,    87,     9,    89,
-      90,    42,    40,    80,    81,    82,    83,    84,    85,    79,
-     100,    88,     9,    42,    40,    26,    86,     5,     6,     7,
-       8,    38,    39,    79,    27,    38,    37,    34,    43,    26,
-      86,    42,    12,    13,    14,    15,    16,     3,    40,    19,
-      37,    13,    14,    15,    16,    42,    40,    19,    36,   126,
-       9,    28,   129,    13,    14,    15,    16,    11,    11,    19,
-     137,   138,    42,    13,    14,    15,    16,    26,    37,    19,
-      42,    13,    14,    15,    16,     3,    39,    19,    37,    18,
-      19,    41,    13,    14,    15,    16,    39,    23,    19,    17,
-      18,    41,     3,    14,    15,    39,     9,    25,    19,    41,
-      28,    29,    30,    26,    11,    44,    17,    18,    26,    26,
-      41,     3,    20,    42,    25,     9,    38,    42,    29,    30,
-      13,    14,    15,    16,    39,    23,    19,    13,    14,    15,
-      16,     3,    42,    19,    23,    44,    23,    23,    31,    32,
-      13,    14,    15,    16,    23,    23,    19,    23,    38,    20,
-      23,    12,    13,    14,    15,    16,    41,    10,    19,    13,
-      14,    15,    16,    33,    14,    19,     5,     6,     7,     8,
-      25,    19,   127,   125
+      38,    39,    18,    19,     9,    43,     9,     0,    46,    23,
+      41,    15,    16,     3,    65,    66,    20,     3,     4,     3,
+      10,    36,    27,    13,    27,    41,    24,    17,    24,    25,
+      68,    21,    22,    38,     3,    38,    74,    11,    89,    90,
+      91,    92,    80,    81,    82,    83,    84,    85,    79,    87,
+      88,    41,   103,    28,     3,    86,     9,     5,     6,     7,
+       8,    39,     9,    79,    13,    11,    40,    35,    17,     3,
+      86,    44,    21,    22,    27,    41,    14,    15,    16,    17,
+      27,    41,    20,     3,    29,    38,    27,    39,    40,    37,
+     128,    38,    41,   131,    40,    38,    11,     3,    18,    19,
+      40,   139,   140,   141,   142,    43,    26,    24,    40,    29,
+      30,    31,    18,    19,     9,    14,    15,    16,    17,    11,
+      26,    20,    27,    27,    30,    31,    14,    15,    16,    17,
+      27,    27,    20,    14,    15,    16,    17,     3,    21,    20,
+      43,    39,    43,    42,    14,    15,    16,    17,    24,    40,
+      20,    24,    45,    24,    42,    24,    14,    15,    16,    17,
+      24,    42,    20,    14,    15,    16,    17,    24,     3,    20,
+      24,    24,    42,    21,    32,    33,    39,    14,    15,    16,
+      17,    32,    33,    20,    34,    10,    42,    24,    14,    15,
+      16,    17,    14,    25,    20,    -1,    20,    12,    24,    14,
+      15,    16,    17,    19,   127,    20,    14,    15,    16,    17,
+     129,    -1,    20,     5,     6,     7,     8
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    22,    46,     3,     0,    23,    35,    47,     3,    48,
-      49,    50,    27,    53,    38,    48,    34,     3,    17,    18,
-      25,    28,    29,    30,    54,    55,    56,    59,    43,    50,
-       5,     6,     7,     8,    36,    51,    52,    11,    39,     3,
-      10,    16,    20,    21,    40,    62,    63,    64,    65,    66,
-      71,    72,    73,    62,     3,    60,    61,    40,    40,    28,
-      54,    37,    57,    11,    39,    23,    40,    71,    72,    71,
-      39,    64,    66,    72,    71,    64,    66,    71,    72,     9,
-      12,    13,    14,    15,    16,    19,     9,    26,    11,    26,
-      26,     3,     4,    67,    68,    69,     3,    70,    53,    23,
-      24,    58,    71,    20,    71,    23,    41,    71,    42,    42,
-      42,    64,    72,    71,    71,    71,    71,    71,    71,    64,
-      72,    53,    71,    53,    53,    38,    39,    38,    42,    39,
-      42,    53,    23,    23,    44,    41,    23,    31,    32,    23,
-      23,     3,    67,    71,    69,    23,    71,    23,    20,    71,
-      71,    41,    41,    41,    33,     5,     6,     7,     8
+       0,    23,    47,     3,     0,    24,    36,    48,     3,    49,
+      50,    51,    28,    54,    39,    49,    35,     3,    18,    19,
+      26,    29,    30,    31,    55,    56,    57,    58,    61,    44,
+      51,     5,     6,     7,     8,    37,    52,    53,    11,    40,
+       3,    10,    13,    17,    21,    22,    41,    66,    67,    68,
+      69,    74,    75,    76,    66,     3,    61,    62,    63,    64,
+      65,    41,    41,    29,    55,    27,    38,    59,    11,    40,
+      24,    74,    75,    74,    40,    67,    75,    74,    74,     9,
+      12,    14,    15,    16,    17,    20,     9,    11,    11,    27,
+      27,    27,    27,     3,     4,    70,    71,    72,     3,    73,
+      54,    54,    24,    25,    60,    74,    21,    24,    42,    74,
+      43,    67,    75,    74,    74,    74,    74,    74,    74,    67,
+      75,    74,    74,    54,    54,    54,    54,    39,    40,    39,
+      43,    40,    43,    24,    54,    24,    24,    45,    42,    32,
+      33,    32,    33,    24,    24,    24,    24,     3,    70,    74,
+      72,    24,    74,    24,    21,    74,    74,    74,    74,    42,
+      42,    42,    34,     5,     6,     7,     8
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    45,    46,    47,    47,    48,    48,    49,    50,    50,
-      51,    51,    51,    51,    51,    52,    52,    52,    52,    53,
-      53,    54,    54,    55,    55,    55,    55,    55,    55,    55,
-      55,    55,    56,    57,    58,    59,    60,    61,    62,    62,
-      63,    63,    64,    64,    64,    64,    64,    64,    64,    65,
-      66,    66,    67,    67,    68,    68,    69,    69,    69,    69,
-      70,    70,    71,    71,    71,    71,    71,    71,    71,    71,
-      72,    72,    72,    73,    73
+       0,    46,    47,    48,    48,    49,    49,    50,    51,    51,
+      52,    52,    52,    52,    52,    53,    53,    53,    53,    54,
+      54,    55,    55,    56,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    57,    58,    59,    60,    61,    62,
+      63,    64,    65,    66,    66,    67,    67,    67,    67,    67,
+      67,    67,    68,    69,    70,    70,    71,    71,    72,    72,
+      72,    72,    73,    73,    74,    74,    74,    74,    74,    74,
+      74,    74,    75,    75,    75,    76,    76,    76
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -999,11 +1012,11 @@ static const yytype_int8 yyr2[] =
        0,     2,     6,     2,     0,     1,     2,     4,     1,     3,
        1,     8,     8,     8,     8,     1,     1,     1,     1,     3,
        2,     1,     2,     5,     5,     4,     4,     4,     3,     5,
-       5,     5,     2,     2,     2,     4,     5,     5,     1,     1,
-       1,     1,     1,     3,     3,     3,     3,     2,     3,     2,
-       3,     3,     1,     3,     1,     0,     1,     1,     3,     4,
-       1,     4,     1,     1,     3,     3,     3,     3,     3,     3,
-       1,     4,     2,     1,     1
+       5,     5,     5,     4,     2,     2,     2,     2,     4,     5,
+       5,     5,     5,     1,     1,     1,     1,     3,     3,     3,
+       3,     2,     2,     3,     1,     3,     1,     0,     1,     1,
+       3,     4,     1,     4,     1,     1,     3,     3,     3,     3,
+       3,     3,     1,     4,     2,     1,     1,     1
 };
 
 
@@ -1467,37 +1480,39 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD  */
-#line 112 "task4.y"
+#line 113 "task4.y"
                                                                                     {printf("Valid Input\n");
                                                                                     reverseTAC();
-                                                                                    printTAC();}
-#line 1475 "y.tab.c"
+                                                                                    printTAC();
+                                                                                    printFormatted();
+                                                                                    }
+#line 1490 "y.tab.c"
     break;
 
   case 8: /* left_side_vars: IDENTIFIER  */
-#line 122 "task4.y"
+#line 125 "task4.y"
                            {
                     char * temp; temp=(char*)malloc(100*sizeof(char));
                     strcpy(temp,(yyvsp[0].sval).val);
                     temp=tolowercase(temp);
                     add_symbol(temp, "undefined");
                 }
-#line 1486 "y.tab.c"
+#line 1501 "y.tab.c"
     break;
 
   case 9: /* left_side_vars: IDENTIFIER COMMA left_side_vars  */
-#line 128 "task4.y"
+#line 131 "task4.y"
                                                  {
                     char * temp; temp=(char*)malloc(100*sizeof(char));
                     strcpy(temp,(yyvsp[-2].sval).val);
                     temp=tolowercase(temp);
                     add_symbol(temp, "undefined");
                 }
-#line 1497 "y.tab.c"
+#line 1512 "y.tab.c"
     break;
 
   case 11: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF INTEGER  */
-#line 136 "task4.y"
+#line 139 "task4.y"
                                                                                                          {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1507,11 +1522,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1511 "y.tab.c"
+#line 1526 "y.tab.c"
     break;
 
   case 12: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF REAL  */
-#line 145 "task4.y"
+#line 148 "task4.y"
                                                                                                        {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1521,11 +1536,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1525 "y.tab.c"
+#line 1540 "y.tab.c"
     break;
 
   case 13: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF BOOLEAN  */
-#line 154 "task4.y"
+#line 157 "task4.y"
                                                                                                           {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1535,11 +1550,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1539 "y.tab.c"
+#line 1554 "y.tab.c"
     break;
 
   case 14: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF CHAR  */
-#line 163 "task4.y"
+#line 166 "task4.y"
                                                                                                        {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1549,11 +1564,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1553 "y.tab.c"
+#line 1568 "y.tab.c"
     break;
 
   case 15: /* datatype: INTEGER  */
-#line 174 "task4.y"
+#line 177 "task4.y"
                   {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1562,11 +1577,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1566 "y.tab.c"
+#line 1581 "y.tab.c"
     break;
 
   case 16: /* datatype: REAL  */
-#line 182 "task4.y"
+#line 185 "task4.y"
               {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1575,11 +1590,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1579 "y.tab.c"
+#line 1594 "y.tab.c"
     break;
 
   case 17: /* datatype: BOOLEAN  */
-#line 190 "task4.y"
+#line 193 "task4.y"
                  {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1588,11 +1603,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1592 "y.tab.c"
+#line 1607 "y.tab.c"
     break;
 
   case 18: /* datatype: CHAR  */
-#line 198 "task4.y"
+#line 201 "task4.y"
               {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1601,33 +1616,31 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1605 "y.tab.c"
+#line 1620 "y.tab.c"
     break;
 
   case 25: /* statementline: IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 216 "task4.y"
+#line 219 "task4.y"
                                                                     {
                     addTAC((yyvsp[-2].sval).val,pop(), "", (yyvsp[-3].sval).val);
-
                 }
-#line 1614 "y.tab.c"
+#line 1628 "y.tab.c"
     break;
 
   case 26: /* statementline: left_array_assignment ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 220 "task4.y"
+#line 222 "task4.y"
                                                                                 {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
                     char *id2=(char*)malloc(100*sizeof(char));
                     strcpy(id2,pop());
                     addTAC((yyvsp[-2].sval).val,id,"",id2);
-                    
                 }
-#line 1627 "y.tab.c"
+#line 1640 "y.tab.c"
     break;
 
   case 29: /* statementline: FOR for_conditionals1 DO program_declaration SEMICOLON  */
-#line 230 "task4.y"
+#line 231 "task4.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1635,11 +1648,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1639 "y.tab.c"
+#line 1652 "y.tab.c"
     break;
 
   case 30: /* statementline: FOR for_conditionals2 DO program_declaration SEMICOLON  */
-#line 237 "task4.y"
+#line 238 "task4.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1647,11 +1660,76 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1651 "y.tab.c"
+#line 1664 "y.tab.c"
     break;
 
-  case 32: /* left_if: IF condition  */
-#line 246 "task4.y"
+  case 31: /* statementline: FOR for_conditionals3 DO program_declaration SEMICOLON  */
+#line 245 "task4.y"
+                                                                        {
+                    char *id=(char*)malloc(100*sizeof(char));
+                    strcpy(id,pop());
+                    addTAC("+",id,"1",id);
+                    addTAC("GOTO",pop(),"","");
+                    addTAC("LABEL",pop(),"","");
+                }
+#line 1676 "y.tab.c"
+    break;
+
+  case 32: /* statementline: FOR for_conditionals4 DO program_declaration SEMICOLON  */
+#line 252 "task4.y"
+                                                                        {
+                    char *id=(char*)malloc(100*sizeof(char));
+                    strcpy(id,pop());
+                    addTAC("-",id,"1",id);
+                    addTAC("GOTO",pop(),"","");
+                    addTAC("LABEL",pop(),"","");
+                }
+#line 1688 "y.tab.c"
+    break;
+
+  case 33: /* statementline: while_left DO program_declaration SEMICOLON  */
+#line 259 "task4.y"
+                                                             {
+                    addTAC("GOTO",pop(),"","");
+                    addTAC("LABEL",pop(),"","");
+                }
+#line 1697 "y.tab.c"
+    break;
+
+  case 34: /* while_left: WHILE condition  */
+#line 264 "task4.y"
+                            {
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    addTAC("LABEL",str,"","");
+    char * str1= (char *)malloc(100*sizeof(char));
+    strcpy(str1,"L");
+    char temp2[10];
+    sprintf(temp2,"%d",lindex);
+    strcat(str1,temp2);
+    lindex++;
+    char * str2=(char *)malloc(100*sizeof(char));
+    strcpy(str2,"L");
+    char temp3[10];
+    sprintf(temp3, "%d", lindex);
+    strcat(str2,temp3);
+    lindex++;
+    addTAC("IF",pop(),"GOTO",str1);
+    push(str2);
+    push(str);
+    addTAC("GOTO",str2,"","");
+    addTAC("LABEL",str1,"","");
+    
+}
+#line 1729 "y.tab.c"
+    break;
+
+  case 35: /* left_if: IF condition  */
+#line 292 "task4.y"
                      {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1671,19 +1749,19 @@ yyreduce:
     lindex++;
     
 }
-#line 1675 "y.tab.c"
+#line 1753 "y.tab.c"
     break;
 
-  case 33: /* middle_if: THEN program_declaration  */
-#line 266 "task4.y"
+  case 36: /* middle_if: THEN program_declaration  */
+#line 312 "task4.y"
                                    {
     addTAC("LABEL",pop(),"","");
 }
-#line 1683 "y.tab.c"
+#line 1761 "y.tab.c"
     break;
 
-  case 35: /* left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 272 "task4.y"
+  case 38: /* left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
+#line 318 "task4.y"
                                                                               {
     char *id=(char*)malloc(100*sizeof(char));
     strcpy(id,"t");
@@ -1697,7 +1775,13 @@ yyreduce:
     char temp2[10];
     sprintf(temp2, "%d", qindex);
     strcat(dt,temp2);
-    addTAC("sizeof",find_symbol((yyvsp[-3].sval).val)->type,"",dt);
+    char*typ=(char *)malloc(100*sizeof(char));
+    (yyvsp[-3].sval).val=tolowercase((yyvsp[-3].sval).val);
+    strcpy(typ,find_symbol((yyvsp[-3].sval).val)->type);
+    char *subStr = NULL;
+    char *underscorePos = strchr(typ, '_');
+    subStr = underscorePos + 1;
+    addTAC("sizeof",subStr,"",dt);
     qindex++;
     char *id2=(char*)malloc(100*sizeof(char));
     strcpy(id2,"t");
@@ -1713,12 +1797,13 @@ yyreduce:
     strcat(id3,temp4);
     addTAC("+",id,id2,id3);
     qindex++;
+    push(id3);
 }
-#line 1718 "y.tab.c"
+#line 1803 "y.tab.c"
     break;
 
-  case 36: /* for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 303 "task4.y"
+  case 39: /* for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression  */
+#line 356 "task4.y"
                                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1750,11 +1835,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1754 "y.tab.c"
+#line 1839 "y.tab.c"
     break;
 
-  case 37: /* for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 335 "task4.y"
+  case 40: /* for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
+#line 388 "task4.y"
                                                                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1786,11 +1871,83 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1790 "y.tab.c"
+#line 1875 "y.tab.c"
     break;
 
-  case 43: /* conditionals: relational_exp BOOLEAN_OP conditionals  */
-#line 374 "task4.y"
+  case 41: /* for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression  */
+#line 420 "task4.y"
+                                                                                           {
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    char * str2=(char *)malloc(100*sizeof(char));
+    strcpy(str2,pop());
+    char * str1=(char *)malloc(100*sizeof(char));
+    strcpy(str1,pop());
+    addTAC((yyvsp[-3].sval).val,str1,"",str1);
+    char* cond=(char *)malloc(100*sizeof(char));
+    strcpy(cond,"t");
+    char temp[10];
+    sprintf(temp, "%d", qindex);
+    strcat(cond,temp);
+    addTAC("LABEL",str,"","");
+    addTAC(">=",str1,str2,cond);
+    qindex++;
+    char* str3=(char *)malloc(100*sizeof(char));
+    strcpy(str3,"L");
+    char temp2[10];
+    sprintf(temp2, "%d", lindex);
+    strcat(str3,temp2);
+    addTAC("IF",cond,"GOTO",str3);
+    push(str3);
+    push(str);
+    push(str1);
+    lindex++;
+}
+#line 1911 "y.tab.c"
+    break;
+
+  case 42: /* for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
+#line 452 "task4.y"
+                                                                                               {
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    char * str2=(char *)malloc(100*sizeof(char));
+    strcpy(str2,pop());
+    char * str1=(char *)malloc(100*sizeof(char));
+    strcpy(str1,pop());
+    addTAC((yyvsp[-3].sval).val,str1,"",str1);
+    char* cond=(char *)malloc(100*sizeof(char));
+    strcpy(cond,"t");
+    char temp[10];
+    sprintf(temp, "%d", qindex);
+    strcat(cond,temp);
+    addTAC("LABEL",str,"","");
+    addTAC("<=",str1,str2,cond);
+    qindex++;
+    char* str3=(char *)malloc(100*sizeof(char));
+    strcpy(str3,"L");
+    char temp2[10];
+    sprintf(temp2, "%d", lindex);
+    strcat(str3,temp2);
+    addTAC("IF",cond,"GOTO",str3);
+    push(str3);
+    push(str);
+    push(str1);
+    lindex++;
+}
+#line 1947 "y.tab.c"
+    break;
+
+  case 47: /* conditionals: relational_exp BOOLEAN_OP conditionals  */
+#line 490 "task4.y"
                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1801,11 +1958,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1805 "y.tab.c"
+#line 1962 "y.tab.c"
     break;
 
-  case 44: /* conditionals: relational_exp BOOLEAN_OP unit  */
-#line 384 "task4.y"
+  case 48: /* conditionals: relational_exp BOOLEAN_OP unit  */
+#line 500 "task4.y"
                                                  {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1816,11 +1973,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1820 "y.tab.c"
+#line 1977 "y.tab.c"
     break;
 
-  case 45: /* conditionals: unit BOOLEAN_OP conditionals  */
-#line 394 "task4.y"
+  case 49: /* conditionals: unit BOOLEAN_OP conditionals  */
+#line 510 "task4.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1831,11 +1988,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1835 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
-  case 46: /* conditionals: unit BOOLEAN_OP unit  */
-#line 404 "task4.y"
+  case 50: /* conditionals: unit BOOLEAN_OP unit  */
+#line 520 "task4.y"
                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1846,11 +2003,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1850 "y.tab.c"
+#line 2007 "y.tab.c"
     break;
 
-  case 50: /* relational_exp: arith_expression RELATIONAL_OP arith_expression  */
-#line 420 "task4.y"
+  case 53: /* relational_exp: arith_expression RELATIONAL_OP arith_expression  */
+#line 535 "task4.y"
                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
@@ -1861,11 +2018,11 @@ yyreduce:
     qindex++;
     push(str);
     }
-#line 1865 "y.tab.c"
+#line 2022 "y.tab.c"
     break;
 
-  case 65: /* arith_expression: arith_expression ARITHEMATIC_OP_PLUS arith_expression  */
-#line 450 "task4.y"
+  case 67: /* arith_expression: arith_expression ARITHEMATIC_OP_PLUS arith_expression  */
+#line 564 "task4.y"
                                                                         { 
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1875,11 +2032,11 @@ yyreduce:
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);}
-#line 1879 "y.tab.c"
+#line 2036 "y.tab.c"
     break;
 
-  case 66: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
-#line 459 "task4.y"
+  case 68: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
+#line 573 "task4.y"
                                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1890,11 +2047,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1894 "y.tab.c"
+#line 2051 "y.tab.c"
     break;
 
-  case 67: /* arith_expression: arith_expression ARITHEMATIC_OP_MUL arith_expression  */
-#line 469 "task4.y"
+  case 69: /* arith_expression: arith_expression ARITHEMATIC_OP_MUL arith_expression  */
+#line 583 "task4.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1905,11 +2062,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1909 "y.tab.c"
+#line 2066 "y.tab.c"
     break;
 
-  case 68: /* arith_expression: arith_expression ARITHEMATIC_OP_DIV arith_expression  */
-#line 479 "task4.y"
+  case 70: /* arith_expression: arith_expression ARITHEMATIC_OP_DIV arith_expression  */
+#line 593 "task4.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1920,11 +2077,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1924 "y.tab.c"
+#line 2081 "y.tab.c"
     break;
 
-  case 69: /* arith_expression: arith_expression ARITHEMATIC_OP_MOD arith_expression  */
-#line 489 "task4.y"
+  case 71: /* arith_expression: arith_expression ARITHEMATIC_OP_MOD arith_expression  */
+#line 603 "task4.y"
                                                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1935,24 +2092,22 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1939 "y.tab.c"
+#line 2096 "y.tab.c"
     break;
 
-  case 70: /* unit: IDENTIFIER  */
-#line 501 "task4.y"
+  case 72: /* unit: IDENTIFIER  */
+#line 615 "task4.y"
                  {
-    printf("here3\n");
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 1950 "y.tab.c"
+#line 2106 "y.tab.c"
     break;
 
-  case 71: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 507 "task4.y"
+  case 73: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
+#line 620 "task4.y"
                                                              {
-        printf("here\n");
             char *id=(char*)malloc(100*sizeof(char));
             strcpy(id,"t");
             char temp[10];
@@ -1965,7 +2120,13 @@ yyreduce:
             char temp2[10];
             sprintf(temp2, "%d", qindex);
             strcat(dt,temp2);
-            addTAC("sizeof",find_symbol((yyvsp[-3].sval).val)->type,"",dt);
+            char*typ=(char *)malloc(100*sizeof(char));
+            (yyvsp[-3].sval).val=tolowercase((yyvsp[-3].sval).val);
+            strcpy(typ,find_symbol((yyvsp[-3].sval).val)->type);
+            char *subStr = NULL;
+            char *underscorePos = strchr(typ, '_');
+            subStr = underscorePos + 1;
+            addTAC("sizeof",subStr,"",dt);
             qindex++;
             char *id2=(char*)malloc(100*sizeof(char));
             strcpy(id2,"t");
@@ -1983,32 +2144,41 @@ yyreduce:
             qindex++;
             push(id3);
         }
-#line 1987 "y.tab.c"
+#line 2148 "y.tab.c"
     break;
 
-  case 73: /* unit_2: INTEGER_CONSTANT  */
-#line 542 "task4.y"
+  case 75: /* unit_2: INTEGER_CONSTANT  */
+#line 660 "task4.y"
                          {
-    printf("here2\n");
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%d",(yyvsp[0].ival).val);
             push(str);
     }
-#line 1998 "y.tab.c"
+#line 2158 "y.tab.c"
     break;
 
-  case 74: /* unit_2: FLOAT_CONSTANT  */
-#line 548 "task4.y"
+  case 76: /* unit_2: FLOAT_CONSTANT  */
+#line 665 "task4.y"
                      {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%f",(yyvsp[0].dval).val);
             push(str);
     }
-#line 2008 "y.tab.c"
+#line 2168 "y.tab.c"
+    break;
+
+  case 77: /* unit_2: CHAR_CONSTANT  */
+#line 670 "task4.y"
+                    {
+            char * str=malloc(100*sizeof(char));
+            sprintf(str,"%s",(yyvsp[0].sval).val);
+            push(str);
+    }
+#line 2178 "y.tab.c"
     break;
 
 
-#line 2012 "y.tab.c"
+#line 2182 "y.tab.c"
 
       default: break;
     }
@@ -2201,7 +2371,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 554 "task4.y"
+#line 676 "task4.y"
 
 
 struct node* make_binary_node(char* root, node* left, node* right){
@@ -2325,6 +2495,29 @@ void reverseTAC() {
         current = next;
     }
     TAC_table = prev;
+}
+
+void printFormatted(){
+    TAC* current=TAC_table;
+    printf("\n\nIntermediate Code:\n\n");
+    while(current!=NULL){
+        if(strcmp(current->op,"LABEL")==0){
+            printf("%s:\n",current->arg1);
+        }else if(strcmp(current->op,"GOTO")==0){
+            printf("GOTO %s\n",current->arg1);
+        }else if(strcmp(current->op,"IF")==0){
+            printf("%s %s %s %s\n",current->op,current->arg1,current->arg2,current->result);
+        }else if(strcmp(current->op,":=")==0){
+            printf("%s = %s\n",current->result,current->arg1);
+        }else if(strcmp(current->op,"sizeof")==0){
+            printf("%s = sizeof(%s)\n",current->result,current->arg1);
+        }else if(strcmp(current->op,"&")==0){
+            printf("%s = &%s\n",current->result,current->arg1);
+        }else{
+            printf("%s = %s %s %s\n",current->result,current->arg1,current->op,current->arg2);
+        }
+        current=current->next;
+    }
 }
 
 void push(char* data){

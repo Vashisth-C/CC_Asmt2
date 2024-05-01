@@ -64,38 +64,39 @@ extern int yydebug;
     BOOLEAN_OP_NOT = 265,          /* BOOLEAN_OP_NOT  */
     ASSIGNMENT_OP = 266,           /* ASSIGNMENT_OP  */
     RELATIONAL_OP = 267,           /* RELATIONAL_OP  */
-    ARITHEMATIC_OP_PLUS = 268,     /* ARITHEMATIC_OP_PLUS  */
-    ARITHEMATIC_OP_DIV = 269,      /* ARITHEMATIC_OP_DIV  */
-    ARITHEMATIC_OP_MUL = 270,      /* ARITHEMATIC_OP_MUL  */
-    ARITHEMATIC_OP_MINUS = 271,    /* ARITHEMATIC_OP_MINUS  */
-    IF = 272,                      /* IF  */
-    WHILE = 273,                   /* WHILE  */
-    ARITHEMATIC_OP_MOD = 274,      /* ARITHEMATIC_OP_MOD  */
-    INTEGER_CONSTANT = 275,        /* INTEGER_CONSTANT  */
-    FLOAT_CONSTANT = 276,          /* FLOAT_CONSTANT  */
-    PROGRAM = 277,                 /* PROGRAM  */
-    SEMICOLON = 278,               /* SEMICOLON  */
-    ELSE = 279,                    /* ELSE  */
-    FOR = 280,                     /* FOR  */
-    DO = 281,                      /* DO  */
-    BEGIN_TAG = 282,               /* BEGIN_TAG  */
-    END = 283,                     /* END  */
-    WRITE = 284,                   /* WRITE  */
-    READ = 285,                    /* READ  */
-    DOWNTO = 286,                  /* DOWNTO  */
-    TO = 287,                      /* TO  */
-    OF = 288,                      /* OF  */
-    COLON = 289,                   /* COLON  */
-    VAR = 290,                     /* VAR  */
-    ARRAY = 291,                   /* ARRAY  */
-    THEN = 292,                    /* THEN  */
-    COMMA = 293,                   /* COMMA  */
-    OPEN_BRACKET = 294,            /* OPEN_BRACKET  */
-    OPEN_PARANTHESIS = 295,        /* OPEN_PARANTHESIS  */
-    CLOSE_BRACKET = 296,           /* CLOSE_BRACKET  */
-    CLOSE_PARANTHESIS = 297,       /* CLOSE_PARANTHESIS  */
-    PERIOD = 298,                  /* PERIOD  */
-    RANGE_DOTS = 299               /* RANGE_DOTS  */
+    CHAR_CONSTANT = 268,           /* CHAR_CONSTANT  */
+    ARITHEMATIC_OP_PLUS = 269,     /* ARITHEMATIC_OP_PLUS  */
+    ARITHEMATIC_OP_DIV = 270,      /* ARITHEMATIC_OP_DIV  */
+    ARITHEMATIC_OP_MUL = 271,      /* ARITHEMATIC_OP_MUL  */
+    ARITHEMATIC_OP_MINUS = 272,    /* ARITHEMATIC_OP_MINUS  */
+    IF = 273,                      /* IF  */
+    WHILE = 274,                   /* WHILE  */
+    ARITHEMATIC_OP_MOD = 275,      /* ARITHEMATIC_OP_MOD  */
+    INTEGER_CONSTANT = 276,        /* INTEGER_CONSTANT  */
+    FLOAT_CONSTANT = 277,          /* FLOAT_CONSTANT  */
+    PROGRAM = 278,                 /* PROGRAM  */
+    SEMICOLON = 279,               /* SEMICOLON  */
+    ELSE = 280,                    /* ELSE  */
+    FOR = 281,                     /* FOR  */
+    DO = 282,                      /* DO  */
+    BEGIN_TAG = 283,               /* BEGIN_TAG  */
+    END = 284,                     /* END  */
+    WRITE = 285,                   /* WRITE  */
+    READ = 286,                    /* READ  */
+    DOWNTO = 287,                  /* DOWNTO  */
+    TO = 288,                      /* TO  */
+    OF = 289,                      /* OF  */
+    COLON = 290,                   /* COLON  */
+    VAR = 291,                     /* VAR  */
+    ARRAY = 292,                   /* ARRAY  */
+    THEN = 293,                    /* THEN  */
+    COMMA = 294,                   /* COMMA  */
+    OPEN_BRACKET = 295,            /* OPEN_BRACKET  */
+    OPEN_PARANTHESIS = 296,        /* OPEN_PARANTHESIS  */
+    CLOSE_BRACKET = 297,           /* CLOSE_BRACKET  */
+    CLOSE_PARANTHESIS = 298,       /* CLOSE_PARANTHESIS  */
+    PERIOD = 299,                  /* PERIOD  */
+    RANGE_DOTS = 300               /* RANGE_DOTS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -114,44 +115,45 @@ extern int yydebug;
 #define BOOLEAN_OP_NOT 265
 #define ASSIGNMENT_OP 266
 #define RELATIONAL_OP 267
-#define ARITHEMATIC_OP_PLUS 268
-#define ARITHEMATIC_OP_DIV 269
-#define ARITHEMATIC_OP_MUL 270
-#define ARITHEMATIC_OP_MINUS 271
-#define IF 272
-#define WHILE 273
-#define ARITHEMATIC_OP_MOD 274
-#define INTEGER_CONSTANT 275
-#define FLOAT_CONSTANT 276
-#define PROGRAM 277
-#define SEMICOLON 278
-#define ELSE 279
-#define FOR 280
-#define DO 281
-#define BEGIN_TAG 282
-#define END 283
-#define WRITE 284
-#define READ 285
-#define DOWNTO 286
-#define TO 287
-#define OF 288
-#define COLON 289
-#define VAR 290
-#define ARRAY 291
-#define THEN 292
-#define COMMA 293
-#define OPEN_BRACKET 294
-#define OPEN_PARANTHESIS 295
-#define CLOSE_BRACKET 296
-#define CLOSE_PARANTHESIS 297
-#define PERIOD 298
-#define RANGE_DOTS 299
+#define CHAR_CONSTANT 268
+#define ARITHEMATIC_OP_PLUS 269
+#define ARITHEMATIC_OP_DIV 270
+#define ARITHEMATIC_OP_MUL 271
+#define ARITHEMATIC_OP_MINUS 272
+#define IF 273
+#define WHILE 274
+#define ARITHEMATIC_OP_MOD 275
+#define INTEGER_CONSTANT 276
+#define FLOAT_CONSTANT 277
+#define PROGRAM 278
+#define SEMICOLON 279
+#define ELSE 280
+#define FOR 281
+#define DO 282
+#define BEGIN_TAG 283
+#define END 284
+#define WRITE 285
+#define READ 286
+#define DOWNTO 287
+#define TO 288
+#define OF 289
+#define COLON 290
+#define VAR 291
+#define ARRAY 292
+#define THEN 293
+#define COMMA 294
+#define OPEN_BRACKET 295
+#define OPEN_PARANTHESIS 296
+#define CLOSE_BRACKET 297
+#define CLOSE_PARANTHESIS 298
+#define PERIOD 299
+#define RANGE_DOTS 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 78 "task4.y"
+#line 79 "task4.y"
 
     struct sval{
         char *val;
@@ -166,7 +168,7 @@ union YYSTYPE
         int line;
     }dval;
 
-#line 170 "y.tab.h"
+#line 172 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
