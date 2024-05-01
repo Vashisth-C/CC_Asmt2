@@ -5,9 +5,10 @@ var
 
 begin
   sum := 0;
-  for i := 1 to 10 do
+  for i:=2 to 10 do
   begin
-    sum := sum + i;
+    sum := sum + 2;
+    write(sum);
   end;
-  write(sum);
+  write(sum,i,"Hey Baby");
 end.

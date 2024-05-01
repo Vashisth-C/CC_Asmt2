@@ -153,7 +153,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 93 "task5.y"
+#line 94 "task5.y"
 
     struct sval{
         char *val;

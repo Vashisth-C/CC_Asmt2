@@ -96,6 +96,7 @@ void reverseTAC();
 void printFormatted();
 void reverseWrite();
 void printTempTable();
+void setSymbolTable();  
 
 typedef struct TAC{
     char op[100];
@@ -138,9 +139,9 @@ typedef struct writeTable{
 wt* write_table=NULL;
 
 typedef struct temporaryVariables{
-    char* temp;
-    char* type;
-    char* value;
+    char temp[100];
+    char type[100];
+    char value[100];
     struct temporaryVariables* next;
 } temp;
 
@@ -159,7 +160,7 @@ void parseTAC();
 
 
 
-#line 163 "y.tab.c"
+#line 164 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -302,7 +303,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 93 "task5.y"
+#line 94 "task5.y"
 
     struct sval{
         char *val;
@@ -317,7 +318,7 @@ union YYSTYPE
         int line;
     }dval;
 
-#line 321 "y.tab.c"
+#line 322 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -805,14 +806,14 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   127,   127,   136,   137,   138,   139,   141,   142,   148,
-     155,   156,   165,   174,   183,   194,   202,   210,   218,   228,
-     229,   231,   232,   234,   234,   239,   240,   243,   251,   252,
-     253,   260,   267,   274,   281,   286,   314,   334,   338,   340,
-     389,   421,   453,   482,   516,   517,   520,   521,   522,   533,
-     544,   555,   566,   579,   591,   602,   603,   604,   608,   609,
-     611,   612,   615,   617,   618,   621,   622,   623,   624,   633,
-     643,   653,   663,   675,   680,   721,   732,   737,   742
+       0,   128,   128,   140,   141,   142,   143,   145,   146,   152,
+     159,   160,   169,   178,   187,   198,   206,   214,   222,   232,
+     233,   235,   236,   238,   238,   243,   244,   247,   255,   256,
+     257,   264,   271,   278,   285,   290,   318,   338,   342,   344,
+     393,   425,   457,   486,   520,   521,   524,   525,   526,   537,
+     548,   559,   570,   583,   595,   606,   607,   608,   612,   613,
+     615,   616,   619,   621,   622,   625,   626,   627,   628,   637,
+     647,   657,   667,   679,   684,   725,   736,   741,   746
 };
 #endif
 
@@ -1495,42 +1496,45 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD  */
-#line 127 "task5.y"
+#line 128 "task5.y"
                                                                                     {printf("\n\n");
-                                                                                    // parseTAC();
-                                                                                    reverseTAC();
-                                                                                    printTAC();
+                                                                                    parseTAC();
+                                                                                    // reverseTAC();
+                                                                                    // printTAC();
                                                                                     // reverseWrite();
                                                                                     // printWriteTable();
-                                                                                    printTempTable();
+                                                                                    // printTempTable();
+                                                                                    printf("\n\n Final Symbol Table");
+                                                                                    setSymbolTable();
+                                                                                    printTable();
                                                                                     }
-#line 1508 "y.tab.c"
+#line 1512 "y.tab.c"
     break;
 
   case 8: /* left_side_vars: IDENTIFIER  */
-#line 142 "task5.y"
+#line 146 "task5.y"
                            {
                     char * temp; temp=(char*)malloc(100*sizeof(char));
                     strcpy(temp,(yyvsp[0].sval).val);
                     temp=tolowercase(temp);
                     add_symbol(temp, "undefined");
                 }
-#line 1519 "y.tab.c"
+#line 1523 "y.tab.c"
     break;
 
   case 9: /* left_side_vars: IDENTIFIER COMMA left_side_vars  */
-#line 148 "task5.y"
+#line 152 "task5.y"
                                                  {
                     char * temp; temp=(char*)malloc(100*sizeof(char));
                     strcpy(temp,(yyvsp[-2].sval).val);
                     temp=tolowercase(temp);
                     add_symbol(temp, "undefined");
                 }
-#line 1530 "y.tab.c"
+#line 1534 "y.tab.c"
     break;
 
   case 11: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF INTEGER  */
-#line 156 "task5.y"
+#line 160 "task5.y"
                                                                                                          {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1540,11 +1544,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1544 "y.tab.c"
+#line 1548 "y.tab.c"
     break;
 
   case 12: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF REAL  */
-#line 165 "task5.y"
+#line 169 "task5.y"
                                                                                                        {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1554,11 +1558,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1558 "y.tab.c"
+#line 1562 "y.tab.c"
     break;
 
   case 13: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF BOOLEAN  */
-#line 174 "task5.y"
+#line 178 "task5.y"
                                                                                                           {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1568,11 +1572,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1572 "y.tab.c"
+#line 1576 "y.tab.c"
     break;
 
   case 14: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF CHAR  */
-#line 183 "task5.y"
+#line 187 "task5.y"
                                                                                                        {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1582,11 +1586,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1586 "y.tab.c"
+#line 1590 "y.tab.c"
     break;
 
   case 15: /* datatype: INTEGER  */
-#line 194 "task5.y"
+#line 198 "task5.y"
                   {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1595,11 +1599,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1599 "y.tab.c"
+#line 1603 "y.tab.c"
     break;
 
   case 16: /* datatype: REAL  */
-#line 202 "task5.y"
+#line 206 "task5.y"
               {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1608,11 +1612,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1612 "y.tab.c"
+#line 1616 "y.tab.c"
     break;
 
   case 17: /* datatype: BOOLEAN  */
-#line 210 "task5.y"
+#line 214 "task5.y"
                  {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1621,11 +1625,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1625 "y.tab.c"
+#line 1629 "y.tab.c"
     break;
 
   case 18: /* datatype: CHAR  */
-#line 218 "task5.y"
+#line 222 "task5.y"
               {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1634,35 +1638,35 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1638 "y.tab.c"
+#line 1642 "y.tab.c"
     break;
 
   case 23: /* $@1: %empty  */
-#line 234 "task5.y"
+#line 238 "task5.y"
                      {initialiseWriteTableElement();}
-#line 1644 "y.tab.c"
+#line 1648 "y.tab.c"
     break;
 
   case 24: /* statementline: WRITE $@1 OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLON  */
-#line 234 "task5.y"
+#line 238 "task5.y"
                                                                                                                    {
     char * str=(char *)malloc(100*sizeof(char));
     sprintf(str,"%d",wcount);
     addTAC("WRITE",str,"","");
     wcount++;}
-#line 1654 "y.tab.c"
+#line 1658 "y.tab.c"
     break;
 
   case 26: /* statementline: IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 240 "task5.y"
+#line 244 "task5.y"
                                                                     {
                     addTAC((yyvsp[-2].sval).val,pop(), "", (yyvsp[-3].sval).val);
                 }
-#line 1662 "y.tab.c"
+#line 1666 "y.tab.c"
     break;
 
   case 27: /* statementline: left_array_assignment ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 243 "task5.y"
+#line 247 "task5.y"
                                                                                 {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1671,11 +1675,11 @@ yyreduce:
                     pop();
                     addTAC((yyvsp[-2].sval).val,id,"",id2);
                 }
-#line 1675 "y.tab.c"
+#line 1679 "y.tab.c"
     break;
 
   case 30: /* statementline: FOR for_conditionals1 DO program_declaration SEMICOLON  */
-#line 253 "task5.y"
+#line 257 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1683,11 +1687,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1687 "y.tab.c"
+#line 1691 "y.tab.c"
     break;
 
   case 31: /* statementline: FOR for_conditionals2 DO program_declaration SEMICOLON  */
-#line 260 "task5.y"
+#line 264 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1695,11 +1699,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1699 "y.tab.c"
+#line 1703 "y.tab.c"
     break;
 
   case 32: /* statementline: FOR for_conditionals3 DO program_declaration SEMICOLON  */
-#line 267 "task5.y"
+#line 271 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1707,11 +1711,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1711 "y.tab.c"
+#line 1715 "y.tab.c"
     break;
 
   case 33: /* statementline: FOR for_conditionals4 DO program_declaration SEMICOLON  */
-#line 274 "task5.y"
+#line 278 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1719,20 +1723,20 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1723 "y.tab.c"
+#line 1727 "y.tab.c"
     break;
 
   case 34: /* statementline: while_left DO program_declaration SEMICOLON  */
-#line 281 "task5.y"
+#line 285 "task5.y"
                                                              {
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1732 "y.tab.c"
+#line 1736 "y.tab.c"
     break;
 
   case 35: /* while_left: WHILE condition  */
-#line 286 "task5.y"
+#line 290 "task5.y"
                             {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1760,11 +1764,11 @@ yyreduce:
     addTAC("LABEL",str1,"","");
     
 }
-#line 1764 "y.tab.c"
+#line 1768 "y.tab.c"
     break;
 
   case 36: /* left_if: IF condition  */
-#line 314 "task5.y"
+#line 318 "task5.y"
                      {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1784,19 +1788,19 @@ yyreduce:
     lindex++;
     
 }
-#line 1788 "y.tab.c"
+#line 1792 "y.tab.c"
     break;
 
   case 37: /* middle_if: THEN program_declaration  */
-#line 334 "task5.y"
+#line 338 "task5.y"
                                    {
     addTAC("LABEL",pop(),"","");
 }
-#line 1796 "y.tab.c"
+#line 1800 "y.tab.c"
     break;
 
   case 39: /* left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 340 "task5.y"
+#line 344 "task5.y"
                                                                               {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1845,11 +1849,11 @@ yyreduce:
     push(str);
     push(start);
 }
-#line 1849 "y.tab.c"
+#line 1853 "y.tab.c"
     break;
 
   case 40: /* for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 389 "task5.y"
+#line 393 "task5.y"
                                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1881,11 +1885,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1885 "y.tab.c"
+#line 1889 "y.tab.c"
     break;
 
   case 41: /* for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 421 "task5.y"
+#line 425 "task5.y"
                                                                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1917,11 +1921,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1921 "y.tab.c"
+#line 1925 "y.tab.c"
     break;
 
   case 42: /* for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 453 "task5.y"
+#line 457 "task5.y"
                                                                                            {
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
@@ -1950,11 +1954,11 @@ yyreduce:
     push(str4);
     lindex++;
 }
-#line 1954 "y.tab.c"
+#line 1958 "y.tab.c"
     break;
 
   case 43: /* for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 482 "task5.y"
+#line 486 "task5.y"
                                                                                                {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1988,11 +1992,11 @@ yyreduce:
     push(str1);
     lindex++;
 }
-#line 1992 "y.tab.c"
+#line 1996 "y.tab.c"
     break;
 
   case 48: /* conditionals: relational_exp BOOLEAN_OP conditionals  */
-#line 522 "task5.y"
+#line 526 "task5.y"
                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2004,11 +2008,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2008 "y.tab.c"
+#line 2012 "y.tab.c"
     break;
 
   case 49: /* conditionals: relational_exp BOOLEAN_OP unit  */
-#line 533 "task5.y"
+#line 537 "task5.y"
                                                  {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2020,11 +2024,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2024 "y.tab.c"
+#line 2028 "y.tab.c"
     break;
 
   case 50: /* conditionals: unit BOOLEAN_OP conditionals  */
-#line 544 "task5.y"
+#line 548 "task5.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2036,11 +2040,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2040 "y.tab.c"
+#line 2044 "y.tab.c"
     break;
 
   case 51: /* conditionals: unit BOOLEAN_OP unit  */
-#line 555 "task5.y"
+#line 559 "task5.y"
                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2052,11 +2056,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2056 "y.tab.c"
+#line 2060 "y.tab.c"
     break;
 
   case 52: /* conditionals: BOOLEAN_OP_NOT conditionals  */
-#line 566 "task5.y"
+#line 570 "task5.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2068,11 +2072,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2072 "y.tab.c"
+#line 2076 "y.tab.c"
     break;
 
   case 53: /* condtional_unit: BOOLEAN_OP_NOT unit  */
-#line 579 "task5.y"
+#line 583 "task5.y"
                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
@@ -2084,11 +2088,11 @@ yyreduce:
     qindex++;
     push(str);
 }
-#line 2088 "y.tab.c"
+#line 2092 "y.tab.c"
     break;
 
   case 54: /* relational_exp: arith_expression RELATIONAL_OP arith_expression  */
-#line 591 "task5.y"
+#line 595 "task5.y"
                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
@@ -2099,51 +2103,51 @@ yyreduce:
     qindex++;
     push(str);
     }
-#line 2103 "y.tab.c"
+#line 2107 "y.tab.c"
     break;
 
   case 55: /* left_side_vars_write: IDENTIFIER  */
-#line 602 "task5.y"
+#line 606 "task5.y"
                                  {addVar((yyvsp[0].sval).val);}
-#line 2109 "y.tab.c"
+#line 2113 "y.tab.c"
     break;
 
   case 56: /* left_side_vars_write: IDENTIFIER COMMA left_side_vars_write  */
-#line 603 "task5.y"
+#line 607 "task5.y"
                                                        {addVar((yyvsp[-2].sval).val);}
-#line 2115 "y.tab.c"
+#line 2119 "y.tab.c"
     break;
 
   case 57: /* left_side_vars_write: STRING_CONSTANT  */
-#line 604 "task5.y"
+#line 608 "task5.y"
                                  {
                             addSC((yyvsp[0].sval).val);
                         }
-#line 2123 "y.tab.c"
+#line 2127 "y.tab.c"
     break;
 
   case 61: /* possible_write_values: STRING_CONSTANT COMMA possible_write_values  */
-#line 612 "task5.y"
+#line 616 "task5.y"
                                                                      {
                             addSC((yyvsp[-2].sval).val);
                         }
-#line 2131 "y.tab.c"
+#line 2135 "y.tab.c"
     break;
 
   case 62: /* possible_write_values: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 615 "task5.y"
+#line 619 "task5.y"
                                                                                  {pop();}
-#line 2137 "y.tab.c"
+#line 2141 "y.tab.c"
     break;
 
   case 64: /* possible_reads: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 618 "task5.y"
+#line 622 "task5.y"
                                                                         {pop();}
-#line 2143 "y.tab.c"
+#line 2147 "y.tab.c"
     break;
 
   case 68: /* arith_expression: arith_expression ARITHEMATIC_OP_PLUS arith_expression  */
-#line 624 "task5.y"
+#line 628 "task5.y"
                                                                         { 
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2153,11 +2157,11 @@ yyreduce:
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);}
-#line 2157 "y.tab.c"
+#line 2161 "y.tab.c"
     break;
 
   case 69: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
-#line 633 "task5.y"
+#line 637 "task5.y"
                                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2168,11 +2172,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2172 "y.tab.c"
+#line 2176 "y.tab.c"
     break;
 
   case 70: /* arith_expression: arith_expression ARITHEMATIC_OP_MUL arith_expression  */
-#line 643 "task5.y"
+#line 647 "task5.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2183,11 +2187,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2187 "y.tab.c"
+#line 2191 "y.tab.c"
     break;
 
   case 71: /* arith_expression: arith_expression ARITHEMATIC_OP_DIV arith_expression  */
-#line 653 "task5.y"
+#line 657 "task5.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2198,11 +2202,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2202 "y.tab.c"
+#line 2206 "y.tab.c"
     break;
 
   case 72: /* arith_expression: arith_expression ARITHEMATIC_OP_MOD arith_expression  */
-#line 663 "task5.y"
+#line 667 "task5.y"
                                                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2213,21 +2217,21 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2217 "y.tab.c"
+#line 2221 "y.tab.c"
     break;
 
   case 73: /* unit: IDENTIFIER  */
-#line 675 "task5.y"
+#line 679 "task5.y"
                  {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 2227 "y.tab.c"
+#line 2231 "y.tab.c"
     break;
 
   case 74: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 680 "task5.y"
+#line 684 "task5.y"
                                                              {
             char *id=(char*)malloc(100*sizeof(char));
             strcpy(id,"t");
@@ -2268,11 +2272,11 @@ yyreduce:
             strcat(start,id3);
             push(start);
         }
-#line 2272 "y.tab.c"
+#line 2276 "y.tab.c"
     break;
 
   case 75: /* unit: ARITHEMATIC_OP_MINUS arith_expression  */
-#line 721 "task5.y"
+#line 725 "task5.y"
                                            {
             char * str=(char *)malloc(100*sizeof(char));
             strcpy(str,"t");
@@ -2283,41 +2287,41 @@ yyreduce:
             qindex++;
             push(str);
     }
-#line 2287 "y.tab.c"
+#line 2291 "y.tab.c"
     break;
 
   case 76: /* unit_2: INTEGER_CONSTANT  */
-#line 732 "task5.y"
+#line 736 "task5.y"
                          {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%d",(yyvsp[0].ival).val);
             push(str);
     }
-#line 2297 "y.tab.c"
+#line 2301 "y.tab.c"
     break;
 
   case 77: /* unit_2: FLOAT_CONSTANT  */
-#line 737 "task5.y"
+#line 741 "task5.y"
                      {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%f",(yyvsp[0].dval).val);
             push(str);
     }
-#line 2307 "y.tab.c"
+#line 2311 "y.tab.c"
     break;
 
   case 78: /* unit_2: CHAR_CONSTANT  */
-#line 742 "task5.y"
+#line 746 "task5.y"
                     {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 2317 "y.tab.c"
+#line 2321 "y.tab.c"
     break;
 
 
-#line 2321 "y.tab.c"
+#line 2325 "y.tab.c"
 
       default: break;
     }
@@ -2510,7 +2514,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 748 "task5.y"
+#line 752 "task5.y"
 
 
 void add_symbol(const char* name, const char* type) {
@@ -2535,9 +2539,9 @@ symbol* find_symbol(const char* name) {
 void printTable() {
     symbol* current = symbol_table;
     printf("\n\nSymbol Table\n");
-    printf("Name\tType\n");
+    printf("Name\tType\tValue\n");
     while (current != NULL) {
-        printf("%s\t%s\n", current->name, current->type);
+        printf("%s\t%s\t%s\n", current->name, current->type,current->value);
         current = current->next;
     }
 }
@@ -2671,16 +2675,37 @@ void printWriteTable(){
     }
 }
 
-void addTemp(const char* name, const char* typ, const char* val){
+void addTemp(const char* name, const char* typ, const char* val) {
     temp* new_temp = (temp*)malloc(sizeof(temp));
-    new_temp->temp=(char*)malloc(100*sizeof(char));
-    strcpy(new_temp->temp,name);
-    new_temp->type=(char*)malloc(100*sizeof(char));
-    strcpy(new_temp->type,typ);
-    new_temp->value=(char*)malloc(100*sizeof(char));
-    strcpy(new_temp->value,val);
-    new_temp->next = temp_table;
-    temp_table = new_temp;
+    temp* current = temp_table;
+    while (current != NULL) {
+        if (strcmp(current->temp, name) == 0) {
+            strcpy(current->value, val);
+            return;
+        }
+        current = current->next;
+    }
+    if (!new_temp) {
+        fprintf(stderr, "Memory allocation failed for new_temp.\n");
+        return;
+    }
+
+    strcpy(new_temp->temp, name);
+    strcpy(new_temp->type, typ);
+    strcpy(new_temp->value, val);
+
+    if (!temp_table) { // If the list is empty, set the new node as the head
+        temp_table = new_temp;
+        new_temp->next = NULL;
+    } else {
+        // Insert at the end of the list
+        temp* current = temp_table;
+        while (current->next) { // Traverse to the end of the list
+            current = current->next;
+        }
+        current->next = new_temp;
+        new_temp->next = NULL;
+    }
 }
 
 TAC* findLabelLocation(char* label){
@@ -2748,13 +2773,23 @@ void executeWrite(int x){
     }
 }
 
+void printTempTable(){
+    temp* current = temp_table;
+    printf("\n\nTemporary Variables Table\n");
+    printf("Temp\tType\tValue\n");
+    while (current != NULL) {
+        printf("%s\t%s\t%s\n", current->temp, current->type, current->value);
+        current = current->next;
+    }
+}
+
 void setSymbolTable(){
     symbol* current = symbol_table;
     while(current!=NULL){
         if(findTemp(current->name)==NULL){
             
         }else{
-            strcpy(findTemp(current->name)->value,current->type);
+            strcpy(current->value,findTemp(current->name)->value);
         }
         current=current->next;
     }
@@ -2762,13 +2797,16 @@ void setSymbolTable(){
 
 void parseTAC(){
     reverseTAC();
+    // printTAC();
     reverseWrite();
+    printf("\n\nCode Output:\n\n");
+
     TAC *current = TAC_table;
     while(current!=NULL){
         if(strcmp(current->op,"GOTO")==0){
             current=findLabelLocation(current->arg1);
         }else if(strcmp(current->op,"IF")==0){
-            if(strcmp(current->arg1,"0")==1){
+            if(strcmp(findTemp(current->arg1)->value,"0")==1){
                 current=findLabelLocation(current->result);
             }
         }else if(strcmp(current->op,":=")==0){
@@ -2777,42 +2815,100 @@ void parseTAC(){
                     addTemp(current->result,"CHAR",current->arg1);
                 }else if(ifFloat(current->arg1)){
                     addTemp(current->result,"REAL",current->arg1);
-                }else{
+                }else if(find_symbol(current->arg1)==NULL){
                     addTemp(current->result,"INTEGER",current->arg1);
+                }else{
+                    addTemp(current->result,findTemp(current->arg1)->type,findTemp(current->arg1)->value);
                 }   
             }else{
                 addTemp(current->result,findTemp(current->arg1)->type,findTemp(current->arg1)->value);
             }                                                                                                                                                                                                  
         }else if(strcmp(current->op,"+")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(ifFloat(current->arg1) || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)+atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);    
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(ifFloat(current->arg1) || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)+atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);    
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)+atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)+atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)+atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)+atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)+atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)+atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)+atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)+atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)+atof(findTemp(current->arg2)->value));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg1)==NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)+atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)+atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)+atoi(findTemp(current->arg2)->value));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)+atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)+atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)+atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)+atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)+atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)+atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)+atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)+atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else{
                 if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
@@ -2827,34 +2923,90 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"-")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(ifFloat(current->arg1) || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)-atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);    
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(ifFloat(current->arg1) || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)-atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);    
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)-atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)-atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)-atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)-atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)-atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)-atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)-atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)-atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)-atof(findTemp(current->arg2)->value));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg1)==NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)-atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)-atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)-atoi(findTemp(current->arg2)->value));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)-atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)-atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)-atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)-atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)-atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)-atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)-atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)-atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else{
                 if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
@@ -2869,34 +3021,90 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"*")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(ifFloat(current->arg1) || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)*atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);    
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(ifFloat(current->arg1) || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)*atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);    
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)*atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)*atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)*atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)*atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)*atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)*atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)*atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)*atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)*atof(findTemp(current->arg2)->value));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg1)==NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)*atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)*atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)*atoi(findTemp(current->arg2)->value));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)*atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)*atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)*atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)*atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)*atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)*atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)*atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)*atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else{
                 if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
@@ -2911,34 +3119,90 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"/")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(ifFloat(current->arg1) || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)/atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);    
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(ifFloat(current->arg1) || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)/atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);    
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)/atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)/atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)/atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)/atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(current->arg1)/atof(findTemp(current->arg2)->value));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg1)==NULL){
+                    if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(current->arg1)/atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(current->arg1)/atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(current->arg1)/atoi(findTemp(current->arg2)->value));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(current->arg2));
-                    addTemp(current->result,"REAL",temp);
+                if(findTemp(current->arg2)==NULL){
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(current->arg2));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(current->arg2));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }else{
-                    char* temp=(char*)malloc(100*sizeof(char));
-                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(current->arg2));
-                    addTemp(current->result,"INTEGER",temp);
+                    if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(findTemp(current->arg2)->value));
+                        addTemp(current->result,"REAL",temp);
+                    }else{
+                        char* temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(findTemp(current->arg2)->value));
+                        addTemp(current->result,"INTEGER",temp);
+                    }
                 }
             }else{
                 if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
@@ -2951,19 +3215,46 @@ void parseTAC(){
                     addTemp(current->result,"INTEGER",temp);
                 }
             }
+
         }else if(strcmp(current->op,"%")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                char* temp=(char*)malloc(100*sizeof(char));
-                sprintf(temp,"%d",atoi(current->arg1)%atoi(current->arg2));
-                addTemp(current->result,"INTEGER",temp);
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)%atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)%atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                char* temp=(char*)malloc(100*sizeof(char));
-                sprintf(temp,"%d",atoi(current->arg1)%atoi(findTemp(current->arg2)->value));
-                addTemp(current->result,"INTEGER",temp);
+                if(findTemp(current->arg1)==NULL){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)%atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                char* temp=(char*)malloc(100*sizeof(char));
-                sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(current->arg2));
-                addTemp(current->result,"INTEGER",temp);
+                if(findTemp(current->arg2)==NULL){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
             }else{
                 char* temp=(char*)malloc(100*sizeof(char));
                 sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(findTemp(current->arg2)->value));
@@ -2971,22 +3262,58 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"<>")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(atof(current->arg1)!=atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(atof(current->arg1)!=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(atof(current->arg1)!=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)!=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)!=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(atof(current->arg1)!=atof(findTemp(current->arg2)->value)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL){
+                    if(atof(current->arg1)!=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(current->arg1)!=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(atof(findTemp(current->arg1)->value)!=atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)!=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)!=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else{
                 if(atof(findTemp(current->arg1)->value)!=atof(findTemp(current->arg2)->value)){
@@ -2997,22 +3324,58 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"<")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(atof(current->arg1)<atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(atof(current->arg1)<atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(atof(current->arg1)<atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)<atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)<atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(atof(current->arg1)<atof(findTemp(current->arg2)->value)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL){
+                    if(atof(current->arg1)<atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(current->arg1)<atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(atof(findTemp(current->arg1)->value)<atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)<atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)<atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else{
                 if(atof(findTemp(current->arg1)->value)<atof(findTemp(current->arg2)->value)){
@@ -3021,24 +3384,61 @@ void parseTAC(){
                     addTemp(current->result,"BOOLEAN","0");
                 }
             }
+                
         }else if(strcmp(current->op,">")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(atof(current->arg1)>atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(atof(current->arg1)>atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(atof(current->arg1)>atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)>atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)>atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(atof(current->arg1)>atof(findTemp(current->arg2)->value)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL){
+                    if(atof(current->arg1)>atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(current->arg1)>atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(atof(findTemp(current->arg1)->value)>atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)>atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)>atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else{
                 if(atof(findTemp(current->arg1)->value)>atof(findTemp(current->arg2)->value)){
@@ -3049,22 +3449,58 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"<=")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(atof(current->arg1)<=atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(atof(current->arg1)<=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(atof(current->arg1)<=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)<=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)<=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(atof(current->arg1)<=atof(findTemp(current->arg2)->value)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL){
+                    if(atof(current->arg1)<=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(current->arg1)<=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(atof(findTemp(current->arg1)->value)<=atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)<=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)<=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else{
                 if(atof(findTemp(current->arg1)->value)<=atof(findTemp(current->arg2)->value)){
@@ -3075,22 +3511,58 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,">=")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(atof(current->arg1)>=atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(atof(current->arg1)>=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(atof(current->arg1)>=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)>=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)>=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(atof(current->arg1)>=atof(findTemp(current->arg2)->value)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL){
+                    if(atof(current->arg1)>=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(current->arg1)>=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(atof(findTemp(current->arg1)->value)>=atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)>=atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)>=atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else{
                 if(atof(findTemp(current->arg1)->value)>=atof(findTemp(current->arg2)->value)){
@@ -3101,22 +3573,58 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"=")==0){
             if(current->arg1[0]!='t' && current->arg2[0]!='t'){
-                if(atof(current->arg1)==atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL && findTemp(current->arg2)==NULL){
+                    if(atof(current->arg1)==atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)==NULL && findTemp(current->arg2)!=NULL){
+                    if(atof(current->arg1)==atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
+                }else if(findTemp(current->arg1)!=NULL && findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)==atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)==atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
-                if(atof(current->arg1)==atof(findTemp(current->arg2)->value)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg1)==NULL){
+                    if(atof(current->arg1)==atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(current->arg1)==atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
-                if(atof(findTemp(current->arg1)->value)==atof(current->arg2)){
-                    addTemp(current->result,"BOOLEAN","1");
+                if(findTemp(current->arg2)==NULL){
+                    if(atof(findTemp(current->arg1)->value)==atof(current->arg2)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }else{
-                    addTemp(current->result,"BOOLEAN","0");
+                    if(atof(findTemp(current->arg1)->value)==atof(findTemp(current->arg2)->value)){
+                        addTemp(current->result,"BOOLEAN","1");
+                    }else{
+                        addTemp(current->result,"BOOLEAN","0");
+                    }
                 }
             }else{
                 if(atof(findTemp(current->arg1)->value)==atof(findTemp(current->arg2)->value)){
@@ -3198,15 +3706,7 @@ void parseTAC(){
     }
 }
 
-void printTempTable(){
-    temp* current = temp_table;
-    printf("\n\nTemporary Variables Table\n");
-    printf("Temp\tType\tValue\n");
-    while (current != NULL) {
-        printf("%s\t%s\t%s\n", current->temp, current->type, current->value);
-        current = current->next;
-    }
-}
+
 
 int main(int argc, char *argv[]){
     char* filename;
