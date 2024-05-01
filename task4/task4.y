@@ -558,7 +558,7 @@ possible_writes: possible_write_values
 possible_write_values: left_side_vars_write 
                         |STRING_CONSTANT 
                         |STRING_CONSTANT COMMA possible_write_values 
-                        | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET 
+                        | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
 
 possible_reads: IDENTIFIER 
                 |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
