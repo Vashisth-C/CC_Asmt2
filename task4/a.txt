@@ -10,4 +10,5 @@ begin
   begin
     read(numbers[i]);
   end;
+  numbers[i]:=2*3-1*7;
 end.

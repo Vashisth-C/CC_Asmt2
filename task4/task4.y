@@ -294,6 +294,13 @@ middle_if: THEN program_declaration{
 right_if: ELSE program_declaration
 
 left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"L");
+    char temp1[10];
+    sprintf(temp1, "%d", lindex);
+    strcat(str,temp1);
+    lindex++;
+    addTAC("LABEL",str,"","");
     char *id=(char*)malloc(100*sizeof(char));
     strcpy(id,"t");
     char temp[10];
@@ -331,6 +338,7 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     char * start=(char*)malloc(100*sizeof(char));
     strcpy(start,"*");
     strcat(start,id3);
+    push(str);
     push(start);
 }
 
@@ -399,19 +407,14 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
 }
 
 for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression{
-    char * str=(char *)malloc(100*sizeof(char));
-    strcpy(str,"L");
-    char temp1[10];
-    sprintf(temp1, "%d", lindex);
-    strcat(str,temp1);
-    lindex++;
-    addTAC("LABEL",str,"","");
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
     char* str4=(char *)malloc(100*sizeof(char));
     strcpy(str4,pop());
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,pop());
     addTAC($2.val,str1,"",str4);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
@@ -428,7 +431,7 @@ for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith
     addTAC("IF",cond,"GOTO",str3);
     push(str3);
     push(str);
-    push(str1);
+    push(str4);
     lindex++;
 }
 
@@ -558,7 +561,7 @@ possible_write_values: left_side_vars_write
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET 
 
 possible_reads: IDENTIFIER 
-                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET
+                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
 
 
 arith_expression: unit_2 
