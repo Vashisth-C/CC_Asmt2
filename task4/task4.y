@@ -551,12 +551,12 @@ relational_exp: arith_expression RELATIONAL_OP arith_expression {
 
 left_side_vars_write: IDENTIFIER 
                 |IDENTIFIER COMMA left_side_vars_write 
+                |STRING_CONSTANT 
 
 possible_writes: possible_write_values
     | ;
 
 possible_write_values: left_side_vars_write 
-                        |STRING_CONSTANT 
                         |STRING_CONSTANT COMMA possible_write_values 
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
 

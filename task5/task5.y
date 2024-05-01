@@ -45,11 +45,34 @@ int qindex=0;
 int lindex=0;
 int wcount=1;
 
+typedef struct stringConstants{
+    char* sc;
+    struct stringConstants* next;
+} sc;
+
+typedef struct variables{
+    char* var;
+    struct variables* next;
+} var;
+
+typedef struct writeTable{
+    sc* sc;
+    var* var;
+    char* order;
+    struct writeTable* next;
+} wt;
+
+wt* write_table=NULL;
+
 void addTAC(const char*, const char*, const char*, const char*);
 void printTAC();
 void push(char*);
 char* pop();
 void printFormatted();
+void initialiseWriteTableElement();
+void addSC(const char*);
+void addVar(const char*);
+void printWriteTable();
 
 
 %}
@@ -91,7 +114,7 @@ void printFormatted();
 start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("Valid Input\n");
                                                                                     reverseTAC();
                                                                                     printTAC();
-                                                                                    printFormatted();
+                                                                                    printWriteTable();
                                                                                     }
 
 variable_declaration: VAR variable_list 
@@ -192,7 +215,11 @@ program_declaration: BEGIN_TAG statements END
 statements: statementline 
             |statementline statements 
 
-statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLON {addTAC("WRITE",sprintf("%d",wcount),"","");wcount++;}
+statementline: WRITE {initialiseWriteTableElement();} OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLON {
+    char * str=(char *)malloc(100*sizeof(char));
+    sprintf(str,"%d",wcount);
+    addTAC("WRITE",str,"","");
+    wcount++;}
                 |READ OPEN_PARANTHESIS possible_reads CLOSE_PARANTHESIS SEMICOLON 
                 |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON{
                     addTAC($2.val,pop(), "", $1.val);
@@ -549,15 +576,19 @@ relational_exp: arith_expression RELATIONAL_OP arith_expression {
     push(str);
     }
 
-left_side_vars_write: IDENTIFIER 
-                |IDENTIFIER COMMA left_side_vars_write 
+left_side_vars_write: IDENTIFIER {addVar($1.val);}
+                |IDENTIFIER COMMA left_side_vars_write {addVar($1.val);}
+                |STRING_CONSTANT {
+                            addSC($1.val);
+                        }
 
 possible_writes: possible_write_values
     | ;
 
 possible_write_values: left_side_vars_write 
-                        |STRING_CONSTANT 
-                        |STRING_CONSTANT COMMA possible_write_values 
+                        |STRING_CONSTANT COMMA possible_write_values {
+                            addSC($1.val);
+                        }
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
 
 possible_reads: IDENTIFIER 
@@ -802,6 +833,54 @@ char* pop(){
     return temp->data;
 }
 
+void initialiseWriteTableElement(){
+    wt* new_wt = (wt*)malloc(sizeof(wt));
+    new_wt->sc = NULL;
+    new_wt->var = NULL;
+    new_wt->order= (char*)malloc(100*sizeof(char));
+    new_wt->next = write_table;
+    write_table = new_wt;
+}
+
+void addSC(const char* str){
+    sc* new_sc = (sc*)malloc(sizeof(sc));
+    new_sc->sc=(char*)malloc(100*sizeof(char));
+    strcpy(new_sc->sc,str);
+    new_sc->next = write_table->sc;
+    strcat(write_table->order,"s");
+    write_table->sc = new_sc;
+}
+
+void addVar(const char* v){
+    var* new_var = (var*)malloc(sizeof(var));
+    new_var->var=(char*)malloc(100*sizeof(char));
+    strcpy(new_var->var ,v);
+    new_var->next = write_table->var;
+    strcat(write_table->order,"v");
+    write_table->var = new_var;
+}
+
+void printWriteTable(){
+    wt* current = write_table;
+    printf("\n\nWrite Table\n");
+    printf("Order\tString Constants\tVariables\n");
+    while (current != NULL) {
+        printf("%s\t", current->order);
+        sc* sc_current = current->sc;
+        while (sc_current != NULL) {
+            printf("%s ", sc_current->sc);
+            sc_current = sc_current->next;
+        }
+        printf("\t");
+        var* var_current = current->var;
+        while (var_current != NULL) {
+            printf("%s ", var_current->var);
+            var_current = var_current->next;
+        }
+        printf("\n");
+        current = current->next;
+    }
+}
 
 int main(int argc, char *argv[]){
     char* filename;
