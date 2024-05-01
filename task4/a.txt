@@ -1,0 +1,11 @@
+program MaxValueArray;
+var
+  numbers,maxValue: array[1..10] of Integer;
+  j,i: Integer;
+  x: array[6..8] of Integer;
+begin
+  for i:=1 to 10 do
+  begin 
+  x:=1;
+  end;
+end.
