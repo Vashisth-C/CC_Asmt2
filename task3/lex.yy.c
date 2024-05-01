@@ -1020,7 +1020,7 @@ YY_RULE_SETUP
 case 39:
 YY_RULE_SETUP
 #line 88 "task3.l"
-{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_PLUS;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
@@ -1030,17 +1030,17 @@ YY_RULE_SETUP
 case 41:
 YY_RULE_SETUP
 #line 90 "task3.l"
-{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_MUL;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 91 "task3.l"
-{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_DIV;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 92 "task3.l"
-{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
+{yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_MOD;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP

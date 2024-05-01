@@ -85,11 +85,11 @@ REALNUMBER {DIGIT}+"."{DIGIT}+
     ")" {return CLOSE_PARANTHESIS;}
     ":" {return COLON;}
     "," {return COMMA;}
-    "+" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
+    "+" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_PLUS;}
     "-" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_MINUS;}
-    "*" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
-    "/" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
-    "%" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP;}
+    "*" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_MUL;}
+    "/" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_DIV;}
+    "%" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ARITHEMATIC_OP_MOD;}
     ":=" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return ASSIGNMENT_OP;}
     "=" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}
     "<" {yylval.sval.val=strdup(yytext);yylval.sval.line=line;return RELATIONAL_OP;}

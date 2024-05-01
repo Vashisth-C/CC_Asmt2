@@ -54,46 +54,49 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    IDENTIFIER = 258,              /* IDENTIFIER  */
-    STRING_CONSTANT = 259,         /* STRING_CONSTANT  */
-    INTEGER = 260,                 /* INTEGER  */
-    REAL = 261,                    /* REAL  */
-    BOOLEAN = 262,                 /* BOOLEAN  */
-    CHAR = 263,                    /* CHAR  */
-    BOOLEAN_OP = 264,              /* BOOLEAN_OP  */
-    BOOLEAN_OP_NOT = 265,          /* BOOLEAN_OP_NOT  */
-    ASSIGNMENT_OP = 266,           /* ASSIGNMENT_OP  */
-    RELATIONAL_OP = 267,           /* RELATIONAL_OP  */
-    ARITHEMATIC_OP = 268,          /* ARITHEMATIC_OP  */
-    ARITHEMATIC_OP_MINUS = 269,    /* ARITHEMATIC_OP_MINUS  */
-    IF = 270,                      /* IF  */
-    WHILE = 271,                   /* WHILE  */
-    CHAR_CONSTANT = 272,           /* CHAR_CONSTANT  */
-    INTEGER_CONSTANT = 273,        /* INTEGER_CONSTANT  */
-    FLOAT_CONSTANT = 274,          /* FLOAT_CONSTANT  */
-    PROGRAM = 275,                 /* PROGRAM  */
-    SEMICOLON = 276,               /* SEMICOLON  */
-    ELSE = 277,                    /* ELSE  */
-    FOR = 278,                     /* FOR  */
-    DO = 279,                      /* DO  */
-    BEGIN_TAG = 280,               /* BEGIN_TAG  */
-    END = 281,                     /* END  */
-    WRITE = 282,                   /* WRITE  */
-    READ = 283,                    /* READ  */
-    DOWNTO = 284,                  /* DOWNTO  */
-    TO = 285,                      /* TO  */
-    OF = 286,                      /* OF  */
-    COLON = 287,                   /* COLON  */
-    VAR = 288,                     /* VAR  */
-    ARRAY = 289,                   /* ARRAY  */
-    THEN = 290,                    /* THEN  */
-    COMMA = 291,                   /* COMMA  */
-    OPEN_BRACKET = 292,            /* OPEN_BRACKET  */
-    OPEN_PARANTHESIS = 293,        /* OPEN_PARANTHESIS  */
-    CLOSE_BRACKET = 294,           /* CLOSE_BRACKET  */
-    CLOSE_PARANTHESIS = 295,       /* CLOSE_PARANTHESIS  */
-    PERIOD = 296,                  /* PERIOD  */
-    RANGE_DOTS = 297               /* RANGE_DOTS  */
+    BOOLEAN_OP_NOT = 258,          /* BOOLEAN_OP_NOT  */
+    ASSIGNMENT_OP = 259,           /* ASSIGNMENT_OP  */
+    RELATIONAL_OP = 260,           /* RELATIONAL_OP  */
+    ARITHEMATIC_OP_PLUS = 261,     /* ARITHEMATIC_OP_PLUS  */
+    ARITHEMATIC_OP_MINUS = 262,    /* ARITHEMATIC_OP_MINUS  */
+    IF = 263,                      /* IF  */
+    WHILE = 264,                   /* WHILE  */
+    CHAR_CONSTANT = 265,           /* CHAR_CONSTANT  */
+    IDENTIFIER = 266,              /* IDENTIFIER  */
+    STRING_CONSTANT = 267,         /* STRING_CONSTANT  */
+    INTEGER = 268,                 /* INTEGER  */
+    REAL = 269,                    /* REAL  */
+    BOOLEAN = 270,                 /* BOOLEAN  */
+    CHAR = 271,                    /* CHAR  */
+    BOOLEAN_OP = 272,              /* BOOLEAN_OP  */
+    ARITHEMATIC_OP_MUL = 273,      /* ARITHEMATIC_OP_MUL  */
+    ARITHEMATIC_OP_DIV = 274,      /* ARITHEMATIC_OP_DIV  */
+    ARITHEMATIC_OP_MOD = 275,      /* ARITHEMATIC_OP_MOD  */
+    INTEGER_CONSTANT = 276,        /* INTEGER_CONSTANT  */
+    FLOAT_CONSTANT = 277,          /* FLOAT_CONSTANT  */
+    PROGRAM = 278,                 /* PROGRAM  */
+    SEMICOLON = 279,               /* SEMICOLON  */
+    ELSE = 280,                    /* ELSE  */
+    FOR = 281,                     /* FOR  */
+    DO = 282,                      /* DO  */
+    BEGIN_TAG = 283,               /* BEGIN_TAG  */
+    END = 284,                     /* END  */
+    WRITE = 285,                   /* WRITE  */
+    READ = 286,                    /* READ  */
+    DOWNTO = 287,                  /* DOWNTO  */
+    TO = 288,                      /* TO  */
+    OF = 289,                      /* OF  */
+    COLON = 290,                   /* COLON  */
+    VAR = 291,                     /* VAR  */
+    ARRAY = 292,                   /* ARRAY  */
+    THEN = 293,                    /* THEN  */
+    COMMA = 294,                   /* COMMA  */
+    OPEN_BRACKET = 295,            /* OPEN_BRACKET  */
+    OPEN_PARANTHESIS = 296,        /* OPEN_PARANTHESIS  */
+    CLOSE_BRACKET = 297,           /* CLOSE_BRACKET  */
+    CLOSE_PARANTHESIS = 298,       /* CLOSE_PARANTHESIS  */
+    PERIOD = 299,                  /* PERIOD  */
+    RANGE_DOTS = 300               /* RANGE_DOTS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -102,46 +105,49 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define IDENTIFIER 258
-#define STRING_CONSTANT 259
-#define INTEGER 260
-#define REAL 261
-#define BOOLEAN 262
-#define CHAR 263
-#define BOOLEAN_OP 264
-#define BOOLEAN_OP_NOT 265
-#define ASSIGNMENT_OP 266
-#define RELATIONAL_OP 267
-#define ARITHEMATIC_OP 268
-#define ARITHEMATIC_OP_MINUS 269
-#define IF 270
-#define WHILE 271
-#define CHAR_CONSTANT 272
-#define INTEGER_CONSTANT 273
-#define FLOAT_CONSTANT 274
-#define PROGRAM 275
-#define SEMICOLON 276
-#define ELSE 277
-#define FOR 278
-#define DO 279
-#define BEGIN_TAG 280
-#define END 281
-#define WRITE 282
-#define READ 283
-#define DOWNTO 284
-#define TO 285
-#define OF 286
-#define COLON 287
-#define VAR 288
-#define ARRAY 289
-#define THEN 290
-#define COMMA 291
-#define OPEN_BRACKET 292
-#define OPEN_PARANTHESIS 293
-#define CLOSE_BRACKET 294
-#define CLOSE_PARANTHESIS 295
-#define PERIOD 296
-#define RANGE_DOTS 297
+#define BOOLEAN_OP_NOT 258
+#define ASSIGNMENT_OP 259
+#define RELATIONAL_OP 260
+#define ARITHEMATIC_OP_PLUS 261
+#define ARITHEMATIC_OP_MINUS 262
+#define IF 263
+#define WHILE 264
+#define CHAR_CONSTANT 265
+#define IDENTIFIER 266
+#define STRING_CONSTANT 267
+#define INTEGER 268
+#define REAL 269
+#define BOOLEAN 270
+#define CHAR 271
+#define BOOLEAN_OP 272
+#define ARITHEMATIC_OP_MUL 273
+#define ARITHEMATIC_OP_DIV 274
+#define ARITHEMATIC_OP_MOD 275
+#define INTEGER_CONSTANT 276
+#define FLOAT_CONSTANT 277
+#define PROGRAM 278
+#define SEMICOLON 279
+#define ELSE 280
+#define FOR 281
+#define DO 282
+#define BEGIN_TAG 283
+#define END 284
+#define WRITE 285
+#define READ 286
+#define DOWNTO 287
+#define TO 288
+#define OF 289
+#define COLON 290
+#define VAR 291
+#define ARRAY 292
+#define THEN 293
+#define COMMA 294
+#define OPEN_BRACKET 295
+#define OPEN_PARANTHESIS 296
+#define CLOSE_BRACKET 297
+#define CLOSE_PARANTHESIS 298
+#define PERIOD 299
+#define RANGE_DOTS 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -163,7 +169,7 @@ union YYSTYPE
     }dval;
     struct node* node;
 
-#line 167 "y.tab.h"
+#line 173 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

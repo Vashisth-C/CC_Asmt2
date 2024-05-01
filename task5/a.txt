@@ -2,6 +2,7 @@ program NoArrayDemo;
 
 var
   i, sum: Integer;
+  num,maxvalue: array[1..10] of integer;
 
 begin
   sum := 0;
@@ -10,5 +11,6 @@ begin
     sum := sum + 2;
     write(sum);
   end;
+  maxvalue:=num;
   write(sum,i,"Hey Baby");
 end.

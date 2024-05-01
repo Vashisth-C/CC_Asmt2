@@ -64,13 +64,14 @@ void printErrors();
 }
 
 
-%left ARITHEMATIC_OP
+%left ARITHEMATIC_OP_PLUS ARITHEMATIC_OP_MINUS
+%left ARITHEMATIC_OP_MUL ARITHEMATIC_OP_DIV ARITHEMATIC_OP_MOD
 %left BOOLEAN_OP
-%left ARITHEMATIC_OP_MINUS
 %right RELATIONAL_OP
 %left BOOLEAN_OP_NOT
 
-%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP ARITHEMATIC_OP ARITHEMATIC_OP_MINUS IF WHILE CHAR_CONSTANT
+%token <sval> BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP ARITHEMATIC_OP_PLUS ARITHEMATIC_OP_MINUS IF WHILE CHAR_CONSTANT
+%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP ARITHEMATIC_OP_MUL ARITHEMATIC_OP_DIV ARITHEMATIC_OP_MOD
 %token <ival> INTEGER_CONSTANT
 %token <dval> FLOAT_CONSTANT
 %token <node> PROGRAM SEMICOLON ELSE FOR DO BEGIN_TAG END WRITE READ DOWNTO TO OF COLON VAR ARRAY THEN
@@ -96,12 +97,13 @@ start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PER
                                                                                     t->child[0]=make_leaf(".");
                                                                                     t->NumChild++;
                                                                                     if(error_table!=NULL){
+                                                                                        printf("\nRun the Python file to see AST\n\n");
+                                                                                        printf("\n\n");
                                                                                         printErrors();
                                                                                     }
                                                                                     else{
-                                                                                        printf("Valid Input\n\n");
-                                                                                        
-                                                                                        printTable();
+                                                                                        printf("\n");
+                                                                                        printf("No Errors\nRun the Python file to see AST");
                                                                                         printf("\n");
                                                                                     }
                                                                                     writeToFile($$);
@@ -749,7 +751,7 @@ arith_expression: unit_2 {$$=$1;}
                 | OPEN_PARANTHESIS arith_expression CLOSE_PARANTHESIS {node * temp=make_leaf(")");
                                                                         $$=make_binary_node("(",$2,temp);
                                                                         strcpy($$->type,$2->type);}
-                | arith_expression ARITHEMATIC_OP arith_expression { $$=make_binary_node($2.val,$1,$3);
+                | arith_expression ARITHEMATIC_OP_PLUS arith_expression { $$=make_binary_node($2.val,$1,$3);
                                                                     if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
                                                                         strcpy($$->type,"INTEGER");
                                                                     }
@@ -797,6 +799,78 @@ arith_expression: unit_2 {$$=$1;}
                                                                             strcpy($$->type,"INTEGER");
                                                                         }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"REAL")==0){
                                                                             strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"undefined");
+                                                                        }
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                                            addError(errormsg);
+                                                                        }}
+                | arith_expression ARITHEMATIC_OP_MUL arith_expression { $$=make_binary_node("*",$1,$3);
+                                                                        if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"INTEGER");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"INTEGER");
+                                                                        }else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"INTEGER");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"undefined");
+                                                                        }
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                                            addError(errormsg);
+                                                                        }}
+                | arith_expression ARITHEMATIC_OP_DIV arith_expression { $$=make_binary_node("/",$1,$3);
+                                                                        if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }
+                                                                        else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"REAL")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"REAL")==0){
+                                                                            strcpy($$->type,"REAL");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"undefined");
+                                                                        }
+                                                                        else{
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Type Mismatch at line number: %d",$2.line);
+                                                                            addError(errormsg);
+                                                                        }}
+                | arith_expression ARITHEMATIC_OP_MOD arith_expression { $$=make_binary_node("%",$1,$3);
+                                                                        if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"INTEGER");
+                                                                        }
+                                                                        else if(strcmp($1->type,"INTEGER")==0 && strcmp($3->type,"undefined")==0){
+                                                                            strcpy($$->type,"INTEGER");
+                                                                        }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"INTEGER")==0){
+                                                                            strcpy($$->type,"INTEGER");
                                                                         }else if(strcmp($1->type,"undefined")==0 && strcmp($3->type,"undefined")==0){
                                                                             strcpy($$->type,"undefined");
                                                                         }

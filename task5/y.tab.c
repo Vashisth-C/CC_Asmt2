@@ -2539,9 +2539,10 @@ symbol* find_symbol(const char* name) {
 void printTable() {
     symbol* current = symbol_table;
     printf("\n\nSymbol Table\n");
-    printf("Name\tType\tValue\n");
+    printf("--------------------------------------------------------\n\n");
+    printf("Name\t\t\tType\t\t\tValue\n");
     while (current != NULL) {
-        printf("%s\t%s\t%s\n", current->name, current->type,current->value);
+        printf("%s\t\t\t%s\t\t\t%s\n", current->name, current->type,current->value);
         current = current->next;
     }
 }

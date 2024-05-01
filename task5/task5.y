@@ -125,7 +125,7 @@ void parseTAC();
 
 %%
 
-start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("\n\n");
+start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("\n");
                                                                                     parseTAC();
                                                                                     // reverseTAC();
                                                                                     // printTAC();
@@ -772,10 +772,11 @@ symbol* find_symbol(const char* name) {
 
 void printTable() {
     symbol* current = symbol_table;
-    printf("\n\nSymbol Table\n");
-    printf("Name\tType\tValue\n");
+    printf("\n\n\tSymbol Table\n");
+    printf("--------------------------------------------------------\n\n");
+    printf("Name\t\t\tType\t\t\tValue\n");
     while (current != NULL) {
-        printf("%s\t%s\t%s\n", current->name, current->type,current->value);
+        printf("%s\t\t\t%s\t\t\t%s\n", current->name, current->type,current->value);
         current = current->next;
     }
 }
@@ -1033,7 +1034,7 @@ void parseTAC(){
     reverseTAC();
     // printTAC();
     reverseWrite();
-    printf("\n\nCode Output:\n\n");
+    printf("\nCode Output:\n\n");
 
     TAC *current = TAC_table;
     while(current!=NULL){

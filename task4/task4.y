@@ -88,10 +88,10 @@ void printFormatted();
 
 %%
 
-start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("Valid Input\n");
+start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("\n");
                                                                                     reverseTAC();
                                                                                     printTAC();
-                                                                                    // printFormatted();
+                                                                                    printFormatted();
                                                                                     }
 
 variable_declaration: VAR variable_list 
@@ -746,10 +746,11 @@ void addTAC(const char* op, const char* arg1, const char* arg2, const char* resu
 
 void printTAC() {
     TAC* current = TAC_table;
-    printf("\n\nThree Address Code\n");
-    printf("Op\tArg1\tArg2\tResult\n");
+    printf("\n\nThree Address Code in Quadruple Format\n");
+    printf("------------------------------------------------------\n");
+    printf("\nOp\t\t\tArg1\t\t\tArg2\t\t\tResult\n");
     while (current != NULL) {
-        printf("%s\t%s\t%s\t%s\n", current->op, current->arg1, current->arg2, current->result);
+        printf("%s\t\t\t%s\t\t\t%s\t\t\t%s\n", current->op, current->arg1, current->arg2, current->result);
         current = current->next;
     }
 }
@@ -769,7 +770,8 @@ void reverseTAC() {
 
 void printFormatted(){
     TAC* current=TAC_table;
-    printf("\n\nIntermediate Code:\n\n");
+    printf("\n\nIntermediate Three Address Code:\n");
+    printf("----------------------------------------------------\n");
     while(current!=NULL){
         if(strcmp(current->op,"LABEL")==0){
             printf("%s:\n",current->arg1);
@@ -788,6 +790,7 @@ void printFormatted(){
         }
         current=current->next;
     }
+    printf("\n\n");
 }
 
 void push(char* data){
