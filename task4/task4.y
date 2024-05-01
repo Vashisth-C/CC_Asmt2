@@ -328,7 +328,17 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     strcat(id3,temp4);
     addTAC("+",id,id2,id3);
     qindex++;
-    push(id3);
+    char *id4=(char*)malloc(100*sizeof(char));
+    strcpy(id4,"t");
+    char temp5[10];
+    sprintf(temp5, "%d", qindex);
+    strcat(id4,temp5);
+    char *id5=(char*)malloc(100*sizeof(char));
+    strcpy(id5,"*");
+    strcat(id5,id3);
+    addTAC(":=",id5,"",id4);
+    push(id4);
+    qindex++;
 }
 
 for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression{
@@ -342,13 +352,13 @@ for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
+    addTAC("LABEL",str,"","");
     addTAC($2.val,str1,"",$1.val);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(cond,temp);
-    addTAC("LABEL",str,"","");
     addTAC(">",$1.val,str2,cond);
     qindex++;
     char* str3=(char *)malloc(100*sizeof(char));
@@ -374,13 +384,13 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
+    addTAC("LABEL",str,"","");
     addTAC($2.val,str1,"",$1.val);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(cond,temp);
-    addTAC("LABEL",str,"","");
     addTAC("<",$1.val,str2,cond);
     qindex++;
     char* str3=(char *)malloc(100*sizeof(char));
@@ -402,18 +412,20 @@ for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith
     sprintf(temp1, "%d", lindex);
     strcat(str,temp1);
     lindex++;
+    addTAC("LABEL",str,"","");
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC($2.val,str1,"",str1);
+    char* str4=(char *)malloc(100*sizeof(char));
+    strcpy(str4,pop());
+    addTAC($2.val,str1,"",str4);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(cond,temp);
-    addTAC("LABEL",str,"","");
-    addTAC(">=",str1,str2,cond);
+    addTAC(">=",str4,str2,cond);
     qindex++;
     char* str3=(char *)malloc(100*sizeof(char));
     strcpy(str3,"L");
@@ -434,18 +446,20 @@ for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO a
     sprintf(temp1, "%d", lindex);
     strcat(str,temp1);
     lindex++;
+    addTAC("LABEL",str,"","");
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC($2.val,str1,"",str1);
+    char* str4=(char *)malloc(100*sizeof(char));
+    strcpy(str4,pop());
+    addTAC($2.val,str1,"",str4);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(cond,temp);
-    addTAC("LABEL",str,"","");
-    addTAC("<=",str1,str2,cond);
+    addTAC("<=",str4,str2,cond);
     qindex++;
     char* str3=(char *)malloc(100*sizeof(char));
     strcpy(str3,"L");
@@ -648,7 +662,17 @@ unit: IDENTIFIER {
             strcat(id3,temp4);
             addTAC("+",id,id2,id3);
             qindex++;
-            push(id3);
+            char *id4=(char*)malloc(100*sizeof(char));
+            strcpy(id4,"t");
+            char temp5[10];
+            sprintf(temp5, "%d", qindex);
+            strcat(id4,temp5);
+            char *id5=(char*)malloc(100*sizeof(char));
+            strcpy(id5,"*");
+            strcat(id5,id3);
+            addTAC(":=",id5,"",id4);
+            push(id4);
+            qindex++;
         }
 
     |ARITHEMATIC_OP_MINUS arith_expression {

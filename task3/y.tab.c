@@ -2010,7 +2010,7 @@ yyreduce:
     x=tolowercase(x);
     node* temp=make_leaf((yyvsp[-3].sval).val);
     (yyvsp[0].node)=make_leaf("r_brace");
-    (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));
+    (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-1].node),(yyvsp[0].node));
     if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
         char *errormsg=(char*)malloc(100*sizeof(char) );
         sprintf(errormsg,"Undeclared variable: %s at line number: %d",(yyvsp[-3].sval).val,(yyvsp[-3].sval).line);
@@ -2358,7 +2358,7 @@ yyreduce:
                                                                         find_symbol(x)->value=1;
                                                                         node* temp=make_leaf((yyvsp[-3].sval).val);
                                                                         (yyvsp[0].node)=make_leaf("r_brace");
-                                                                        (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));
+                                                                        (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-1].node),(yyvsp[0].node));
                                                                         if(strcmp((yyvsp[-1].node)->type,"INTEGER")!=0){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
                                                                             sprintf(errormsg,"Array Indices should be Integer at line number: %d",(yyvsp[-3].sval).line);
@@ -2487,7 +2487,7 @@ yyreduce:
                                                             x=tolowercase(x);
                                                             node* temp=make_leaf((yyvsp[-3].sval).val);
                                                             (yyvsp[0].node)=make_leaf("r_brace");
-                                                            (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-2].node),(yyvsp[-1].node));
+                                                            (yyval.node)=make_ternary_node("l_brace",temp,(yyvsp[-1].node),(yyvsp[0].node));
                                                             if(find_symbol(x)==NULL){
                                                                 char *errormsg=(char*)malloc(100*sizeof(char) );
                                                                 sprintf(errormsg,"Undeclared variable: %s at line number: %d",(yyvsp[-3].sval).val,(yyvsp[-3].sval).line);

@@ -498,7 +498,7 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     x=tolowercase(x);
     node* temp=make_leaf($1.val);
     $4=make_leaf("r_brace");
-    $$=make_ternary_node("l_brace",temp,$2,$3);
+    $$=make_ternary_node("l_brace",temp,$3,$4);
     if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
         char *errormsg=(char*)malloc(100*sizeof(char) );
         sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
@@ -736,7 +736,7 @@ possible_reads: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
                                                                         find_symbol(x)->value=1;
                                                                         node* temp=make_leaf($1.val);
                                                                         $4=make_leaf("r_brace");
-                                                                        $$=make_ternary_node("l_brace",temp,$2,$3);
+                                                                        $$=make_ternary_node("l_brace",temp,$3,$4);
                                                                         if(strcmp($3->type,"INTEGER")!=0){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
                                                                             sprintf(errormsg,"Array Indices should be Integer at line number: %d",$1.line);
@@ -836,7 +836,7 @@ unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
                                                             x=tolowercase(x);
                                                             node* temp=make_leaf($1.val);
                                                             $4=make_leaf("r_brace");
-                                                            $$=make_ternary_node("l_brace",temp,$2,$3);
+                                                            $$=make_ternary_node("l_brace",temp,$3,$4);
                                                             if(find_symbol(x)==NULL){
                                                                 char *errormsg=(char*)malloc(100*sizeof(char) );
                                                                 sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);

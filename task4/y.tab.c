@@ -771,11 +771,11 @@ static const yytype_int16 yyrline[] =
        0,    91,    91,    97,    98,    99,   100,   102,   103,   109,
      116,   117,   126,   135,   144,   155,   163,   171,   179,   189,
      190,   192,   193,   195,   196,   197,   200,   207,   208,   209,
-     216,   223,   230,   237,   242,   270,   290,   294,   296,   334,
-     366,   398,   430,   462,   463,   466,   467,   468,   478,   488,
-     498,   508,   520,   531,   542,   543,   545,   546,   548,   549,
-     550,   551,   553,   554,   557,   558,   559,   560,   569,   579,
-     589,   599,   611,   616,   654,   665,   670,   675
+     216,   223,   230,   237,   242,   270,   290,   294,   296,   344,
+     376,   408,   442,   476,   477,   480,   481,   482,   492,   502,
+     512,   522,   534,   545,   556,   557,   559,   560,   562,   563,
+     564,   565,   567,   568,   571,   572,   573,   574,   583,   593,
+     603,   613,   625,   630,   678,   689,   694,   699
 };
 #endif
 
@@ -1775,13 +1775,23 @@ yyreduce:
     strcat(id3,temp4);
     addTAC("+",id,id2,id3);
     qindex++;
-    push(id3);
+    char *id4=(char*)malloc(100*sizeof(char));
+    strcpy(id4,"t");
+    char temp5[10];
+    sprintf(temp5, "%d", qindex);
+    strcat(id4,temp5);
+    char *id5=(char*)malloc(100*sizeof(char));
+    strcpy(id5,"*");
+    strcat(id5,id3);
+    addTAC(":=",id5,"",id4);
+    push(id4);
+    qindex++;
 }
-#line 1781 "y.tab.c"
+#line 1791 "y.tab.c"
     break;
 
   case 39: /* for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 334 "task4.y"
+#line 344 "task4.y"
                                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1813,11 +1823,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1817 "y.tab.c"
+#line 1827 "y.tab.c"
     break;
 
   case 40: /* for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 366 "task4.y"
+#line 376 "task4.y"
                                                                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1849,11 +1859,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1853 "y.tab.c"
+#line 1863 "y.tab.c"
     break;
 
   case 41: /* for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 398 "task4.y"
+#line 408 "task4.y"
                                                                                            {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1861,18 +1871,20 @@ yyreduce:
     sprintf(temp1, "%d", lindex);
     strcat(str,temp1);
     lindex++;
+    addTAC("LABEL",str,"","");
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC((yyvsp[-3].sval).val,str1,"",str1);
+    char* str4=(char *)malloc(100*sizeof(char));
+    strcpy(str4,pop());
+    addTAC((yyvsp[-3].sval).val,str1,"",str4);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(cond,temp);
-    addTAC("LABEL",str,"","");
-    addTAC(">=",str1,str2,cond);
+    addTAC(">=",str4,str2,cond);
     qindex++;
     char* str3=(char *)malloc(100*sizeof(char));
     strcpy(str3,"L");
@@ -1885,11 +1897,11 @@ yyreduce:
     push(str1);
     lindex++;
 }
-#line 1889 "y.tab.c"
+#line 1901 "y.tab.c"
     break;
 
   case 42: /* for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 430 "task4.y"
+#line 442 "task4.y"
                                                                                                {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1897,18 +1909,20 @@ yyreduce:
     sprintf(temp1, "%d", lindex);
     strcat(str,temp1);
     lindex++;
+    addTAC("LABEL",str,"","");
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC((yyvsp[-3].sval).val,str1,"",str1);
+    char* str4=(char *)malloc(100*sizeof(char));
+    strcpy(str4,pop());
+    addTAC((yyvsp[-3].sval).val,str1,"",str4);
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(cond,temp);
-    addTAC("LABEL",str,"","");
-    addTAC("<=",str1,str2,cond);
+    addTAC("<=",str4,str2,cond);
     qindex++;
     char* str3=(char *)malloc(100*sizeof(char));
     strcpy(str3,"L");
@@ -1921,11 +1935,11 @@ yyreduce:
     push(str1);
     lindex++;
 }
-#line 1925 "y.tab.c"
+#line 1939 "y.tab.c"
     break;
 
   case 47: /* conditionals: relational_exp BOOLEAN_OP conditionals  */
-#line 468 "task4.y"
+#line 482 "task4.y"
                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1936,11 +1950,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1940 "y.tab.c"
+#line 1954 "y.tab.c"
     break;
 
   case 48: /* conditionals: relational_exp BOOLEAN_OP unit  */
-#line 478 "task4.y"
+#line 492 "task4.y"
                                                  {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1951,11 +1965,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1955 "y.tab.c"
+#line 1969 "y.tab.c"
     break;
 
   case 49: /* conditionals: unit BOOLEAN_OP conditionals  */
-#line 488 "task4.y"
+#line 502 "task4.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1966,11 +1980,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1970 "y.tab.c"
+#line 1984 "y.tab.c"
     break;
 
   case 50: /* conditionals: unit BOOLEAN_OP unit  */
-#line 498 "task4.y"
+#line 512 "task4.y"
                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1981,11 +1995,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 1985 "y.tab.c"
+#line 1999 "y.tab.c"
     break;
 
   case 51: /* conditionals: BOOLEAN_OP_NOT conditionals  */
-#line 508 "task4.y"
+#line 522 "task4.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -1996,11 +2010,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2000 "y.tab.c"
+#line 2014 "y.tab.c"
     break;
 
   case 52: /* condtional_unit: BOOLEAN_OP_NOT unit  */
-#line 520 "task4.y"
+#line 534 "task4.y"
                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
@@ -2011,11 +2025,11 @@ yyreduce:
     qindex++;
     push(str);
 }
-#line 2015 "y.tab.c"
+#line 2029 "y.tab.c"
     break;
 
   case 53: /* relational_exp: arith_expression RELATIONAL_OP arith_expression  */
-#line 531 "task4.y"
+#line 545 "task4.y"
                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
@@ -2026,11 +2040,11 @@ yyreduce:
     qindex++;
     push(str);
     }
-#line 2030 "y.tab.c"
+#line 2044 "y.tab.c"
     break;
 
   case 67: /* arith_expression: arith_expression ARITHEMATIC_OP_PLUS arith_expression  */
-#line 560 "task4.y"
+#line 574 "task4.y"
                                                                         { 
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2040,11 +2054,11 @@ yyreduce:
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);}
-#line 2044 "y.tab.c"
+#line 2058 "y.tab.c"
     break;
 
   case 68: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
-#line 569 "task4.y"
+#line 583 "task4.y"
                                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2055,11 +2069,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2059 "y.tab.c"
+#line 2073 "y.tab.c"
     break;
 
   case 69: /* arith_expression: arith_expression ARITHEMATIC_OP_MUL arith_expression  */
-#line 579 "task4.y"
+#line 593 "task4.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2070,11 +2084,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2074 "y.tab.c"
+#line 2088 "y.tab.c"
     break;
 
   case 70: /* arith_expression: arith_expression ARITHEMATIC_OP_DIV arith_expression  */
-#line 589 "task4.y"
+#line 603 "task4.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2085,11 +2099,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2089 "y.tab.c"
+#line 2103 "y.tab.c"
     break;
 
   case 71: /* arith_expression: arith_expression ARITHEMATIC_OP_MOD arith_expression  */
-#line 599 "task4.y"
+#line 613 "task4.y"
                                                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2100,21 +2114,21 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2104 "y.tab.c"
+#line 2118 "y.tab.c"
     break;
 
   case 72: /* unit: IDENTIFIER  */
-#line 611 "task4.y"
+#line 625 "task4.y"
                  {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 2114 "y.tab.c"
+#line 2128 "y.tab.c"
     break;
 
   case 73: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 616 "task4.y"
+#line 630 "task4.y"
                                                              {
             char *id=(char*)malloc(100*sizeof(char));
             strcpy(id,"t");
@@ -2150,13 +2164,23 @@ yyreduce:
             strcat(id3,temp4);
             addTAC("+",id,id2,id3);
             qindex++;
-            push(id3);
+            char *id4=(char*)malloc(100*sizeof(char));
+            strcpy(id4,"t");
+            char temp5[10];
+            sprintf(temp5, "%d", qindex);
+            strcat(id4,temp5);
+            char *id5=(char*)malloc(100*sizeof(char));
+            strcpy(id5,"*");
+            strcat(id5,id3);
+            addTAC(":=",id5,"",id4);
+            push(id4);
+            qindex++;
         }
-#line 2156 "y.tab.c"
+#line 2180 "y.tab.c"
     break;
 
   case 74: /* unit: ARITHEMATIC_OP_MINUS arith_expression  */
-#line 654 "task4.y"
+#line 678 "task4.y"
                                            {
             char * str=(char *)malloc(100*sizeof(char));
             strcpy(str,"t");
@@ -2167,41 +2191,41 @@ yyreduce:
             qindex++;
             push(str);
     }
-#line 2171 "y.tab.c"
+#line 2195 "y.tab.c"
     break;
 
   case 75: /* unit_2: INTEGER_CONSTANT  */
-#line 665 "task4.y"
+#line 689 "task4.y"
                          {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%d",(yyvsp[0].ival).val);
             push(str);
     }
-#line 2181 "y.tab.c"
+#line 2205 "y.tab.c"
     break;
 
   case 76: /* unit_2: FLOAT_CONSTANT  */
-#line 670 "task4.y"
+#line 694 "task4.y"
                      {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%f",(yyvsp[0].dval).val);
             push(str);
     }
-#line 2191 "y.tab.c"
+#line 2215 "y.tab.c"
     break;
 
   case 77: /* unit_2: CHAR_CONSTANT  */
-#line 675 "task4.y"
+#line 699 "task4.y"
                     {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 2201 "y.tab.c"
+#line 2225 "y.tab.c"
     break;
 
 
-#line 2205 "y.tab.c"
+#line 2229 "y.tab.c"
 
       default: break;
     }
@@ -2394,7 +2418,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 681 "task4.y"
+#line 705 "task4.y"
 
 
 void add_symbol(const char* name, const char* type) {
