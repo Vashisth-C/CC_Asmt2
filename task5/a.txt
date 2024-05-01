@@ -1,12 +1,13 @@
-program MaxValueArray;
+program NoArrayDemo;
+
 var
-  numbers,maxValue: array[1..10] of Integer;
-  j,i: Integer;
-  x: array[6..8] of Integer;
-  y:CHAR;
+  i, sum: Integer;
+
 begin
-  write("Enter 10 integer values:");
-  i:=1+2;
-  j:=3-2; 
-  write(maxValue);
+  sum := 0;
+  for i := 1 to 10 do
+  begin
+    sum := sum + i;
+  end;
+  write(sum);
 end.

@@ -11,7 +11,7 @@ int yyerror();
 typedef struct symbol {
     char name[100];
     char type[100];
-    int value;
+    char value[100];
     struct symbol* next;
 } symbol;
 
@@ -124,8 +124,9 @@ void parseTAC();
 
 %%
 
-start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("Valid Input\n");
-                                                                                    parseTAC();
+start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("\n\n");
+                                                                                    // parseTAC();
+                                                                                    reverseTAC();
                                                                                     printTAC();
                                                                                     // reverseWrite();
                                                                                     // printWriteTable();
@@ -396,8 +397,8 @@ for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC("LABEL",str,"","");
     addTAC($2.val,str1,"",$1.val);
+    addTAC("LABEL",str,"","");
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
@@ -428,8 +429,8 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC("LABEL",str,"","");
     addTAC($2.val,str1,"",$1.val);
+    addTAC("LABEL",str,"","");
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
@@ -524,6 +525,7 @@ conditionals:   condtional_unit
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    $2.val=tolowercase($2.val);
                     addTAC($2.val,pop(), pop(), str);
                     qindex++;
                     push(str);
@@ -534,6 +536,7 @@ conditionals:   condtional_unit
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    $2.val=tolowercase($2.val);
                     addTAC($2.val,pop(), pop(), str);
                     qindex++;
                     push(str);
@@ -544,6 +547,7 @@ conditionals:   condtional_unit
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    $2.val=tolowercase($2.val);
                     addTAC($2.val,pop(), pop(), str);
                     qindex++;
                     push(str);
@@ -554,6 +558,7 @@ conditionals:   condtional_unit
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    $2.val=tolowercase($2.val);
                     addTAC($2.val,pop(), pop(), str);
                     qindex++;
                     push(str);
@@ -564,6 +569,7 @@ conditionals:   condtional_unit
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    $1.val=tolowercase($1.val);
                     addTAC($1.val,pop(), "", str);
                     qindex++;
                     push(str);
@@ -576,7 +582,8 @@ condtional_unit:BOOLEAN_OP_NOT unit {
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(str,temp);
-    addTAC($1.val,pop(), "", str);
+    $1.val=tolowercase($1.val);
+    addTAC($1.val,pop(),"", str);
     qindex++;
     push(str);
 }
@@ -910,7 +917,7 @@ void addTemp(const char* name, const char* typ, const char* val){
     temp_table = new_temp;
 }
 
-void findLabelLocation(char* label){
+TAC* findLabelLocation(char* label){
     TAC* current = TAC_table;
     while (current != NULL) {
         if (strcmp(current->op, "LABEL") == 0 && strcmp(current->arg1, label) == 0) {
@@ -918,7 +925,7 @@ void findLabelLocation(char* label){
         }
         current = current->next;
     }
-    TAC_table = current;
+    return current;
 }
 
 void reverseWrite(){
@@ -954,15 +961,49 @@ int ifFloat(char* str){
     return 0;
 }
 
+void executeWrite(int x){
+    // setSymbolTable();
+    int counter=1;
+    wt* current = write_table;
+    while(counter!=x){
+        current=current->next;
+        counter++;
+    }
+    sc* sc_current = current->sc;
+    var* var_current = current->var;
+    for(int i=0;i<strlen(current->order);i++){
+        if(current->order[i]=='s'){
+            printf("%s\n",sc_current->sc);
+            sc_current=sc_current->next;
+        }else{
+            printf("%s\n",findTemp(var_current->var)->value);
+            var_current=var_current->next;
+        }
+    }
+}
+
+void setSymbolTable(){
+    symbol* current = symbol_table;
+    while(current!=NULL){
+        if(findTemp(current->name)==NULL){
+            
+        }else{
+            strcpy(findTemp(current->name)->value,current->type);
+        }
+        current=current->next;
+    }
+}
+
 void parseTAC(){
     reverseTAC();
+    reverseWrite();
     TAC *current = TAC_table;
     while(current!=NULL){
         if(strcmp(current->op,"GOTO")==0){
-            findLabelLocation(current->arg1);
+            current=findLabelLocation(current->arg1);
         }else if(strcmp(current->op,"IF")==0){
             if(strcmp(current->arg1,"0")==1){
-                findLabelLocation(current->result);
+                current=findLabelLocation(current->result);
             }
         }else if(strcmp(current->op,":=")==0){
             if(current->arg1[0]!='t'){
@@ -1102,8 +1143,291 @@ void parseTAC(){
                     addTemp(current->result,"INTEGER",temp);
                 }
             }
+        }else if(strcmp(current->op,"/")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(ifFloat(current->arg1) || ifFloat(current->arg2)){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(current->arg1)/atof(current->arg2));
+                    addTemp(current->result,"REAL",temp);    
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)/atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(current->arg1)/atof(findTemp(current->arg2)->value));
+                    addTemp(current->result,"REAL",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)/atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(current->arg2));
+                    addTemp(current->result,"REAL",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }else{
+                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(findTemp(current->arg2)->value));
+                    addTemp(current->result,"REAL",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }
+        }else if(strcmp(current->op,"%")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(current->arg1)%atoi(current->arg2));
+                addTemp(current->result,"INTEGER",temp);
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(current->arg1)%atoi(findTemp(current->arg2)->value));
+                addTemp(current->result,"INTEGER",temp);
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(current->arg2));
+                addTemp(current->result,"INTEGER",temp);
+            }else{
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(findTemp(current->arg2)->value));
+                addTemp(current->result,"INTEGER",temp);
+            }
+        }else if(strcmp(current->op,"<>")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)!=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)!=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)!=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)!=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"<")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)<atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)<atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)<atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)<atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,">")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)>atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)>atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)>atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)>atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"<=")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)<=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)<=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)<=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)<=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,">=")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)>=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)>=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)>=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)>=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"=")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)==atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)==atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)==atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)==atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"and")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atoi(current->arg1) && atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atoi(current->arg1) && atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atoi(findTemp(current->arg1)->value) && atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atoi(findTemp(current->arg1)->value) && atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"or")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atoi(current->arg1) || atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atoi(current->arg1) || atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atoi(findTemp(current->arg1)->value) || atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atoi(findTemp(current->arg1)->value) || atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"not")==0){
+            if(current->arg1[0]!='t'){
+                if(atoi(current->arg1)){
+                    addTemp(current->result,"BOOLEAN","0");
+                }else{
+                    addTemp(current->result,"BOOLEAN","1");
+                }
+            }else{
+                if(atoi(findTemp(current->arg1)->value)){
+                    addTemp(current->result,"BOOLEAN","0");
+                }else{
+                    addTemp(current->result,"BOOLEAN","1");
+                }
+            }
+        }else if(strcmp(current->op,"WRITE")==0){
+            executeWrite(atoi(current->arg1));
         }
-        
         current=current->next;
     }
 }

@@ -81,7 +81,7 @@ int yyerror();
 typedef struct symbol {
     char name[100];
     char type[100];
-    int value;
+    char value[100];
     struct symbol* next;
 } symbol;
 
@@ -805,14 +805,14 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   127,   127,   135,   136,   137,   138,   140,   141,   147,
-     154,   155,   164,   173,   182,   193,   201,   209,   217,   227,
-     228,   230,   231,   233,   233,   238,   239,   242,   250,   251,
-     252,   259,   266,   273,   280,   285,   313,   333,   337,   339,
-     388,   420,   452,   481,   515,   516,   519,   520,   521,   531,
-     541,   551,   561,   573,   584,   595,   596,   597,   601,   602,
-     604,   605,   608,   610,   611,   614,   615,   616,   617,   626,
-     636,   646,   656,   668,   673,   714,   725,   730,   735
+       0,   127,   127,   136,   137,   138,   139,   141,   142,   148,
+     155,   156,   165,   174,   183,   194,   202,   210,   218,   228,
+     229,   231,   232,   234,   234,   239,   240,   243,   251,   252,
+     253,   260,   267,   274,   281,   286,   314,   334,   338,   340,
+     389,   421,   453,   482,   516,   517,   520,   521,   522,   533,
+     544,   555,   566,   579,   591,   602,   603,   604,   608,   609,
+     611,   612,   615,   617,   618,   621,   622,   623,   624,   633,
+     643,   653,   663,   675,   680,   721,   732,   737,   742
 };
 #endif
 
@@ -1496,40 +1496,41 @@ yyreduce:
     {
   case 2: /* start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD  */
 #line 127 "task5.y"
-                                                                                    {printf("Valid Input\n");
-                                                                                    parseTAC();
+                                                                                    {printf("\n\n");
+                                                                                    // parseTAC();
+                                                                                    reverseTAC();
                                                                                     printTAC();
                                                                                     // reverseWrite();
                                                                                     // printWriteTable();
                                                                                     printTempTable();
                                                                                     }
-#line 1507 "y.tab.c"
+#line 1508 "y.tab.c"
     break;
 
   case 8: /* left_side_vars: IDENTIFIER  */
-#line 141 "task5.y"
+#line 142 "task5.y"
                            {
                     char * temp; temp=(char*)malloc(100*sizeof(char));
                     strcpy(temp,(yyvsp[0].sval).val);
                     temp=tolowercase(temp);
                     add_symbol(temp, "undefined");
                 }
-#line 1518 "y.tab.c"
+#line 1519 "y.tab.c"
     break;
 
   case 9: /* left_side_vars: IDENTIFIER COMMA left_side_vars  */
-#line 147 "task5.y"
+#line 148 "task5.y"
                                                  {
                     char * temp; temp=(char*)malloc(100*sizeof(char));
                     strcpy(temp,(yyvsp[-2].sval).val);
                     temp=tolowercase(temp);
                     add_symbol(temp, "undefined");
                 }
-#line 1529 "y.tab.c"
+#line 1530 "y.tab.c"
     break;
 
   case 11: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF INTEGER  */
-#line 155 "task5.y"
+#line 156 "task5.y"
                                                                                                          {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1539,11 +1540,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1543 "y.tab.c"
+#line 1544 "y.tab.c"
     break;
 
   case 12: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF REAL  */
-#line 164 "task5.y"
+#line 165 "task5.y"
                                                                                                        {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1553,11 +1554,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1557 "y.tab.c"
+#line 1558 "y.tab.c"
     break;
 
   case 13: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF BOOLEAN  */
-#line 173 "task5.y"
+#line 174 "task5.y"
                                                                                                           {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1567,11 +1568,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1571 "y.tab.c"
+#line 1572 "y.tab.c"
     break;
 
   case 14: /* rigth_side_type: ARRAY OPEN_BRACKET INTEGER_CONSTANT RANGE_DOTS INTEGER_CONSTANT CLOSE_BRACKET OF CHAR  */
-#line 182 "task5.y"
+#line 183 "task5.y"
                                                                                                        {
                     symbol* current = symbol_table;
                     while (current != NULL) {
@@ -1581,11 +1582,11 @@ yyreduce:
                         current = current->next;
                     }
                 }
-#line 1585 "y.tab.c"
+#line 1586 "y.tab.c"
     break;
 
   case 15: /* datatype: INTEGER  */
-#line 193 "task5.y"
+#line 194 "task5.y"
                   {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1594,11 +1595,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1598 "y.tab.c"
+#line 1599 "y.tab.c"
     break;
 
   case 16: /* datatype: REAL  */
-#line 201 "task5.y"
+#line 202 "task5.y"
               {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1607,11 +1608,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1611 "y.tab.c"
+#line 1612 "y.tab.c"
     break;
 
   case 17: /* datatype: BOOLEAN  */
-#line 209 "task5.y"
+#line 210 "task5.y"
                  {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1620,11 +1621,11 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1624 "y.tab.c"
+#line 1625 "y.tab.c"
     break;
 
   case 18: /* datatype: CHAR  */
-#line 217 "task5.y"
+#line 218 "task5.y"
               {
             symbol* current = symbol_table;
             while (current != NULL) {
@@ -1633,35 +1634,35 @@ yyreduce:
                 }
                 current = current->next;
             }}
-#line 1637 "y.tab.c"
+#line 1638 "y.tab.c"
     break;
 
   case 23: /* $@1: %empty  */
-#line 233 "task5.y"
+#line 234 "task5.y"
                      {initialiseWriteTableElement();}
-#line 1643 "y.tab.c"
+#line 1644 "y.tab.c"
     break;
 
   case 24: /* statementline: WRITE $@1 OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLON  */
-#line 233 "task5.y"
+#line 234 "task5.y"
                                                                                                                    {
     char * str=(char *)malloc(100*sizeof(char));
     sprintf(str,"%d",wcount);
     addTAC("WRITE",str,"","");
     wcount++;}
-#line 1653 "y.tab.c"
+#line 1654 "y.tab.c"
     break;
 
   case 26: /* statementline: IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 239 "task5.y"
+#line 240 "task5.y"
                                                                     {
                     addTAC((yyvsp[-2].sval).val,pop(), "", (yyvsp[-3].sval).val);
                 }
-#line 1661 "y.tab.c"
+#line 1662 "y.tab.c"
     break;
 
   case 27: /* statementline: left_array_assignment ASSIGNMENT_OP arith_expression SEMICOLON  */
-#line 242 "task5.y"
+#line 243 "task5.y"
                                                                                 {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1670,11 +1671,11 @@ yyreduce:
                     pop();
                     addTAC((yyvsp[-2].sval).val,id,"",id2);
                 }
-#line 1674 "y.tab.c"
+#line 1675 "y.tab.c"
     break;
 
   case 30: /* statementline: FOR for_conditionals1 DO program_declaration SEMICOLON  */
-#line 252 "task5.y"
+#line 253 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1682,11 +1683,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1686 "y.tab.c"
+#line 1687 "y.tab.c"
     break;
 
   case 31: /* statementline: FOR for_conditionals2 DO program_declaration SEMICOLON  */
-#line 259 "task5.y"
+#line 260 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1694,11 +1695,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1698 "y.tab.c"
+#line 1699 "y.tab.c"
     break;
 
   case 32: /* statementline: FOR for_conditionals3 DO program_declaration SEMICOLON  */
-#line 266 "task5.y"
+#line 267 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1706,11 +1707,11 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1710 "y.tab.c"
+#line 1711 "y.tab.c"
     break;
 
   case 33: /* statementline: FOR for_conditionals4 DO program_declaration SEMICOLON  */
-#line 273 "task5.y"
+#line 274 "task5.y"
                                                                         {
                     char *id=(char*)malloc(100*sizeof(char));
                     strcpy(id,pop());
@@ -1718,20 +1719,20 @@ yyreduce:
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1722 "y.tab.c"
+#line 1723 "y.tab.c"
     break;
 
   case 34: /* statementline: while_left DO program_declaration SEMICOLON  */
-#line 280 "task5.y"
+#line 281 "task5.y"
                                                              {
                     addTAC("GOTO",pop(),"","");
                     addTAC("LABEL",pop(),"","");
                 }
-#line 1731 "y.tab.c"
+#line 1732 "y.tab.c"
     break;
 
   case 35: /* while_left: WHILE condition  */
-#line 285 "task5.y"
+#line 286 "task5.y"
                             {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1759,11 +1760,11 @@ yyreduce:
     addTAC("LABEL",str1,"","");
     
 }
-#line 1763 "y.tab.c"
+#line 1764 "y.tab.c"
     break;
 
   case 36: /* left_if: IF condition  */
-#line 313 "task5.y"
+#line 314 "task5.y"
                      {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1783,19 +1784,19 @@ yyreduce:
     lindex++;
     
 }
-#line 1787 "y.tab.c"
+#line 1788 "y.tab.c"
     break;
 
   case 37: /* middle_if: THEN program_declaration  */
-#line 333 "task5.y"
+#line 334 "task5.y"
                                    {
     addTAC("LABEL",pop(),"","");
 }
-#line 1795 "y.tab.c"
+#line 1796 "y.tab.c"
     break;
 
   case 39: /* left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 339 "task5.y"
+#line 340 "task5.y"
                                                                               {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1844,11 +1845,11 @@ yyreduce:
     push(str);
     push(start);
 }
-#line 1848 "y.tab.c"
+#line 1849 "y.tab.c"
     break;
 
   case 40: /* for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 388 "task5.y"
+#line 389 "task5.y"
                                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1860,8 +1861,8 @@ yyreduce:
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC("LABEL",str,"","");
     addTAC((yyvsp[-3].sval).val,str1,"",(yyvsp[-4].sval).val);
+    addTAC("LABEL",str,"","");
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
@@ -1880,11 +1881,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1884 "y.tab.c"
+#line 1885 "y.tab.c"
     break;
 
   case 41: /* for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 420 "task5.y"
+#line 421 "task5.y"
                                                                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1896,8 +1897,8 @@ yyreduce:
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC("LABEL",str,"","");
     addTAC((yyvsp[-3].sval).val,str1,"",(yyvsp[-4].sval).val);
+    addTAC("LABEL",str,"","");
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
@@ -1916,11 +1917,11 @@ yyreduce:
     push((yyvsp[-4].sval).val);
     lindex++;
 }
-#line 1920 "y.tab.c"
+#line 1921 "y.tab.c"
     break;
 
   case 42: /* for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression  */
-#line 452 "task5.y"
+#line 453 "task5.y"
                                                                                            {
     char * str2=(char *)malloc(100*sizeof(char));
     strcpy(str2,pop());
@@ -1949,11 +1950,11 @@ yyreduce:
     push(str4);
     lindex++;
 }
-#line 1953 "y.tab.c"
+#line 1954 "y.tab.c"
     break;
 
   case 43: /* for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO arith_expression  */
-#line 481 "task5.y"
+#line 482 "task5.y"
                                                                                                {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
@@ -1987,101 +1988,107 @@ yyreduce:
     push(str1);
     lindex++;
 }
-#line 1991 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
   case 48: /* conditionals: relational_exp BOOLEAN_OP conditionals  */
-#line 521 "task5.y"
+#line 522 "task5.y"
                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    (yyvsp[-1].sval).val=tolowercase((yyvsp[-1].sval).val);
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);
                 }
-#line 2006 "y.tab.c"
+#line 2008 "y.tab.c"
     break;
 
   case 49: /* conditionals: relational_exp BOOLEAN_OP unit  */
-#line 531 "task5.y"
+#line 533 "task5.y"
                                                  {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    (yyvsp[-1].sval).val=tolowercase((yyvsp[-1].sval).val);
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);
                 }
-#line 2021 "y.tab.c"
+#line 2024 "y.tab.c"
     break;
 
   case 50: /* conditionals: unit BOOLEAN_OP conditionals  */
-#line 541 "task5.y"
+#line 544 "task5.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    (yyvsp[-1].sval).val=tolowercase((yyvsp[-1].sval).val);
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);
                 }
-#line 2036 "y.tab.c"
+#line 2040 "y.tab.c"
     break;
 
   case 51: /* conditionals: unit BOOLEAN_OP unit  */
-#line 551 "task5.y"
+#line 555 "task5.y"
                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    (yyvsp[-1].sval).val=tolowercase((yyvsp[-1].sval).val);
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);
                 }
-#line 2051 "y.tab.c"
+#line 2056 "y.tab.c"
     break;
 
   case 52: /* conditionals: BOOLEAN_OP_NOT conditionals  */
-#line 561 "task5.y"
+#line 566 "task5.y"
                                               {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
                     char temp[10];
                     sprintf(temp, "%d", qindex);
                     strcat(str,temp);
+                    (yyvsp[-1].sval).val=tolowercase((yyvsp[-1].sval).val);
                     addTAC((yyvsp[-1].sval).val,pop(), "", str);
                     qindex++;
                     push(str);
                 }
-#line 2066 "y.tab.c"
+#line 2072 "y.tab.c"
     break;
 
   case 53: /* condtional_unit: BOOLEAN_OP_NOT unit  */
-#line 573 "task5.y"
+#line 579 "task5.y"
                                     {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
     char temp[10];
     sprintf(temp, "%d", qindex);
     strcat(str,temp);
-    addTAC((yyvsp[-1].sval).val,pop(), "", str);
+    (yyvsp[-1].sval).val=tolowercase((yyvsp[-1].sval).val);
+    addTAC((yyvsp[-1].sval).val,pop(),"", str);
     qindex++;
     push(str);
 }
-#line 2081 "y.tab.c"
+#line 2088 "y.tab.c"
     break;
 
   case 54: /* relational_exp: arith_expression RELATIONAL_OP arith_expression  */
-#line 584 "task5.y"
+#line 591 "task5.y"
                                                                 {
     char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"t");
@@ -2092,51 +2099,51 @@ yyreduce:
     qindex++;
     push(str);
     }
-#line 2096 "y.tab.c"
+#line 2103 "y.tab.c"
     break;
 
   case 55: /* left_side_vars_write: IDENTIFIER  */
-#line 595 "task5.y"
+#line 602 "task5.y"
                                  {addVar((yyvsp[0].sval).val);}
-#line 2102 "y.tab.c"
+#line 2109 "y.tab.c"
     break;
 
   case 56: /* left_side_vars_write: IDENTIFIER COMMA left_side_vars_write  */
-#line 596 "task5.y"
+#line 603 "task5.y"
                                                        {addVar((yyvsp[-2].sval).val);}
-#line 2108 "y.tab.c"
+#line 2115 "y.tab.c"
     break;
 
   case 57: /* left_side_vars_write: STRING_CONSTANT  */
-#line 597 "task5.y"
+#line 604 "task5.y"
                                  {
                             addSC((yyvsp[0].sval).val);
                         }
-#line 2116 "y.tab.c"
+#line 2123 "y.tab.c"
     break;
 
   case 61: /* possible_write_values: STRING_CONSTANT COMMA possible_write_values  */
-#line 605 "task5.y"
+#line 612 "task5.y"
                                                                      {
                             addSC((yyvsp[-2].sval).val);
                         }
-#line 2124 "y.tab.c"
+#line 2131 "y.tab.c"
     break;
 
   case 62: /* possible_write_values: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 608 "task5.y"
+#line 615 "task5.y"
                                                                                  {pop();}
-#line 2130 "y.tab.c"
+#line 2137 "y.tab.c"
     break;
 
   case 64: /* possible_reads: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 611 "task5.y"
+#line 618 "task5.y"
                                                                         {pop();}
-#line 2136 "y.tab.c"
+#line 2143 "y.tab.c"
     break;
 
   case 68: /* arith_expression: arith_expression ARITHEMATIC_OP_PLUS arith_expression  */
-#line 617 "task5.y"
+#line 624 "task5.y"
                                                                         { 
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2146,11 +2153,11 @@ yyreduce:
                     addTAC((yyvsp[-1].sval).val,pop(), pop(), str);
                     qindex++;
                     push(str);}
-#line 2150 "y.tab.c"
+#line 2157 "y.tab.c"
     break;
 
   case 69: /* arith_expression: arith_expression ARITHEMATIC_OP_MINUS arith_expression  */
-#line 626 "task5.y"
+#line 633 "task5.y"
                                                                         {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2161,11 +2168,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2165 "y.tab.c"
+#line 2172 "y.tab.c"
     break;
 
   case 70: /* arith_expression: arith_expression ARITHEMATIC_OP_MUL arith_expression  */
-#line 636 "task5.y"
+#line 643 "task5.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2176,11 +2183,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2180 "y.tab.c"
+#line 2187 "y.tab.c"
     break;
 
   case 71: /* arith_expression: arith_expression ARITHEMATIC_OP_DIV arith_expression  */
-#line 646 "task5.y"
+#line 653 "task5.y"
                                                                       {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2191,11 +2198,11 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2195 "y.tab.c"
+#line 2202 "y.tab.c"
     break;
 
   case 72: /* arith_expression: arith_expression ARITHEMATIC_OP_MOD arith_expression  */
-#line 656 "task5.y"
+#line 663 "task5.y"
                                                                        {
                     char * str=(char *)malloc(100*sizeof(char));
                     strcpy(str,"t");
@@ -2206,21 +2213,21 @@ yyreduce:
                     qindex++;
                     push(str);
                 }
-#line 2210 "y.tab.c"
+#line 2217 "y.tab.c"
     break;
 
   case 73: /* unit: IDENTIFIER  */
-#line 668 "task5.y"
+#line 675 "task5.y"
                  {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 2220 "y.tab.c"
+#line 2227 "y.tab.c"
     break;
 
   case 74: /* unit: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET  */
-#line 673 "task5.y"
+#line 680 "task5.y"
                                                              {
             char *id=(char*)malloc(100*sizeof(char));
             strcpy(id,"t");
@@ -2261,11 +2268,11 @@ yyreduce:
             strcat(start,id3);
             push(start);
         }
-#line 2265 "y.tab.c"
+#line 2272 "y.tab.c"
     break;
 
   case 75: /* unit: ARITHEMATIC_OP_MINUS arith_expression  */
-#line 714 "task5.y"
+#line 721 "task5.y"
                                            {
             char * str=(char *)malloc(100*sizeof(char));
             strcpy(str,"t");
@@ -2276,41 +2283,41 @@ yyreduce:
             qindex++;
             push(str);
     }
-#line 2280 "y.tab.c"
+#line 2287 "y.tab.c"
     break;
 
   case 76: /* unit_2: INTEGER_CONSTANT  */
-#line 725 "task5.y"
+#line 732 "task5.y"
                          {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%d",(yyvsp[0].ival).val);
             push(str);
     }
-#line 2290 "y.tab.c"
+#line 2297 "y.tab.c"
     break;
 
   case 77: /* unit_2: FLOAT_CONSTANT  */
-#line 730 "task5.y"
+#line 737 "task5.y"
                      {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%f",(yyvsp[0].dval).val);
             push(str);
     }
-#line 2300 "y.tab.c"
+#line 2307 "y.tab.c"
     break;
 
   case 78: /* unit_2: CHAR_CONSTANT  */
-#line 735 "task5.y"
+#line 742 "task5.y"
                     {
             char * str=malloc(100*sizeof(char));
             sprintf(str,"%s",(yyvsp[0].sval).val);
             push(str);
     }
-#line 2310 "y.tab.c"
+#line 2317 "y.tab.c"
     break;
 
 
-#line 2314 "y.tab.c"
+#line 2321 "y.tab.c"
 
       default: break;
     }
@@ -2503,7 +2510,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 741 "task5.y"
+#line 748 "task5.y"
 
 
 void add_symbol(const char* name, const char* type) {
@@ -2676,7 +2683,7 @@ void addTemp(const char* name, const char* typ, const char* val){
     temp_table = new_temp;
 }
 
-void findLabelLocation(char* label){
+TAC* findLabelLocation(char* label){
     TAC* current = TAC_table;
     while (current != NULL) {
         if (strcmp(current->op, "LABEL") == 0 && strcmp(current->arg1, label) == 0) {
@@ -2684,7 +2691,7 @@ void findLabelLocation(char* label){
         }
         current = current->next;
     }
-    TAC_table = current;
+    return current;
 }
 
 void reverseWrite(){
@@ -2720,15 +2727,49 @@ int ifFloat(char* str){
     return 0;
 }
 
+void executeWrite(int x){
+    // setSymbolTable();
+    int counter=1;
+    wt* current = write_table;
+    while(counter!=x){
+        current=current->next;
+        counter++;
+    }
+    sc* sc_current = current->sc;
+    var* var_current = current->var;
+    for(int i=0;i<strlen(current->order);i++){
+        if(current->order[i]=='s'){
+            printf("%s\n",sc_current->sc);
+            sc_current=sc_current->next;
+        }else{
+            printf("%s\n",findTemp(var_current->var)->value);
+            var_current=var_current->next;
+        }
+    }
+}
+
+void setSymbolTable(){
+    symbol* current = symbol_table;
+    while(current!=NULL){
+        if(findTemp(current->name)==NULL){
+            
+        }else{
+            strcpy(findTemp(current->name)->value,current->type);
+        }
+        current=current->next;
+    }
+}
+
 void parseTAC(){
     reverseTAC();
+    reverseWrite();
     TAC *current = TAC_table;
     while(current!=NULL){
         if(strcmp(current->op,"GOTO")==0){
-            findLabelLocation(current->arg1);
+            current=findLabelLocation(current->arg1);
         }else if(strcmp(current->op,"IF")==0){
             if(strcmp(current->arg1,"0")==1){
-                findLabelLocation(current->result);
+                current=findLabelLocation(current->result);
             }
         }else if(strcmp(current->op,":=")==0){
             if(current->arg1[0]!='t'){
@@ -2868,9 +2909,291 @@ void parseTAC(){
                     addTemp(current->result,"INTEGER",temp);
                 }
             }
+        }else if(strcmp(current->op,"/")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(ifFloat(current->arg1) || ifFloat(current->arg2)){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(current->arg1)/atof(current->arg2));
+                    addTemp(current->result,"REAL",temp);    
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)/atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(ifFloat(current->arg1) || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(current->arg1)/atof(findTemp(current->arg2)->value));
+                    addTemp(current->result,"REAL",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(current->arg1)/atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || ifFloat(current->arg2)){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(current->arg2));
+                    addTemp(current->result,"REAL",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(current->arg2));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }else{
+                if(strcmp(findTemp(current->arg1)->type,"REAL")==0 || strcmp(findTemp(current->arg2)->type,"REAL")==0){
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%f",atof(findTemp(current->arg1)->value)/atof(findTemp(current->arg2)->value));
+                    addTemp(current->result,"REAL",temp);
+                }else{
+                    char* temp=(char*)malloc(100*sizeof(char));
+                    sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)/atoi(findTemp(current->arg2)->value));
+                    addTemp(current->result,"INTEGER",temp);
+                }
+            }
+        }else if(strcmp(current->op,"%")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(current->arg1)%atoi(current->arg2));
+                addTemp(current->result,"INTEGER",temp);
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(current->arg1)%atoi(findTemp(current->arg2)->value));
+                addTemp(current->result,"INTEGER",temp);
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(current->arg2));
+                addTemp(current->result,"INTEGER",temp);
+            }else{
+                char* temp=(char*)malloc(100*sizeof(char));
+                sprintf(temp,"%d",atoi(findTemp(current->arg1)->value)%atoi(findTemp(current->arg2)->value));
+                addTemp(current->result,"INTEGER",temp);
+            }
+        }else if(strcmp(current->op,"<>")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)!=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)!=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)!=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)!=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"<")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)<atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)<atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)<atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)<atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,">")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)>atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)>atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)>atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)>atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"<=")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)<=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)<=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)<=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)<=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,">=")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)>=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)>=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)>=atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)>=atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"=")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atof(current->arg1)==atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atof(current->arg1)==atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atof(findTemp(current->arg1)->value)==atof(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atof(findTemp(current->arg1)->value)==atof(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"and")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atoi(current->arg1) && atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atoi(current->arg1) && atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atoi(findTemp(current->arg1)->value) && atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atoi(findTemp(current->arg1)->value) && atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"or")==0){
+            if(current->arg1[0]!='t' && current->arg2[0]!='t'){
+                if(atoi(current->arg1) || atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]!='t' && current->arg2[0]=='t'){
+                if(atoi(current->arg1) || atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else if(current->arg1[0]=='t' && current->arg2[0]!='t'){
+                if(atoi(findTemp(current->arg1)->value) || atoi(current->arg2)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }else{
+                if(atoi(findTemp(current->arg1)->value) || atoi(findTemp(current->arg2)->value)){
+                    addTemp(current->result,"BOOLEAN","1");
+                }else{
+                    addTemp(current->result,"BOOLEAN","0");
+                }
+            }
+        }else if(strcmp(current->op,"not")==0){
+            if(current->arg1[0]!='t'){
+                if(atoi(current->arg1)){
+                    addTemp(current->result,"BOOLEAN","0");
+                }else{
+                    addTemp(current->result,"BOOLEAN","1");
+                }
+            }else{
+                if(atoi(findTemp(current->arg1)->value)){
+                    addTemp(current->result,"BOOLEAN","0");
+                }else{
+                    addTemp(current->result,"BOOLEAN","1");
+                }
+            }
+        }else if(strcmp(current->op,"WRITE")==0){
+            executeWrite(atoi(current->arg1));
         }
-        
-        
         current=current->next;
     }
 }

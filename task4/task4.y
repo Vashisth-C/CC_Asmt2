@@ -354,8 +354,9 @@ for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC("LABEL",str,"","");
+
     addTAC($2.val,str1,"",$1.val);
+    addTAC("LABEL",str,"","");
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
@@ -387,8 +388,9 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
     strcpy(str2,pop());
     char * str1=(char *)malloc(100*sizeof(char));
     strcpy(str1,pop());
-    addTAC("LABEL",str,"","");
+    
     addTAC($2.val,str1,"",$1.val);
+    addTAC("LABEL",str,"","");
     char* cond=(char *)malloc(100*sizeof(char));
     strcpy(cond,"t");
     char temp[10];
