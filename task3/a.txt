@@ -3,15 +3,17 @@ var
   numbers,maxValue: array[1..10] of Integer;
   j,i: Integer;
   x: array[6..8] of Integer;
+  y:CHAR;
 begin
   write("Enter 10 integer values:");
-  for i := 1 to 10 do
+  for numbers[1] := 1 to 10 do
   begin
     read(numbers[i]);
   end;
   maxValue := numbers;
   j := 1+numbers[1]*maxvalue[2]; 
   x[1]:=1;
+  y:='a';
   for i := j+2 to j+5 do
   begin
     if numbers<>maxValue then

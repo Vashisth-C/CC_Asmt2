@@ -68,31 +68,32 @@ extern int yydebug;
     ARITHEMATIC_OP_MINUS = 269,    /* ARITHEMATIC_OP_MINUS  */
     IF = 270,                      /* IF  */
     WHILE = 271,                   /* WHILE  */
-    INTEGER_CONSTANT = 272,        /* INTEGER_CONSTANT  */
-    FLOAT_CONSTANT = 273,          /* FLOAT_CONSTANT  */
-    PROGRAM = 274,                 /* PROGRAM  */
-    SEMICOLON = 275,               /* SEMICOLON  */
-    ELSE = 276,                    /* ELSE  */
-    FOR = 277,                     /* FOR  */
-    DO = 278,                      /* DO  */
-    BEGIN_TAG = 279,               /* BEGIN_TAG  */
-    END = 280,                     /* END  */
-    WRITE = 281,                   /* WRITE  */
-    READ = 282,                    /* READ  */
-    DOWNTO = 283,                  /* DOWNTO  */
-    TO = 284,                      /* TO  */
-    OF = 285,                      /* OF  */
-    COLON = 286,                   /* COLON  */
-    VAR = 287,                     /* VAR  */
-    ARRAY = 288,                   /* ARRAY  */
-    THEN = 289,                    /* THEN  */
-    COMMA = 290,                   /* COMMA  */
-    OPEN_BRACKET = 291,            /* OPEN_BRACKET  */
-    OPEN_PARANTHESIS = 292,        /* OPEN_PARANTHESIS  */
-    CLOSE_BRACKET = 293,           /* CLOSE_BRACKET  */
-    CLOSE_PARANTHESIS = 294,       /* CLOSE_PARANTHESIS  */
-    PERIOD = 295,                  /* PERIOD  */
-    RANGE_DOTS = 296               /* RANGE_DOTS  */
+    CHAR_CONSTANT = 272,           /* CHAR_CONSTANT  */
+    INTEGER_CONSTANT = 273,        /* INTEGER_CONSTANT  */
+    FLOAT_CONSTANT = 274,          /* FLOAT_CONSTANT  */
+    PROGRAM = 275,                 /* PROGRAM  */
+    SEMICOLON = 276,               /* SEMICOLON  */
+    ELSE = 277,                    /* ELSE  */
+    FOR = 278,                     /* FOR  */
+    DO = 279,                      /* DO  */
+    BEGIN_TAG = 280,               /* BEGIN_TAG  */
+    END = 281,                     /* END  */
+    WRITE = 282,                   /* WRITE  */
+    READ = 283,                    /* READ  */
+    DOWNTO = 284,                  /* DOWNTO  */
+    TO = 285,                      /* TO  */
+    OF = 286,                      /* OF  */
+    COLON = 287,                   /* COLON  */
+    VAR = 288,                     /* VAR  */
+    ARRAY = 289,                   /* ARRAY  */
+    THEN = 290,                    /* THEN  */
+    COMMA = 291,                   /* COMMA  */
+    OPEN_BRACKET = 292,            /* OPEN_BRACKET  */
+    OPEN_PARANTHESIS = 293,        /* OPEN_PARANTHESIS  */
+    CLOSE_BRACKET = 294,           /* CLOSE_BRACKET  */
+    CLOSE_PARANTHESIS = 295,       /* CLOSE_PARANTHESIS  */
+    PERIOD = 296,                  /* PERIOD  */
+    RANGE_DOTS = 297               /* RANGE_DOTS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -115,31 +116,32 @@ extern int yydebug;
 #define ARITHEMATIC_OP_MINUS 269
 #define IF 270
 #define WHILE 271
-#define INTEGER_CONSTANT 272
-#define FLOAT_CONSTANT 273
-#define PROGRAM 274
-#define SEMICOLON 275
-#define ELSE 276
-#define FOR 277
-#define DO 278
-#define BEGIN_TAG 279
-#define END 280
-#define WRITE 281
-#define READ 282
-#define DOWNTO 283
-#define TO 284
-#define OF 285
-#define COLON 286
-#define VAR 287
-#define ARRAY 288
-#define THEN 289
-#define COMMA 290
-#define OPEN_BRACKET 291
-#define OPEN_PARANTHESIS 292
-#define CLOSE_BRACKET 293
-#define CLOSE_PARANTHESIS 294
-#define PERIOD 295
-#define RANGE_DOTS 296
+#define CHAR_CONSTANT 272
+#define INTEGER_CONSTANT 273
+#define FLOAT_CONSTANT 274
+#define PROGRAM 275
+#define SEMICOLON 276
+#define ELSE 277
+#define FOR 278
+#define DO 279
+#define BEGIN_TAG 280
+#define END 281
+#define WRITE 282
+#define READ 283
+#define DOWNTO 284
+#define TO 285
+#define OF 286
+#define COLON 287
+#define VAR 288
+#define ARRAY 289
+#define THEN 290
+#define COMMA 291
+#define OPEN_BRACKET 292
+#define OPEN_PARANTHESIS 293
+#define CLOSE_BRACKET 294
+#define CLOSE_PARANTHESIS 295
+#define PERIOD 296
+#define RANGE_DOTS 297
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -161,7 +163,7 @@ union YYSTYPE
     }dval;
     struct node* node;
 
-#line 165 "y.tab.h"
+#line 167 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -70,15 +70,16 @@ void printErrors();
 %right RELATIONAL_OP
 %left BOOLEAN_OP_NOT
 
-%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP ARITHEMATIC_OP ARITHEMATIC_OP_MINUS IF WHILE
+%token <sval> IDENTIFIER STRING_CONSTANT INTEGER REAL BOOLEAN CHAR BOOLEAN_OP BOOLEAN_OP_NOT ASSIGNMENT_OP RELATIONAL_OP ARITHEMATIC_OP ARITHEMATIC_OP_MINUS IF WHILE CHAR_CONSTANT
 %token <ival> INTEGER_CONSTANT
 %token <dval> FLOAT_CONSTANT
 %token <node> PROGRAM SEMICOLON ELSE FOR DO BEGIN_TAG END WRITE READ DOWNTO TO OF COLON VAR ARRAY THEN
 %token <node> COMMA OPEN_BRACKET OPEN_PARANTHESIS CLOSE_BRACKET CLOSE_PARANTHESIS PERIOD RANGE_DOTS 
 
 
-%type <node> start variable_declaration program_declaration variable_list variable_line left_side_vars rigth_side_type datatype unit_2 statements statementline for_conditionals1 for_conditionals2
-%type <node> possible_writes possible_write_values possible_reads arith_expression unit condition conditional_head relational_exp conditionals condtional_unit left_side_vars_write
+%type <node> start variable_declaration program_declaration variable_list variable_line left_side_vars  statementline for_conditionals1 for_conditionals2
+%type <node> conditional_head relational_exp conditionals condtional_unit left_side_vars_write left_array_assignment for_conditionals3 for_conditionals4
+%type <node> possible_writes possible_write_values possible_reads arith_expression unit condition rigth_side_type datatype unit_2 statements
 
 %%
 
@@ -403,6 +404,28 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                     t->child[0]=make_leaf(";");
                     t->NumChild++;
                 }
+                |FOR for_conditionals3 DO program_declaration SEMICOLON {
+                    node* dotemp=make_unary_node("DO",$4);
+                    $$=make_binary_node("FOR",$2,dotemp);
+                    node* t=$$;
+                    while(t->child!=NULL){
+                        t=t->child[t->NumChild-1];
+                    }
+                    t->child=(struct node**)malloc(sizeof(struct node*));
+                    t->child[0]=make_leaf(";");
+                    t->NumChild++;
+                }
+                | FOR for_conditionals4 DO program_declaration SEMICOLON {
+                    node* dotemp=make_unary_node("DO",$4);
+                    $$=make_binary_node("FOR",$2,dotemp);
+                    node* t=$$;
+                    while(t->child!=NULL){
+                        t=t->child[t->NumChild-1];
+                    }
+                    t->child=(struct node**)malloc(sizeof(struct node*));
+                    t->child[0]=make_leaf(";");
+                    t->NumChild++;
+                }
                 |WHILE condition DO program_declaration SEMICOLON { node* temp=make_unary_node("DO",$4);
                                                                     $$=make_binary_node("WHILE",$2,temp);
                                                                     node* t=$$;
@@ -430,7 +453,7 @@ for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression
     }
     else if(!(strcmp(find_symbol(x)->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0 && strcmp($5->type,"INTEGER")==0)){
         char *errormsg=(char*)malloc(100*sizeof(char));
-        sprintf(errormsg,"For loop variables should be integer at line number: %d",$1.line);
+        sprintf(errormsg,"For loop variables and constraints should be integer at line number: %d",$1.line);
         addError(errormsg);
     }
     find_symbol(x)->value=1;
@@ -450,7 +473,7 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
     }
     if(!(strcmp(find_symbol(x)->type,"INTEGER")==0 && strcmp($3->type,"INTEGER")==0 && strcmp($5->type,"INTEGER")==0)){
         char *errormsg=(char*)malloc(100*sizeof(char));
-        sprintf(errormsg,"For loop variables should be integer at line number: %d",$1.line);
+        sprintf(errormsg,"For loop variables and constraints should be integer at line number: %d",$1.line);
         addError(errormsg);
     }
     find_symbol(x)->value=1;
@@ -458,6 +481,44 @@ for_conditionals2: IDENTIFIER ASSIGNMENT_OP arith_expression DOWNTO arith_expres
     node * temp1=make_binary_node("DOWNTO",$3,$5);
     $$=make_binary_node(":=",temp,temp1);
 }
+
+for_conditionals3: left_array_assignment ASSIGNMENT_OP arith_expression TO arith_expression{
+    node * temp1=make_binary_node("TO",$3,$5);
+   $$=make_binary_node($2.val,$1,temp1);
+}
+
+for_conditionals4: left_array_assignment ASSIGNMENT_OP arith_expression DOWNTO arith_expression{
+    node * temp1=make_binary_node("DOWNTO",$3,$5);
+   $$=make_binary_node($2.val,$1,temp1);
+}
+
+left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
+    char * x; x=(char*)malloc(100*sizeof(char));
+    strcpy(x,$1.val);
+    x=tolowercase(x);
+    node* temp=make_leaf($1.val);
+    $4=make_leaf("r_brace");
+    $$=make_ternary_node("l_brace",temp,$2,$3);
+    if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
+        char *errormsg=(char*)malloc(100*sizeof(char) );
+        sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
+        addError(errormsg);
+    }
+    else{
+        char *typ=(char*)malloc(100*sizeof(char));
+        strcpy(typ,find_symbol(x)->type);
+        char *subStr = NULL;
+        char *underscorePos = strchr(typ, '_');
+        subStr = underscorePos + 1;
+        strcpy($$->type,subStr);
+        find_symbol(x)->value=1;
+    }
+    if(strcmp($3->type,"INTEGER")!=0){
+        char *errormsg=(char*)malloc(100*sizeof(char));
+        sprintf(errormsg,"Array Indices should be Integer at line number: %d",$1.line);
+        addError(errormsg);
+    }
+    }
 
 condition: conditional_head {$$=$1;
                             strcpy($$->type,$1->type);}
@@ -633,7 +694,7 @@ possible_write_values: left_side_vars_write {$$=$1;}
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
                                                                                 strcpy(x,$1.val);
                                                                                 x=tolowercase(x);
-                                                                                if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
+                                                                                if(find_symbol(x)==NULL){
                                                                                     char *errormsg=(char*)malloc(100*sizeof(char));
                                                                                     sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
                                                                                     addError(errormsg);
@@ -667,17 +728,20 @@ possible_reads: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
                 |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
                                                                         strcpy(x,$1.val);
                                                                         x=tolowercase(x);
-                                                                        if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
+                                                                        if(find_symbol(x)==NULL){
                                                                             char *errormsg=(char*)malloc(100*sizeof(char));
                                                                             sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
-                                                                            addError(errormsg);
-                                                                            add_symbol(x,"undefined");
-                                                                            symbol_table->value=0;     
+                                                                            addError(errormsg);   
                                                                         }
                                                                         find_symbol(x)->value=1;
                                                                         node* temp=make_leaf($1.val);
                                                                         $4=make_leaf("r_brace");
-                                                                        $$=make_ternary_node("l_brace",temp,$2,$3);}
+                                                                        $$=make_ternary_node("l_brace",temp,$2,$3);
+                                                                        if(strcmp($3->type,"INTEGER")!=0){
+                                                                            char *errormsg=(char*)malloc(100*sizeof(char));
+                                                                            sprintf(errormsg,"Array Indices should be Integer at line number: %d",$1.line);
+                                                                            addError(errormsg);
+                                                                        }}
 
 
 arith_expression: unit_2 {$$=$1;}
@@ -773,7 +837,7 @@ unit: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(char));
                                                             node* temp=make_leaf($1.val);
                                                             $4=make_leaf("r_brace");
                                                             $$=make_ternary_node("l_brace",temp,$2,$3);
-                                                            if(find_symbol(x)==NULL || strcmp(find_symbol(x)->type,"undefined")==0){
+                                                            if(find_symbol(x)==NULL){
                                                                 char *errormsg=(char*)malloc(100*sizeof(char) );
                                                                 sprintf(errormsg,"Undeclared variable: %s at line number: %d",$1.val,$1.line);
                                                                 addError(errormsg);
@@ -823,6 +887,10 @@ unit_2: INTEGER_CONSTANT { char * temp; temp=(char*)malloc(100*sizeof(char));
                         sprintf(temp,"%f",$1.val);
                         $$=make_leaf(temp);
                         sprintf($$->type,"REAL");}
+    | CHAR_CONSTANT { char * temp; temp=(char*)malloc(100*sizeof(char));
+                        sprintf(temp,"%s",$1.val);
+                        $$=make_leaf(temp);
+                        sprintf($$->type,"CHAR");}
 
 %%
 
