@@ -79,7 +79,7 @@ void printErrors();
 
 
 %type <node> start variable_declaration program_declaration variable_list variable_line left_side_vars  statementline for_conditionals1 for_conditionals2
-%type <node> conditional_head relational_exp conditionals condtional_unit left_side_vars_write left_array_assignment for_conditionals3 for_conditionals4
+%type <node> relational_exp conditionals condtional_unit left_side_vars_write left_array_assignment for_conditionals3 for_conditionals4
 %type <node> possible_writes possible_write_values possible_reads arith_expression unit condition rigth_side_type datatype unit_2 statements
 
 %%
@@ -522,17 +522,15 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     }
     }
 
-condition: conditional_head {$$=$1;
+condition: conditionals{$$=$1;
                             strcpy($$->type,$1->type);}
             |unit {$$=$1;
                    strcpy($$->type,$1->type);}
 
-conditional_head: relational_exp { $$=$1;
-                                    strcpy($$->type,$1->type);}
-                    |conditionals { $$=$1;
-                                    strcpy($$->type,$1->type);}
 
 conditionals:   condtional_unit {$$=$1;
+                                strcpy($$->type,$1->type);}
+                |relational_exp {$$=$1; 
                                 strcpy($$->type,$1->type);}
                 |relational_exp BOOLEAN_OP conditionals { $$=make_binary_node($2.val,$1,$3);
                                                             if(strcmp($1->type,"BOOLEAN")==0 && strcmp($3->type,"BOOLEAN")==0){
@@ -584,9 +582,7 @@ conditionals:   condtional_unit {$$=$1;
                                                     addError(errormsg);
                                                     strcpy($$->type,"BOOLEAN");
                                                 }}
-                |OPEN_PARANTHESIS conditionals CLOSE_PARANTHESIS {node * temp=make_leaf(")");
-                                                                $$=make_binary_node("(",$2,temp);
-                                                                strcpy($$->type,$2->type);}
+                
                 
 
 condtional_unit:BOOLEAN_OP_NOT unit {$$=make_unary_node($1.val,$2);
@@ -685,12 +681,12 @@ left_side_vars_write: IDENTIFIER {char * temp; temp=(char*)malloc(100*sizeof(cha
                                                 }
                                                 struct node * temp1=make_leaf($1.val);
                                                 $$=make_binary_node(",",temp1,$3);}
+                |STRING_CONSTANT { $$=make_leaf($1.val);}
 
 possible_writes: possible_write_values { $$=$1;}
     | {$$=NULL;};
 
 possible_write_values: left_side_vars_write {$$=$1;}
-                        |STRING_CONSTANT { $$=make_leaf($1.val);}
                         |STRING_CONSTANT COMMA possible_write_values {node* temp=make_leaf($1.val);
                                                                         $$=make_binary_node(",",temp,$3);}
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {char * x; x=(char*)malloc(100*sizeof(char));
