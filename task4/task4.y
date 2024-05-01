@@ -328,17 +328,10 @@ left_array_assignment: IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
     strcat(id3,temp4);
     addTAC("+",id,id2,id3);
     qindex++;
-    char *id4=(char*)malloc(100*sizeof(char));
-    strcpy(id4,"t");
-    char temp5[10];
-    sprintf(temp5, "%d", qindex);
-    strcat(id4,temp5);
-    char *id5=(char*)malloc(100*sizeof(char));
-    strcpy(id5,"*");
-    strcat(id5,id3);
-    addTAC(":=",id5,"",id4);
-    push(id4);
-    qindex++;
+    char * start=(char*)malloc(100*sizeof(char));
+    strcpy(start,"*");
+    strcat(start,id3);
+    push(start);
 }
 
 for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression{
@@ -662,17 +655,10 @@ unit: IDENTIFIER {
             strcat(id3,temp4);
             addTAC("+",id,id2,id3);
             qindex++;
-            char *id4=(char*)malloc(100*sizeof(char));
-            strcpy(id4,"t");
-            char temp5[10];
-            sprintf(temp5, "%d", qindex);
-            strcat(id4,temp5);
-            char *id5=(char*)malloc(100*sizeof(char));
-            strcpy(id5,"*");
-            strcat(id5,id3);
-            addTAC(":=",id5,"",id4);
-            push(id4);
-            qindex++;
+            char * start=(char*)malloc(100*sizeof(char));
+            strcpy(start,"*");
+            strcat(start,id3);
+            push(start);
         }
 
     |ARITHEMATIC_OP_MINUS arith_expression {
