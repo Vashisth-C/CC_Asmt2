@@ -6,9 +6,7 @@ var
   y:CHAR;
 begin
   write("Enter 10 integer values:");
-  for numbers[1] := 1 to 10 do
-  begin
-    write(numbers,x,"hello");
-  end;
-  numbers[i]:=2*3-1*7;
+  i:=1+2;
+  j:=3-2; 
+  write(maxValue);
 end.

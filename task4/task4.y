@@ -91,7 +91,7 @@ void printFormatted();
 start: PROGRAM IDENTIFIER SEMICOLON variable_declaration program_declaration PERIOD {printf("Valid Input\n");
                                                                                     reverseTAC();
                                                                                     printTAC();
-                                                                                    printFormatted();
+                                                                                    // printFormatted();
                                                                                     }
 
 variable_declaration: VAR variable_list 
@@ -202,6 +202,7 @@ statementline: WRITE OPEN_PARANTHESIS possible_writes CLOSE_PARANTHESIS SEMICOLO
                     strcpy(id,pop());
                     char *id2=(char*)malloc(100*sizeof(char));
                     strcpy(id2,pop());
+                    pop();
                     addTAC($2.val,id,"",id2);
                 }
                 |left_if middle_if right_if SEMICOLON 
@@ -370,6 +371,7 @@ for_conditionals1: IDENTIFIER ASSIGNMENT_OP arith_expression TO arith_expression
     addTAC("IF",cond,"GOTO",str3);
     push(str3);
     push(str);
+    printf("%s\n%s\n",str,str3);
     push($1.val);
     lindex++;
 }

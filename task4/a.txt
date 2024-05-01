@@ -6,9 +6,21 @@ var
   y:CHAR;
 begin
   write("Enter 10 integer values:");
-  for numbers[1] := 1 to 10 do
+  for i := 1 to 10 do
   begin
-    write(numbers[i]);
+    read(numbers[i]);
   end;
-  numbers[i]:=2*3-1*7;
+  maxValue := numbers;
+  j := 1+numbers[1]*maxvalue[2]; 
+  x[1]:=1;
+  y:='a';
+  for i := j+2 to j+5 do
+  begin
+    if numbers<>maxValue then
+    begin
+      maxValue[i] := 1;
+    end;
+  end;
+  write("The value is ");  
+  write(maxValue);
 end.
