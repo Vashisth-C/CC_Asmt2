@@ -7,12 +7,6 @@ extern FILE *yyin;
 int yylex();
 int yyerror();
 
-typedef struct node{
-    char lexeme[100];
-    int NumChild;
-    char type[100];
-    struct node **child;
-} node;
 
 typedef struct symbol {
     char name[100];
@@ -23,28 +17,12 @@ typedef struct symbol {
 
 symbol* symbol_table = NULL;
 
-struct node* make_binary_node(char*, node*, node*);
-struct node* make_leaf(char* );
-struct node* make_ternary_node(char* , node* , node* ,node* );
-struct node* make_unary_node(char* , node* );
-void AST_print(struct node* );
-void writeToFile(struct node* );
-void preOrderTraversal(struct node* , char* );
+
 void add_symbol(const char*, const char*);
 symbol* find_symbol(const char*);
 char * tolowercase(char *);
 void printTable();
 void reverseTAC();
-
-typedef struct error{
-    char error[100];
-    struct error* next;
-} error;
-
-error* error_table = NULL;
-
-void addError(const char*);
-void printErrors();
 
 typedef struct TAC{
     char op[100];
@@ -527,10 +505,28 @@ conditionals:   condtional_unit
                     qindex++;
                     push(str);
                 }
-                | BOOLEAN_OP_NOT conditionals 
+                | BOOLEAN_OP_NOT conditionals {
+                    char * str=(char *)malloc(100*sizeof(char));
+                    strcpy(str,"t");
+                    char temp[10];
+                    sprintf(temp, "%d", qindex);
+                    strcat(str,temp);
+                    addTAC($1.val,pop(), "", str);
+                    qindex++;
+                    push(str);
+                }
                 
 
-condtional_unit:BOOLEAN_OP_NOT unit 
+condtional_unit:BOOLEAN_OP_NOT unit {
+    char * str=(char *)malloc(100*sizeof(char));
+    strcpy(str,"t");
+    char temp[10];
+    sprintf(temp, "%d", qindex);
+    strcat(str,temp);
+    addTAC($1.val,pop(), "", str);
+    qindex++;
+    push(str);
+}
 
 relational_exp: arith_expression RELATIONAL_OP arith_expression {
     char * str=(char *)malloc(100*sizeof(char));
@@ -655,7 +651,16 @@ unit: IDENTIFIER {
             push(id3);
         }
 
-    |ARITHEMATIC_OP_MINUS arith_expression
+    |ARITHEMATIC_OP_MINUS arith_expression {
+            char * str=(char *)malloc(100*sizeof(char));
+            strcpy(str,"t");
+            char temp[10];
+            sprintf(temp, "%d", qindex);
+            strcat(str,temp);
+            addTAC($1.val,pop(), "", str);
+            qindex++;
+            push(str);
+    }
 
 unit_2: INTEGER_CONSTANT {
             char * str=malloc(100*sizeof(char));
@@ -674,44 +679,6 @@ unit_2: INTEGER_CONSTANT {
     }
 
 %%
-
-struct node* make_binary_node(char* root, node* left, node* right){
-    struct node* ASTnode = (struct node*)malloc(sizeof(struct node));
-    ASTnode->child = (struct node**)malloc(2*sizeof(struct node *));
-    ASTnode->NumChild = 2;
-    strcpy(ASTnode->lexeme,root);
-    ASTnode->child[0] = left;
-    ASTnode->child[1] = right;
-    return ASTnode;
-}
-
-struct node* make_ternary_node(char* root, node* left, node* middle, node* right){
-    struct node* ASTnode = (struct node*)malloc(sizeof(struct node));
-    ASTnode->child = (struct node**)malloc(3*sizeof(struct node *));
-    ASTnode->NumChild = 3;
-    strcpy(ASTnode->lexeme,root);
-    ASTnode->child[0] = left;
-    ASTnode->child[1] = middle;
-    ASTnode->child[2] = right;
-    return ASTnode;
-}
-
-struct node* make_unary_node(char* root, node* child){
-    struct node* ASTnode = (struct node*)malloc(sizeof(struct node));
-    ASTnode->child = (struct node**)malloc(sizeof(struct node *));
-    ASTnode->NumChild = 1;
-    strcpy(ASTnode->lexeme,root);
-    ASTnode->child[0] = child;
-    return ASTnode;
-}
-
-struct node* make_leaf(char* root){
-	struct node* ASTnode = (struct node*)malloc(sizeof(struct node));
-	strcpy(ASTnode->lexeme,root);
-	ASTnode->NumChild = 0;
-	ASTnode->child = NULL;
-	return ASTnode;
-}
 
 void add_symbol(const char* name, const char* type) {
     symbol* new_symbol = (symbol*)malloc(sizeof(symbol));
@@ -749,21 +716,6 @@ char * tolowercase(char *s){
     return s;
 }
 
-void addError(const char* e) {
-    error* new_error = (error*)malloc(sizeof(error));
-    strcpy(new_error->error, e);
-    new_error->next = error_table;
-    error_table = new_error;
-}
-
-void printErrors() {
-    error* current = error_table;
-    printf("Errors\n\n");
-    while (current != NULL) {
-        printf("%s\n", current->error);
-        current = current->next;
-    }
-}
 
 void addTAC(const char* op, const char* arg1, const char* arg2, const char* result) {
     TAC* new_tac = (TAC*)malloc(sizeof(TAC));
