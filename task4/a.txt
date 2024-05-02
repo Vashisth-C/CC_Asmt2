@@ -1,8 +1,11 @@
 program MaxValueArray;
-  
+var 
+nums :array[1..10] of integer;
 begin
-  if 1>10 And 2>10 then 
+  for i:=2 to 10 do
   begin
+  read(nums[i]);
+  nums[i]:=1;
   end; 
 
 end.

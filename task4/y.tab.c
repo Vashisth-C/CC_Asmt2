@@ -2499,7 +2499,7 @@ void reverseTAC() {
 
 void printFormatted(){
     TAC* current=TAC_table;
-    printf("\n\nIntermediate Three Address Code:\n\n");
+    printf("\n\nIntermediate Three Address Code:\n");
     printf("----------------------------------------------------\n");
     while(current!=NULL){
         if(strcmp(current->op,"LABEL")==0){
@@ -2519,6 +2519,7 @@ void printFormatted(){
         }
         current=current->next;
     }
+    printf("\n\n");
 }
 
 void push(char* data){

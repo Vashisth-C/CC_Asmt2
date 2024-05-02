@@ -4,6 +4,7 @@ var
   j,i: Integer;
   x: array[6..8] of Integer;
   y:CHAR;
+  z:Real;
 begin
   write("Enter 10 integer values:");
   for numbers[1] := 1 to 10 do
@@ -11,6 +12,10 @@ begin
     read(numbers[1]);
   end;
   maxValue := numbers;
+  z:=2.5+1;
+  if 2.5<1 and 2>5 then 
+  begin
+  end;
   j := 1+numbers[1]*maxvalue[2]; 
   x[1]:=1+2*3+2;
   y:='a';

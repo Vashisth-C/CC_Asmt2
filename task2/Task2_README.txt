@@ -2,7 +2,7 @@ Task2: Syntax analysis of the given input
 Output: Valid Input or Syntax Error
 
 Commands:
-yacc -d ASPV9624.y 2>/dev/null
+yacc -d ASPV9624.y 
 lex ASPV9624.l
 gcc y.tab.c lex.yy.c -ll
 ./a.out <filename.txt>
