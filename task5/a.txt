@@ -13,5 +13,6 @@ begin
   end;
   read(i);
   read(num[i]);
+  write(num[i]);
   write(sum,i,"Hey Baby");
 end.

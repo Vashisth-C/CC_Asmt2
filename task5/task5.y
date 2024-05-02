@@ -64,6 +64,7 @@ typedef struct stringConstants{
 
 typedef struct variables{
     char* var;
+    int isArrayEl;
     struct variables* next;
 } var;
 
@@ -104,7 +105,7 @@ char* pop();
 void printFormatted();
 void initialiseWriteTableElement();
 void addSC(const char*);
-void addVar(const char*);
+void addVar(const char*,int);
 void printWriteTable();
 void parseTAC();
 temp* findTemp(const char*);
@@ -633,8 +634,8 @@ relational_exp: arith_expression RELATIONAL_OP arith_expression {
     push(str);
     }
 
-left_side_vars_write: IDENTIFIER {addVar($1.val);}
-                |IDENTIFIER COMMA left_side_vars_write {addVar($1.val);}
+left_side_vars_write: IDENTIFIER {addVar($1.val,0);}
+                |IDENTIFIER COMMA left_side_vars_write {addVar($1.val,0);}
                 |STRING_CONSTANT {
                             addSC($1.val);
                         }
@@ -646,7 +647,16 @@ possible_write_values: left_side_vars_write
                         |STRING_CONSTANT COMMA possible_write_values {
                             addSC($1.val);
                         }
-                        | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
+                        | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
+                            char* indices=(char*)malloc(100*sizeof(char));
+                            strcpy(indices,pop());
+                            char* id=(char*)malloc(100*sizeof(char));
+                            strcpy(id,$1.val);
+                            strcat(id,"[");
+                            strcat(id,indices);
+                            strcat(id,"]");
+                            id=tolowercase(id);
+                            addVar(id,1);}
 
 possible_reads: IDENTIFIER {
                     read_table->isArrayEl=0;
@@ -950,10 +960,11 @@ void addSC(const char* str){
     write_table->sc = new_sc;
 }
 
-void addVar(const char* v){
+void addVar(const char* v,int x){
     var* new_var = (var*)malloc(sizeof(var));
     new_var->var=(char*)malloc(100*sizeof(char));
     strcpy(new_var->var ,v);
+    new_var->isArrayEl=x;
     new_var->next = write_table->var;
     strcat(write_table->order,"v");
     write_table->var = new_var;
@@ -1165,7 +1176,45 @@ void executeWrite(int x){
             printf("%s\n",sc_current->sc);
             sc_current=sc_current->next;
         }else{
-            printf("%s\n",findTemp(var_current->var)->value);
+            if(var_current->isArrayEl==0){
+                printf("%s\n",findTemp(var_current->var)->value);
+            }else{
+                int bp;
+                char* result=(char*)malloc(100*sizeof(char));
+                for(int i=0;i<strlen(var_current->var);i++){
+                    if(var_current->var[i]=='['){
+                        bp=i;
+                        break;
+                    }
+                result[i]=var_current->var[i];
+                }
+                char* ind=(char*)malloc(100*sizeof(char));
+                for(int i=bp+1;i<strlen(var_current->var);i++){
+                    if(var_current->var[i]==']'){
+                        break;
+                    }
+                    ind[i-bp-1]=var_current->var[i];
+                }
+                int x;
+                if(findTemp(ind)==NULL){
+                    x=atoi(ind);
+                }else{
+                    x=atoi(findTemp(ind)->value);
+                }
+                int counter=1;
+                array_vals* current_val = find_symbol(result)->vals;
+                while(current!=NULL){
+                    if(counter==x){
+                        printf("%s\n",current_val->val);
+                        break;
+                    }
+                    current_val=current_val->next;
+                    counter++;
+                }
+                
+            }
+
+            
             var_current=var_current->next;
         }
     }
