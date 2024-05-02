@@ -11,6 +11,7 @@ begin
     sum := sum + 2;
     write(sum);
   end;
-  maxvalue:=num;
+  read(i);
+  read(num[i]);
   write(sum,i,"Hey Baby");
 end.

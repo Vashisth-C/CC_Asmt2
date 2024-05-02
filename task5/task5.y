@@ -7,11 +7,16 @@ extern FILE *yyin;
 int yylex();
 int yyerror();
 
+typedef struct array_vals{
+    char* val;
+    struct array_vals* next;
+} array_vals;
 
 typedef struct symbol {
     char name[100];
     char type[100];
     char value[100];
+    array_vals* vals;
     struct symbol* next;
 } symbol;
 
@@ -27,6 +32,9 @@ void printFormatted();
 void reverseWrite();
 void printTempTable();
 void setSymbolTable();  
+void initialiseArrayValsList(int, symbol*);
+void addTemp(const char*, const char*, const char*);
+
 
 typedef struct TAC{
     char op[100];
@@ -68,14 +76,26 @@ typedef struct writeTable{
 
 wt* write_table=NULL;
 
+typedef struct readTable{
+    char* var;
+    int isArrayEl;
+    struct readTable* next;
+} rt;
+
+rt* read_table=NULL;
+
 typedef struct temporaryVariables{
     char temp[100];
     char type[100];
     char value[100];
+    array_vals* vals;
     struct temporaryVariables* next;
 } temp;
 
 temp* temp_table=NULL;
+
+int rcount=1;
+
 
 void addTAC(const char*, const char*, const char*, const char*);
 void printTAC();
@@ -87,7 +107,8 @@ void addSC(const char*);
 void addVar(const char*);
 void printWriteTable();
 void parseTAC();
-
+temp* findTemp(const char*);
+void initialiseReadTableElement();
 
 %}
 
@@ -162,6 +183,7 @@ rigth_side_type: datatype
                     while (current != NULL) {
                         if (strcmp(current->type, "undefined") == 0) {
                             strcpy(current->type, "ARRAY_INTEGER");
+                            initialiseArrayValsList($5.val-$3.val+1,current);
                         }
                         current = current->next;
                     }
@@ -171,6 +193,7 @@ rigth_side_type: datatype
                     while (current != NULL) {
                         if (strcmp(current->type, "undefined") == 0) {
                             strcpy(current->type, "ARRAY_REAL");
+                            initialiseArrayValsList($5.val-$3.val+1,current);
                         }
                         current = current->next;
                     }
@@ -180,6 +203,7 @@ rigth_side_type: datatype
                     while (current != NULL) {
                         if (strcmp(current->type, "undefined") == 0) {
                             strcpy(current->type, "ARRAY_BOOLEAN");
+                            initialiseArrayValsList($5.val-$3.val+1,current);
                         }
                         current = current->next;
                     }
@@ -189,6 +213,7 @@ rigth_side_type: datatype
                     while (current != NULL) {
                         if (strcmp(current->type, "undefined") == 0) {
                             strcpy(current->type, "ARRAY_CHAR");
+                            initialiseArrayValsList($5.val-$3.val+1,current);
                         }
                         current = current->next;
                     }
@@ -240,7 +265,12 @@ statementline: WRITE {initialiseWriteTableElement();} OPEN_PARANTHESIS possible_
     sprintf(str,"%d",wcount);
     addTAC("WRITE",str,"","");
     wcount++;}
-                |READ OPEN_PARANTHESIS possible_reads CLOSE_PARANTHESIS SEMICOLON 
+                |READ {initialiseReadTableElement();} OPEN_PARANTHESIS possible_reads CLOSE_PARANTHESIS SEMICOLON {
+                    char * str=(char *)malloc(100*sizeof(char));
+                    sprintf(str,"%d",rcount);
+                    addTAC("READ",str,"","");
+                    rcount++;
+                }
                 |IDENTIFIER ASSIGNMENT_OP arith_expression SEMICOLON{
                     addTAC($2.val,pop(), "", $1.val);
                 }                                                     
@@ -618,8 +648,25 @@ possible_write_values: left_side_vars_write
                         }
                         | IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
 
-possible_reads: IDENTIFIER 
-                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {pop();}
+possible_reads: IDENTIFIER {
+                    read_table->isArrayEl=0;
+                    strcpy(read_table->var,$1.val);
+
+                }
+                |IDENTIFIER OPEN_BRACKET arith_expression CLOSE_BRACKET {
+                    
+                    char* indices=(char*)malloc(100*sizeof(char));
+                    strcpy(indices,pop());
+                    char* id=(char*)malloc(100*sizeof(char));
+                    strcpy(id,$1.val);
+                    strcat(id,"[");
+                    strcat(id,indices);
+                    strcat(id,"]");
+                    id=tolowercase(id);
+                    strcpy(read_table->var,id);
+                    read_table->isArrayEl=1;
+                    
+                }
 
 
 arith_expression: unit_2 
@@ -776,7 +823,23 @@ void printTable() {
     printf("--------------------------------------------------------\n\n");
     printf("Name\t\t\tType\t\t\tValue\n");
     while (current != NULL) {
-        printf("%s\t\t\t%s\t\t\t%s\n", current->name, current->type,current->value);
+        char * str=(char*)malloc(100*sizeof(char));
+        if(strcmp(current->type,"ARRAY_INTEGER")==0 || strcmp(current->type,"ARRAY_REAL")==0 || strcmp(current->type,"ARRAY_BOOLEAN")==0 || strcmp(current->type,"ARRAY_CHAR")==0){
+            
+            strcpy(str,"[");
+            array_vals* current_val=current->vals;
+            while(current_val!=NULL){
+                strcat(str,current_val->val);
+                current_val=current_val->next;
+                if(current_val!=NULL){
+                    strcat(str,",");
+                }
+            }
+            strcat(str,"]");
+        }else{
+            strcpy(str,current->value);
+        }
+        printf("%s\t\t\t%s\t\t\t%s\n", current->name, current->type,str);
         current = current->next;
     }
 }
@@ -869,6 +932,14 @@ void initialiseWriteTableElement(){
     new_wt->next = write_table;
     write_table = new_wt;
 }
+
+void initialiseReadTableElement(){
+    rt* new_rt = (rt*)malloc(sizeof(rt));
+    new_rt->var = (char*)malloc(100*sizeof(char));
+    new_rt->next = read_table;
+    read_table = new_rt;
+}
+
 
 void addSC(const char* str){
     sc* new_sc = (sc*)malloc(sizeof(sc));
@@ -967,6 +1038,98 @@ void reverseWrite(){
     write_table = prev;
 }
 
+void reverseRead(){
+    rt* current = read_table;
+    rt* prev = NULL;
+    rt* next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    read_table = prev;
+}
+
+void executeRead(int d){
+    int counter=1;
+    rt* current = read_table;
+    while(counter!=d){
+        current=current->next;
+        counter++;
+    }
+    char* var_current = (char *)malloc(100*sizeof(char));
+    strcpy(var_current,current->var);
+    
+    var_current=tolowercase(var_current);
+    char* str=(char*)malloc(100*sizeof(char));
+    if(current->isArrayEl==0){
+        if(strcmp(find_symbol(var_current)->type,"INTEGER")==0){
+                        int x;
+                        scanf("%d",&x);
+                        sprintf(str,"%d",x);        
+        }else if(strcmp(find_symbol(var_current)->type,"REAL")==0){
+            float x;
+            scanf("%f",&x);
+            sprintf(str,"%f",x);
+        }else if(strcmp(find_symbol(var_current)->type,"CHAR")==0){
+            char x;
+            scanf("%c",&x);
+            sprintf(str,"%c",x);
+        }
+    strcpy(find_symbol(var_current)->value,str);
+    addTemp(var_current,find_symbol(var_current)->type,str);
+    }else{
+        int bp;
+        char* result=(char*)malloc(100*sizeof(char));
+        for(int i=0;i<strlen(var_current);i++){
+            if(var_current[i]=='['){
+                bp=i;
+                break;
+            }
+            result[i]=var_current[i];
+        }
+        if(strcmp(find_symbol(result)->type,"ARRAY_INTEGER")==0){
+            int x;
+            scanf("%d",&x);
+            sprintf(str,"%d",x);        
+        }else if(strcmp(find_symbol(result)->type,"ARRAY_REAL")==0){
+            float x;
+            scanf("%f",&x);
+            sprintf(str,"%f",x);
+        }else if(strcmp(find_symbol(result)->type,"ARRAY_CHAR")==0){
+            char x;
+            scanf("%c",&x);
+            sprintf(str,"%c",x);
+        }
+        char* ind=(char*)malloc(100*sizeof(char));
+        for(int i=bp+1;i<strlen(var_current);i++){
+            if(var_current[i]==']'){
+                break;
+            }
+            ind[i-bp-1]=var_current[i];
+        }
+        int x;
+        if(findTemp(ind)==NULL){
+            x=atoi(ind);
+        }else{
+            x=atoi(findTemp(ind)->value);
+        }
+        int counter=1;
+        array_vals* current_val = find_symbol(result)->vals;
+        while(current!=NULL){
+            if(counter==x){
+                strcpy(current_val->val,str);
+                break;
+            }
+            current_val=current_val->next;
+            counter++;
+        }
+    }
+    
+
+}
+
 temp* findTemp(const char* name){
     temp* current = temp_table;
     while (current != NULL) {
@@ -1030,10 +1193,42 @@ void setSymbolTable(){
     }
 }
 
+array_vals* createNewArrayValNode() {
+    array_vals* new_node = (array_vals*)malloc(sizeof(array_vals));
+    if (new_node == NULL) {
+        fprintf(stderr, "Memory allocation failed for array_vals node.\n");
+        exit(EXIT_FAILURE); // Handle memory allocation failure
+    }
+    new_node->val = (char*)malloc(100 * sizeof(char)); // Initialize with a default size
+    if (new_node->val == NULL) {
+        fprintf(stderr, "Memory allocation failed for array_vals->val.\n");
+        exit(EXIT_FAILURE); // Handle memory allocation failure
+    }
+    strcpy(new_node->val, "undefined"); // Set a default value
+    new_node->next = NULL;
+    return new_node;
+}
+
+void initialiseArrayValsList(int x,symbol* sym){
+    if(x==0){
+        return;
+    }
+    sym->vals = createNewArrayValNode();
+    array_vals* current = sym->vals;
+
+    // Loop to create and link the rest of the nodes
+    for (int i = 1; i < x; i++) {
+        current->next = createNewArrayValNode(); // Create and link a new node
+        current = current->next; // Move to the next node
+    }
+
+}
+
 void parseTAC(){
     reverseTAC();
     // printTAC();
     reverseWrite();
+    reverseRead();
     printf("\nCode Output:\n\n");
 
     TAC *current = TAC_table;
@@ -1936,6 +2131,8 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,"WRITE")==0){
             executeWrite(atoi(current->arg1));
+        }else if(strcmp(current->op,"READ")==0){
+            executeRead(atoi(current->arg1));
         }
         current=current->next;
     }
