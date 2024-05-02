@@ -3075,15 +3075,20 @@ void parseTAC(){
             }
         }else if(strcmp(current->op,":=")==0){
             if(current->arg1[0]!='t'){
-                if (strlen(current->arg1)==3 && (current->arg1[0]=='\'' && current->arg1[2]=='\'')){
-                    addTemp(current->result,"CHAR",current->arg1);
-                }else if(ifFloat(current->arg1)){
-                    addTemp(current->result,"REAL",current->arg1);
-                }else if(find_symbol(current->arg1)==NULL){
-                    addTemp(current->result,"INTEGER",current->arg1);
+                if(findTemp(current->arg1)==NULL){
+                    if (strlen(current->arg1)==3 && (current->arg1[0]=='\'' && current->arg1[2]=='\'')){
+                        addTemp(current->result,"CHAR",current->arg1);
+                    }else if(ifFloat(current->arg1)){
+                        addTemp(current->result,"REAL",current->arg1);
+                    }else if(find_symbol(current->arg1)==NULL){
+                        addTemp(current->result,"INTEGER",current->arg1);
+                    }else{
+                        addTemp(current->result,find_symbol(current->arg1)->type,find_symbol(current->arg1)->value);
+                        find_symbol(current->result)->vals=find_symbol(current->arg1)->vals;
+                    }
                 }else{
                     addTemp(current->result,findTemp(current->arg1)->type,findTemp(current->arg1)->value);
-                }   
+                }  
             }else{
                 addTemp(current->result,findTemp(current->arg1)->type,findTemp(current->arg1)->value);
             }                                                                                                                                                                                                  

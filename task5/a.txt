@@ -8,11 +8,10 @@ begin
   sum := 0;
   for i:=2 to 10 do
   begin
-    sum := sum + 2;
-    write(sum);
+    read(num[i]);
   end;
-  read(i);
-  read(num[i]);
-  write(num[i]);
+  num[i]:=1+2;
+  write(num[3]);
+  maxvalue:=num;
   write(sum,i,"Hey Baby");
 end.
