@@ -318,14 +318,16 @@ statementline: WRITE {initialiseWriteTableElement();} OPEN_PARANTHESIS possible_
                     addTAC("LABEL",pop(),"","");
                 }
 
-while_left :WHILE condition {
-    char * str=(char *)malloc(100*sizeof(char));
+while_left :WHILE {char * str=(char *)malloc(100*sizeof(char));
     strcpy(str,"L");
     char temp1[10];
     sprintf(temp1, "%d", lindex);
     strcat(str,temp1);
     lindex++;
     addTAC("LABEL",str,"","");
+    push(str);} condition {
+    char * str=(char *)malloc(100*sizeof(char));
+    
     char * str1= (char *)malloc(100*sizeof(char));
     strcpy(str1,"L");
     char temp2[10];
@@ -339,6 +341,7 @@ while_left :WHILE condition {
     strcat(str2,temp3);
     lindex++;
     addTAC("IF",pop(),"GOTO",str1);
+    strcpy(str,pop());
     push(str2);
     push(str);
     addTAC("GOTO",str2,"","");
@@ -817,9 +820,12 @@ void add_symbol(const char* name, const char* type) {
 }
 
 symbol* find_symbol(const char* name) {
+    char *tS = malloc(100*sizeof(char));
+    strcpy(tS, name);
+    strcpy(tS, tolowercase(tS));
     symbol* current = symbol_table;
     while (current != NULL) {
-        if (strcmp(current->name, name) == 0) {
+        if (strcmp(current->name, tS) == 0) {
             return current;
         }
         current = current->next;
@@ -1142,9 +1148,12 @@ void executeRead(int d){
 }
 
 temp* findTemp(const char* name){
+    char *tS = malloc(100*sizeof(char));
+    strcpy(tS, name);
+    strcpy(tS, tolowercase(tS));
     temp* current = temp_table;
     while (current != NULL) {
-        if (strcmp(current->temp, name) == 0) {
+        if (strcmp(current->temp, tS) == 0) {
             return current;
         }
         current = current->next;

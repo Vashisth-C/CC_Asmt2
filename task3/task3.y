@@ -1053,9 +1053,12 @@ void add_symbol(const char* name, const char* type) {
 }
 
 symbol* find_symbol(const char* name) {
+    char *tS = malloc(100*sizeof(char));
+    strcpy(tS, name);
+    strcpy(tS, tolowercase(tS));
     symbol* current = symbol_table;
     while (current != NULL) {
-        if (strcmp(current->name, name) == 0) {
+        if (strcmp(current->name, tS) == 0) {
             return current;
         }
         current = current->next;
